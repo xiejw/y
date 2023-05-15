@@ -1,0 +1,10 @@
+# vim
+*.swo
+*.swp
+
+# vim-plug
+plugged
+
+# vim-help
+doc/tags
+

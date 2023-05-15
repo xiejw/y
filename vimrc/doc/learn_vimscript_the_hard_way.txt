@@ -1,0 +1,96 @@
+# vim: ft=help
+================================================================================
+
+Learn Vimscript the Hard Way~
+
+- https://learnvimscriptthehardway.stevelosh.com/
+
+================================================================================
+Chp 01                                                                  *chp_01*
+
+>
+  :echo "hello world"
+  :echom "hello world"    # write to message bufer
+  :messages               # print message buffer
+<
+
+================================================================================
+Chp 02                                                                  *chp_02*
+
+>
+  :set number             # enable
+  :set nonumber           # disable
+  :set number!            # toggle
+  :set number?            # check value
+<
+
+================================================================================
+Chp 03                                                                  *chp_03*
+
+>
+  :map - x                # map key - to x
+  :map <space> viw
+  :map <c-d> dd
+<
+
+================================================================================
+Chp 04 Modal Mapping                                                    *chp_04*
+
+>
+  :nmap
+  :vmap
+  :imap <c-d> <esc>dd
+<
+
+================================================================================
+Chp 05 Strict Mapping                                                   *chp_05*
+
+unmap a mapping
+
+>
+  :nunmap dd
+<
+
+nonrecursive mapping. we should always use them.
+
+>
+  :noremap
+  :nnoremap
+  :vnoremap
+  :inoremap
+<
+
+================================================================================
+Chp 06 Leader                                                           *chp_06*
+
+>
+  :let mapleader = "-"
+  :nnoremap <leader>d dd
+<
+
+================================================================================
+Chp 11 Buffer-Local Options and Mappings                                *chp_11*
+
+The `<buffer>` in the second nnoremap command told Vim to only consider that
+mapping when we're in the buffer where we defined it.
+
+>
+  :nnoremap          <leader>d dd
+  :nnoremap <buffer> <leader>x dd
+<
+
+Local option
+
+>
+  :setlocal wrap
+<
+
+Shadowing
+
+>
+  :nnoremap <buffer> Q x
+  :nnoremap          Q dd
+<
+
+When you press {Q}, vim will run the first mapping, not the second, because
+the first mapping is more specific than the second.

@@ -1,0 +1,54 @@
+# vim: ft=help
+================================================================================
+                                                                         *start*
+
+- run `vim -clean` to start a clean session.
+- run {:scriptnames} to list loaded scripts.
+
+================================================================================
+                                                                     *highlight*
+
+Highlight Group~
+
+- use {:hi} to show all colors for current file type.
+- call 'fns#SynGroup()' to see the current syntax group under cursor.
+
+Conceal~
+
+- for highlight item, if 'conceal' is given, the item will be hidden to make
+  the display compact. For example, the '*' around the '*tag*' will not be
+  visible in vim.  see {:h conceal} for more detials.
+- also see {:h conseallevel} to see how to control the behavior. For example,
+  `:set conseallevel=0` will disable the hiding.
+
+================================================================================
+                                                                  *help-writing*
+
+'vim' has a very nice help system. And its format is open. Check
+
+    `$VIMRUNTIME/share/syntax/help.vim`
+
+For outside directory, run {:helptags _dir_} to generate tags.
+
+CHEATSHEET
+
+>
+    =============       a separated line
+
+    ALL CAP LETTERS     headline
+    headline~           another headline
+
+    *tag*               a tag
+    |tag|               link to a tag
+
+    {word}              highlight
+    'word'              highlight
+    `word`              highlight
+
+    \t*Todo\t           Todo highlight
+    Note                Note highlight
+
+    >                   Block code
+      code here
+    <
+<

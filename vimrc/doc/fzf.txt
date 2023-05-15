@@ -1,0 +1,25 @@
+# vim: ft=help
+================================================================================
+                                                                           *fzf*
+                                                 https://github.com/junegunn/fzf
+
+|fzf| is a tool providing many cool features. One of them is {fzf#run}, which
+can be viewed as a low level building block to enable many awesome features.
+
+It is arguably better than the {:h popup.txt} feature provided by vim as it searches
+filtering and highlighting.
+
+The 'source' field can take a 'cmd' to run or a vim list. The 'sink' field can
+be a vim 'cmd' or a vim 'func' to call with the selected line.
+
+
+================================================================================
+                                                                      *fzf-tmux*
+
+It is a puzzle how |fzf| opens a window outside of vim and shows a beautiful
+pane to do the search. According to
+
+    https://junegunn.kr/2015/03/fzf-tmux
+
+it actualy uses 'tmux', which pulls the job. Quite smart idea.
+
