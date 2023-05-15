@@ -11,9 +11,9 @@ See [here](cheatsheet.md).
 - Clone and link the `vimrc`.
 
         cd ~/Workspace
-        git clone git@github.com:xiejw/vimrc.git
-        ln -sf ~/Workspace/vimrc ~/.vim
-        ln -sf ~/.vim/vimrc ~/.vimrc
+        git clone git@github.com:xiejw/y.git
+        ln -sf ~/Workspace/y/vimrc       ~/.vim
+        ln -sf ~/Workspace/y/vimrc/vimrc ~/.vimrc
 
 - Open vim and run `:PlugInstall`.
 - Quit vim and open vim again.
