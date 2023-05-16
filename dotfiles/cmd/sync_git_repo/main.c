@@ -29,8 +29,7 @@ main(void)
                     /* clang-format off */
 
                     // core
-                    "~/Workspace/vimrc",
-                    "~/Workspace/dotfiles",
+                    "~/Workspace/y",
 
                     /* clang-format on */
                 };
