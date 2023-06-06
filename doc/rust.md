@@ -20,6 +20,16 @@ cargo update -p regex   # updates just “regex”
 cargo doc --open
 ```
 
+Update `target-dir` in
+[build](https://doc.rust-lang.org/cargo/reference/config.html) section of
+config.
+```
+# $PROJECT/.cargo/config
+[build]
+target-dir = ".build"
+```
+
+
 ## LLVM-IR
 
 ```
