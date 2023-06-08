@@ -21,14 +21,16 @@ pub mod dancing_link {
     }
 
     impl<T> Node<T> {
+        // TODO: for best performance, we should inline alloc all nodes and set
+        // them in-place.
         fn new(id: usize) -> Node<T> {
             Node {
                 id: id,
                 data: None,
-                l: 0,
-                r: 0,
-                u: 0,
-                d: 0,
+                l: id,
+                r: id,
+                u: id,
+                d: id,
                 col: HeadIdOrCount { col_count: 0 },
             }
         }
