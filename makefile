@@ -15,6 +15,9 @@ install:
 	@echo "=>" install dotfiles
 	@echo "==>" compile cmds
 	CC=clang make -C dotfiles
+	@echo "==>" link sym links for tmux
+	rm -f ~/.tmux.conf
+	ln -sf ~/Workspace/y/dotfiles/conf/tmux.conf ~/.tmux.conf
 	@echo "==>" install the following lines into ~/.profile
 	@echo "##################################"
 	@echo "# xiejw/y/dotfiles"
