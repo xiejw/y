@@ -1,0 +1,6 @@
+# vim: filetype=dockerfile
+FROM xiejw/baseimage
+
+COPY cron /
+
+CMD ["bash"]

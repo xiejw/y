@@ -1,0 +1,122 @@
+# vim: ft=help
+
+================================================================================
+C PROGRAMMING LANGUAGE (C99)~
+
+COMPILER FLAGS
+
+To enable c99, flags are: >
+
+  -std=c99
+  -Wno-c11-extensions
+
+================================================================================
+NEW FEATURES~
+
+COMPOUND LITERALS
+
+Initializer list with a type casting, which is a  `lvalue`: >
+
+    // this
+    structure = ((struct foo) {x + y, 'a', 0});
+
+    // is same as
+    {
+      struct foo temp = {x + y, 'a', 0};
+      structure = temp;
+    }
+
+or >
+
+    // this
+    fn((char[]){0x00, 0x01, 0x03});
+
+    // is same as
+    char cp[] = {0x01, 0x02, 0x03};
+    fn(cp);
+
+which are quite convenient for passing arguments: >
+
+    func((struct x) {1, 2}))
+    func((int[]) {1, 2}))
+
+INLINE FUNC
+
+See 'inline' func below for difference between `static inline` vs `extern inline`.
+
+INTERMINGLED DECLARATIONS AND CODE
+
+Basically >
+
+    int i = 99;
+    fn(i);
+
+    int j = 98; // this is allowed with c99.
+
+
+ONE LINE COMMENT
+
+Support for one-line comments beginning with `//`.
+
+FLEXIBLE ARRAY MEMBERS
+
+The array can be defined as the final field with length `[]` >
+
+    struct vectord {
+        short len;    // there must be at least one other data member
+        double arr[]; // the flexible array member must be last
+        // The compiler may reserve extra padding space here, like it can between struct members
+    };
+
+
+LONG LONG
+
+`long long` is at lest 64 bit.
+
+NEW LIB
+
+- `snprintf`
+
+- also float methods
+  - sqrtf     https://en.cppreference.com/w/c/numeric/math/sqrt
+  - logf      https://en.cppreference.com/w/c/numeric/math/log
+  - sinf,conf https://en.cppreference.com/w/c/numeric/math/sin
+
+VARIADIC MACROS
+
+For example >
+
+    #define errFatalAndExit(fmt, ...) \
+            errFatalAndExit_(__FILE__, __LINE__, fmt, __VA_ARGS__)
+
+RESTRICT
+
+The 'restrict' qualification allows more aggressive code optimization,
+removing compile-time array access advantages.
+
+================================================================================
+EXTERN VS STATIC INLINE~
+
+Refs
+  https://elinux.org/Extern_Vs_Static_Inline
+  https://gcc.gnu.org/onlinedocs/gcc/Inline.html
+
+Linus comment
+
+  - "static inline" means "we have to have this function, if you use it
+     but don't inline it, then make a static version of it in this
+     compilation unit"
+
+  - "extern inline" means "I actually _have_ an extern for this function,
+     but if you want to inline it, here's the inline-version"
+
+  ... we should just convert
+  all current users of "extern inline" to "static inline".
+
+static inline can be inlined or not-inline, depending on compiler. but it does
+not have fn pointer address can take.
+
+When a function is both inline and static, if all calls to the function are
+integrated into the caller, and the function’s address is never used, then the
+function’s own assembler code is never referenced
+

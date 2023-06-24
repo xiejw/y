@@ -1,0 +1,10 @@
+# vim
+*.swp
+*.swo
+
+# output
+.build*
+
+# docker
+.docker
+

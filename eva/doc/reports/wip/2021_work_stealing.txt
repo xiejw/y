@@ -1,0 +1,109 @@
+# vim: ft=help
+
+--------------------------------------------------------------------------------
+Work-Stealing~
+
+This document records my lessons toward implementing a work-stealing scheduler
+in C.
+
+Ref regarding the algorithm~
+  - https://en.wikipedia.org/wiki/Work_stealing
+  - Paper: Scheduling multithreaded computations by work stealing (1999)
+  - Paper: Cilk: An efficient multithreaded runtime system (1996)
+  - Paper: A Java fork/join framework (2000)
+  - Code: https://github.com/openjdk/jdk ForkJoinPool
+  - Code: https://github.com/golang/go/blob/master/src/runtime/proc.go#L19
+      - Design doc: https://golang.org/s/go11sched
+
+Refs regarding the lock-free tech~
+  - https://preshing.com/20120612/an-introduction-to-lock-free-programming
+  - https://preshing.com/20130823/the-synchronizes-with-relation
+  - https://preshing.com/20120625/memory-ordering-at-compile-time
+  - https://preshing.com/20120913/acquire-and-release-semantics
+  - https://en.cppreference.com/w/c/atomic/memory_order
+  - https://en.wikipedia.org/wiki/Read-copy-update
+  - https://blog.molecular-matters.com/2015/09/25/job-system-2-0-lock-free-work-stealing-part-3-going-lock-free/
+
+--------------------------------------------------------------------------------
+Key Idea~
+
+    "The main throughput advantages of work-stealing stem from
+    decentralized control -- workers mostly take tasks from
+    themselves or each other, at rates that can exceed a billion
+    per second."
+
+--------------------------------------------------------------------------------
+Challenges~
+
+With theory ready, the implementation challenges are two:
+
+1. How to avoid locks in 'push'/'pop'/'poll'('steal')?
+
+   Read paper:
+       Solution of a Problem in Concurrent Programming Control (1965)
+
+2. How to pause/wake up threads when no job/new job events triggered?
+
+--------------------------------------------------------------------------------
+Version 1~
+
+The goal of the version 1 is correct, readable, and runnable. It should speed
+things up but not as good as Cilk.
+
+I plan to improve the performance overtime and use it in my other projects but
+we will see.
+
+- The runner group maintains a list of N threads, called pool. The typical
+  size is number of cores. We define a control to manage all of them. And
+  public interfaces are provided via controller only.
+
+- All threads will in wait state initially.
+
+- There will be N runner, one for each thread. They could be active, either
+  running jobs or stealing jobs. Or inactive, wait of signals from controller.
+
+- Once a job is submitted, the magic show starts. The controller will wake up
+  all threads and assign a random thread to handle the job.
+
+- FORK: Each runner maintains a LIFO queue. Any job FORK will be pushed into
+  the queue and later gets popped as next candidate. The controller submission
+  can be viewed as one form of FORK.
+
+- POP:  If one job finished, the runner will pop the queue to find next job,
+  if present.
+
+- STEAL: If the runner has not jobs left in the queue, work stealing happens.
+  It will start with a random index of the other runners. And pop (from the
+  end of queue from targeted runner; note the runner pops from the top of its
+  own queue).
+
+- YIELD: The job has opportunity to yield in case it is waiting for some
+  situation to be read. User code should not go this for fork-join pattern.
+  This is useful as implementation for JOIN.
+
+- JOIN: is basically check job's state and keep YIELDS.
+
+- PARK: Park is the state the runner keeps popping or stealing jobs with the
+  possibility that there is no work to do so it goes to sleep, followed by
+  thread wait. YIELD and JOIN will try steal (with spinning) also but not into
+  PARK mode (sleep/wait). PARK will iterate to POP/STEAL multiple times (each
+  iteration will do POP and N-1 STEALS for all remaining runners), then
+  inactive itself and go into short sleep mode. Once, other runners are ALL
+  inactive, go into wake mode.
+
+- The result of job is 'union value_t' (with memory fence of course).
+
+--------------------------------------------------------------------------------
+Version 2~
+
+Lock-Free~
+
+There are two parts of lock free we need to change
+- Avoid all 'locks' in implementation, e.g., queue, sync job metadata, sync
+  counters, etc
+- Avoid 'locks' in allocators for jobs as well.
+
+The second is slightly easier, as we can maintain customized allocators. The
+first one is very challenging. We need to understand lock-free programming and
+compiler/language low-level primitives in multi-thread system.
+

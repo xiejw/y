@@ -1,0 +1,42 @@
+# vim: ft=help
+--------------------------------------------------------------------------------
+Cron is a utility printing the number of seconds matching cron expressions.
+
+OPTIONS~
+
+Options are set via flags >
+
+    -minute   set the cron expression field for minute.
+    -hour     set the cron expression field for hour.
+    -m        same as -minute
+    -h        same as -hour
+
+If optionts are absent, it prints the number of seconds to next minute.
+
+PLAY~
+
+To run and play >
+
+    # print the number of seconds until next time matching X hour Y minute
+    $ make cron
+    $ .build/cron --hour X --minute Y
+
+EXAMPLES~
+
+To use this in a shell script loop, consider to the following example: >
+
+    #!/bin/sh
+
+    while true; do
+       sleep `cron --hour X --minute Y`
+       echo "Current time is `date`."
+
+       # Your job.
+    done
+
+DOCKER~
+
+See dockerfile [1] for usages or use 'xiejw/cron' directly.
+
+[1]: cmd/cron/dockerfile.cron
+

@@ -1,0 +1,34 @@
+# vim: ft=help
+
+================================================================================
+C PROGRAMMING LANGUAGE (C89)~
+
+OVERVIEW
+
+The programming language used is commonly based on C89/C90 with little GNU
+extensions.
+
+The extensions i used typically include:
+
+- Uses of fixed-width integer from `stdint.h` and `inttypes.h`.
+- Uses of `dprintf` with is not defined in C or POSIX from `stdio.h`.
+
+
+COMPILER OPTIONS
+
+Compilers might enable extensions, which inserts proper `#define` symbols,
+e.g., `_DEFAULT_SOURCE` for system header files.
+
+You can also use `-pedantic-errors` or `-pedantic` (see [1]) to disable (some
+of) the extensions if needed.
+
+[1]: http://clang.llvm.org/docs/UsersManual.html#options-to-control-error-and-warning-messages
+
+FIXED-WIDTH INTEGERS
+
+- Use `int64_t` or `uint64_t` from `stdint.h` to define variables.
+- On 32-bit platform, integer literal `1L` could be 32-bit `long` type. Given
+  the fact `1LL` notation is not part of C89, `((uint64_t)1L)` is a reasonable
+  workaround.
+- To work with `printf`, use `PRIu64`, etc, in `inttypes.h`.
+

@@ -1,0 +1,69 @@
+# vim: ft=help
+
+Although this is still a personal project at its early stage, I would like to
+define the roadmap.
+
+--------------------------------------------------------------------------------
+2022 Revisit~
+
+As immediate next steps, three things are on radar now:
+
+1. Having a simple comiler to perform eager operations. Designing a full stack
+   compiler takes more time than I have. So, maybe consider to use eager
+   version.
+
+2. To support efficient IO, a queue based tensor should be introduced. We
+   could implement a single thread version first and then extend to
+   multi-threas version (which might need lock free pritimives or lock/signal
+   building blockers)
+
+3. Arena memory allocation. To improve efficiency and some isolation of global
+   weights, one batch of inputs, outputs, metrics and temporary (but re-used
+   areas) for func executions (batch ops). Arena abstraction will be
+   introduced. We can design it to reuse malloc/free at first and then extend
+   to more general cases for ML models (large weights/gradients, etc).
+
+--------------------------------------------------------------------------------
+2022~
+
+In 2022, I would like to implement some Ops to support the most important model
+(to me) and design a new feature on top of the current stack.
+
+Missing Ops~
+
+I would like to use this MLP-Mixer model:
+
+    https://arxiv.org/abs/2105.01601
+
+Toward, that, I think I need to implement an efficient transpose op, the
+general layer norm, and a simple conv2d operation.
+
+Scratch Pad~
+
+Currently, all tensors are globally allocated. They must disjoint and cannot
+reuse existing buffer. This is not very efficient for several reasons.
+
+1. With a compiler or even hand written ML programs, tensors can be reused
+   safely, or repack the underlying storages for different combinations.
+
+2. If we want to run different programs with the same VM, a common storage
+   area is necessary to save memory usages.
+
+So a scratch pad might be a good idea of this.
+
+>
+    void* vmAllocScratchPad(struct vm_t*, size_t s)
+    int vmTensorFromSP(struct vm_t*, enum data_t, struct shape_t*, size_t start)
+<
+
+This provides great flexibility to upper stack to do whatever they want. Of
+course, it comes great responsibility, e.g., data race, non-overlapping,
+within bound check, etc.
+
+--------------------------------------------------------------------------------
+2021~
+
+With repeated re-designs over years, I finally come up the design in current
+form, which I like and am willing to use. It is non-opinionated, and provides
+enough design space for upper stacks. The interface is still small and
+self-explained. The overhead is as small as possible already.

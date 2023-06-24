@@ -1,0 +1,17 @@
+# vim: ft=help
+
+================================================================================
+C PROGRAMMING LANGUAGE (Optimization)~
+
+BRANCH PREDICTION
+
+In short, for static branch prediction
+
+- A forward branch defaults to not taken
+- A backward branch defaults to taken
+
+In order to effectively write your code to take advantage of these rules, when
+writing if-else or switch statements, check the most common cases first and
+work progressively down to the least common
+
+https://software.intel.com/content/www/us/en/develop/articles/branch-and-loop-reorganization-to-prevent-mispredicts.html
