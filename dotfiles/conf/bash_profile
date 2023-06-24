@@ -190,24 +190,15 @@ function ed_jdk {
 export CC=clang
 export CXX=clang++
 
-# This might conflict with in-house clang.
-#
-# # for clang compiled from source, SDKROOT is needed to provide sdk path for
-# # include. man xcrun and search for SDKROOT.
-# if [[ "$OSTYPE" == "darwin"* ]]; then
-#         export SDKROOT=`xcrun --sdk macosx --show-sdk-path`
-# fi
-
-# # use local clang/llvm if possible. Good for ASAN check on macOS.
-# if [[ -z $TMUX ]]; then
-#   if [ -d "$BUILD_HOME/llvm" ]; then
-#     export PATH=$BUILD_HOME/llvm/install/bin:$PATH
-#   fi
-# fi
-
-# allow manually enable
 ed_llvm() {
   export PATH=$BUILD_HOME/llvm/install/bin:$PATH
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # for clang compiled from source, SDKROOT is needed to provide sdk path for
+    # include. man xcrun and search for SDKROOT.
+    #
+    # This might conflict with in-house clang.
+    export SDKROOT=`xcrun --sdk macosx --show-sdk-path`
+  fi
 }
 
 cmake_llvm() {
