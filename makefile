@@ -24,3 +24,6 @@ install:
 	@echo "export DOTFILES=~/Workspace/y/dotfiles"
 	@echo "source ~/Workspace/y/dotfiles/conf/bash_profile"
 	@echo "##################################"
+
+compile:
+	make -C ann/eva all

@@ -136,7 +136,7 @@ sha256Digest(struct sha256 *s)
 
         // Format the hash value.
         for (int i = 0; i < DIGEST_SIZE; i++)
-                sprintf(buf + i * 2, "%02x", digest[i]);
+                snprintf(buf + i * 2, /*size=*/2 + 1, "%02x", digest[i]);
         return buf;
 }
 
