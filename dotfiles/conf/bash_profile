@@ -210,7 +210,7 @@ cmake_llvm_lite() {
 }
 
 # goto llvm easier
-function l {
+function llvm {
   cd ~/Workspace/build/llvm/src
   ed_lite_prompt
 }
