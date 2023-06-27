@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Run with LITE_LLVM_COMPILE=1 ~/Workspace/dotfiles/tools/llvm_config.sh to
 # disable unnecessary compilation.
@@ -17,6 +17,8 @@ LLVM_GENERATOR="Ninja"
 if [[ "$HOSTNAME" == *"arm" ]]; then
   SINGLE_ARCH="AArch64"
 elif [[ "$HOSTNAME" == "mini"* ]]; then
+  SINGLE_ARCH="AArch64"
+elif [[ "$HOSTNAME" == "debian-12" ]]; then
   SINGLE_ARCH="AArch64"
 else
   SINGLE_ARCH="X86"
