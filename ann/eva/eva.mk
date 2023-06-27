@@ -241,7 +241,7 @@ define objs
 $(1): compile $(2)/$(1)
 	$$(EVA_EX) $(2)/$(1)
 
-$(2)/$(1): cmd/$(1)/main.c $(3)
+$(2)/$(1): cmd/$(1)/main.c $(3) | $(2)
 	$$(EVA_LD) -o $$@ $$^
 
 endef
