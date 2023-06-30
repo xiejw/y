@@ -3,8 +3,9 @@
 # https://www.tug.org/texlive/quickinstall.html
 #   wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 #
-# scheme basic
-#   https://tug.org/svn/texlive/trunk/Master/tlpkg/tlpsrc/scheme-basic.tlpsrc?view=markup
+# scheme
+#   basic https://tug.org/svn/texlive/trunk/Master/tlpkg/tlpsrc/scheme-basic.tlpsrc?view=markup
+#   full  https://tug.org/svn/texlive/trunk/Master/tlpkg/tlpsrc/scheme-full.tlpsrc?view=markup
 #
 # remember to modify PATH
 #
@@ -19,7 +20,8 @@
 #   tlmgr install helvetic
 
 TEXDIR=~/Workspace/build/texlive/`date +"%Y"`
-SCHEME=basic
+#SCHEME=basic
+SCHEME=full
 
 mkdir -p ${TEXDIR}
 
