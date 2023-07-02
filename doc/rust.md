@@ -39,6 +39,8 @@ cargo rustc -- --emit=llvm-ir
 
 ## Mdbook
 
+- https://rust-lang.github.io/mdBook/index.html
+
 ```
 cargon install mdbook
 mdbook serve --open
