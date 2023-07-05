@@ -1,8 +1,9 @@
 test:
-	make -C ann/eva test > /tmp/y_eva.txt && \
-		make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt
+	@echo "run tests for all components" && \
+		echo "==> ann/eva" && make -C ann/eva test > /tmp/y_eva.txt && \
+		echo "==> ann/taocp/vol4" && make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt
 
-all:
+libeva:
 	make -C ann/eva all
 
 install:
