@@ -1,6 +1,8 @@
 ## SOP
 
-### Bootstrap Linux Kernel Config
+### Linux Kernel
+
+#### Bootstrap Linux Kernel Config
 
 ```
 ##########
@@ -24,7 +26,7 @@ make menuconfig
 # now go to next subsection.
 ```
 
-### Build Linux Kernel
+#### Build Linux Kernel
 
 Arch Linux:
 
@@ -42,4 +44,17 @@ sudo make modules_install
 make install
 # arch
 ~/Workspace/y/dotfiles/tools/kernel_install.sh
+```
+
+### Go
+
+#### Install
+
+Go [official site](http://golang.org) to download. It is recommended **not** to
+use Linux distro package to install, as it could be super old.
+
+Typically, the install can be done via:
+
+```
+sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
 ```
