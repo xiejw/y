@@ -1,0 +1,14 @@
+# vim: ft=help
+
+--------------------------------------------------------------------------------
+SUDOKU~
+
+See code, `cmd/sudoku/main.c`, for an interesting example demonstrates
+Dancing Links algorithm.
+
+- Based on Dancing Links [1] by Donald E. Knuth.
+- Soduku is based on The Art of Computer Programming [2] Vol 4, Dancing
+  Linkss, by Donald E. Knuth
+
+[1]: https://arxiv.org/pdf/cs/0011047.pdf
+[2]: https://www-cs-faculty.stanford.edu/~knuth/taocp.html

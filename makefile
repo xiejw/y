@@ -1,3 +1,10 @@
+test:
+	make -C ann/eva test > /tmp/y_eva.txt && \
+		make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt
+
+all:
+	make -C ann/eva all
+
 install:
 	@echo "=>" install vimrc
 	@echo "==>" delink sym links if any
@@ -25,5 +32,3 @@ install:
 	@echo "source ~/Workspace/y/dotfiles/conf/bash_profile"
 	@echo "##################################"
 
-compile:
-	make -C ann/eva all
