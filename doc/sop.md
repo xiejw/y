@@ -46,6 +46,46 @@ make install
 ~/Workspace/y/dotfiles/tools/kernel_install.sh
 ```
 
+### LLVM
+
+#### Bootstrap
+
+```
+##########
+# packages
+##########
+#
+# debian
+apt --no-install-recommends install xz-utils cmake ninja-build python3
+# arch
+pacman -S cmake ninja python3
+```
+
+#### Download
+
+- https://releases.llvm.org/
+- https://github.com/llvm/llvm-project.git
+
+
+#### Compile
+
+Target folder:
+```
+build/llvm/{src,install}
+```
+
+Build cmd:
+```
+mkdir build/llvm/build-<date>
+cd build/llvm/build-<date>
+
+sh ~/Workspace/y/dotfiles/tools/llvm_config.sh
+time ninja [-j2]
+
+rm build/llvm/install
+ln -sf build/llvm/build-<date> build/llvm/install
+```
+
 ### Go
 
 #### Install
