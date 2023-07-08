@@ -95,6 +95,7 @@ error_t board_put_new_stone(struct board *, struct pos, enum COLOR valid_c,
 
 // player constructor
 struct player *random_player(char *name);
+struct player *ml_player(char *name);
 
 // game
 void play_game(struct context *ctx);
@@ -247,6 +248,18 @@ random_pos(void *data)
 
 struct player *
 random_player(char *name)
+{
+        struct player *p = malloc(sizeof(*p));
+        p->name          = name;  // TODO unsafe, use sds_t
+        p->data          = NULL;
+        p->next_pos      = random_pos;
+        p->record_pos    = NULL;  // TODO
+        p->free_fn       = free;  // TODO
+        return p;
+}
+
+struct player *
+ml_player(char *name)
 {
         struct player *p = malloc(sizeof(*p));
         p->name          = name;  // TODO unsafe, use sds_t
