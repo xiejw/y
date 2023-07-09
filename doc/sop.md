@@ -98,3 +98,33 @@ Typically, the install can be done via:
 ```
 sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
 ```
+
+### Libtorch
+
+libtorch with mps on mac (amd64)
+
+- ensure clang is built-in verison (not customized clang from source code)
+- prepare the python env
+
+```
+python3 -m venv pyenv
+./pyenv/bin/activate
+pip3 install pyyaml typing_extensions
+```
+
+- follow the cmds:
+
+```
+cd build/torch
+git clone --depth 1 --recursive https://github.com/pytorch/pytorch.git src-<date>
+ln -sf src-<date> src
+mkdir build-<date>
+cd build-<date>
+~/Workspace/y/dotfiles/tools/torch_config.sh
+```
+
+refs:
+  https://pytorch.org/cppdocs/installing.html
+  https://discuss.pytorch.org/t/compile-libtorch-c-api-from-source/81624
+  https://github.com/pytorch/pytorch/blob/master/docs/libtorch.rst
+  https://github.com/mlverse/libtorch-mac-m1
