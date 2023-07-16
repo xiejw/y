@@ -39,11 +39,7 @@ make menuconfig
 grep =m .config | wc
 time make [-j1]
 sudo make modules_install
-
-# debian
-make install
-# arch
-~/Workspace/y/dotfiles/tools/kernel_install.sh
+sudo ~/Workspace/y/dotfiles/tools/kernel_install.sh
 ```
 
 ### LLVM
