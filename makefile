@@ -1,7 +1,30 @@
+# === WHAT ===
+#
+# makefile for project y
+#
+# === HOW ===
+#
+# if you are bootstrap a machine, run
+#
+#     make instal
+#
+# if you are sanity checking (daily run), run
+#
+#     make test
+#
+# if you are building eva, run
+#
+#     make eva      # alias
+#     make libeva
+
+.PHONY: install test eva libeva
+
 test:
 	@echo "run tests for all components" && \
 		echo "==> ann/eva" && make -C ann/eva test > /tmp/y_eva.txt && \
 		echo "==> ann/taocp/vol4" && make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt
+
+eva: libeva
 
 libeva:
 	make -C ann/eva all
