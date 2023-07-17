@@ -173,7 +173,7 @@ if [[ -z $TMUX ]]; then
 fi
 
 ed_go() {
-  export PATH=$BUILD_HOME/go/bin:$PATH
+  export PATH=/usr/local/go/bin:$PATH
 }
 
 # ------------------------------------------------------------------------------
