@@ -20,7 +20,7 @@ export TERM='xterm-256color'
 #
 # ```
 # [~/Workspace/y/dotfiles]
-# xiejw:freebsd-vm (master) -> <cursor>
+# xiejw:debian-vm (master) -> <cursor>
 # ```
 
 function prompt_command {
@@ -165,23 +165,9 @@ BUILD_HOME=$HOME/Workspace/build
 # ------------------------------------------------------------------------------
 # At go 1.11, GOPATH is used for mod cache and go install
 export GOPATH=~/.cache/go-mod
-# customized installed go place.
-if [[ -z $TMUX ]]; then
-  if [ -d "/usr/local/go" ]; then
-    export PATH=/usr/local/go/bin:$PATH
-  fi
-fi
 
 ed_go() {
   export PATH=/usr/local/go/bin:$PATH
-}
-
-# ------------------------------------------------------------------------------
-# jdk
-# ------------------------------------------------------------------------------
-
-function ed_jdk {
-  export PATH=~/Workspace/build/jdk/jdk/bin:$PATH
 }
 
 # ------------------------------------------------------------------------------
@@ -201,11 +187,11 @@ ed_llvm() {
   fi
 }
 
-cmake_llvm() {
+ed_cmake_llvm() {
   ~/Workspace/y/dotfiles/tools/llvm_config.sh
 }
 
-cmake_llvm_lite() {
+ed_cmake_llvm_lite() {
   LITE_LLVM_COMPILE=1 ~/Workspace/y/dotfiles/tools/llvm_config.sh
 }
 
@@ -214,13 +200,6 @@ function llvm {
   cd ~/Workspace/build/llvm/src
   ed_lite_prompt
 }
-
-# ------------------------------------------------------------------------------
-# docker
-# ------------------------------------------------------------------------------
-# make docker as boring as possible.
-export DOCKER_BUILDKIT=0
-export DOCKER_SCAN_SUGGEST=false
 
 # ------------------------------------------------------------------------------
 # psql
