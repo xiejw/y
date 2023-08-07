@@ -21,7 +21,7 @@ arch_install() {
 
 if [[ "$DIST" == *"Arch Linux"* ]]; then
   echo "Arch:  run script "
-  arch_install()
+  arch_install
 
 else
   echo "Other: run 'make install'"
