@@ -103,24 +103,48 @@ libtorch with mps on mac (amd64)
 - prepare the python env
 
 ```
+# prepare the venv
 python3 -m venv pyenv
 ./pyenv/bin/activate
+
+# required for compiling libtorch
 pip3 install pyyaml typing_extensions
+
+# optional for testing pytorch
+pip3 install -U torch
 ```
 
 - follow the cmds:
 
 ```
+#
+# prepare source code
+#
 cd build/torch
 git clone --depth 1 --recursive https://github.com/pytorch/pytorch.git src-<date>
 ln -sf src-<date> src
+
+#
+# prepare cmake with ninja
+#
 mkdir build-<date>
 cd build-<date>
 ~/Workspace/y/dotfiles/tools/torch_config.sh
+
+#
+# compile with ninja
+#
+time ninja
+
+#
+# finish the install
+#
+cd ..
+ln -sf install-<data> install
 ```
 
-refs:
-  https://pytorch.org/cppdocs/installing.html
-  https://discuss.pytorch.org/t/compile-libtorch-c-api-from-source/81624
-  https://github.com/pytorch/pytorch/blob/master/docs/libtorch.rst
-  https://github.com/mlverse/libtorch-mac-m1
+Refs:
+- https://pytorch.org/cppdocs/installing.html
+- https://discuss.pytorch.org/t/compile-libtorch-c-api-from-source/81624
+- https://github.com/pytorch/pytorch/blob/master/docs/libtorch.rst
+- https://github.com/mlverse/libtorch-mac-m1
