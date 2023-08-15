@@ -111,7 +111,7 @@ python3 -m venv pyenv
 pip3 install pyyaml typing_extensions
 
 # optional for testing pytorch
-pip3 install -U torch
+pip3 install -U torch numpy
 ```
 
 - follow the cmds:
