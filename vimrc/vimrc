@@ -387,6 +387,7 @@ autocmd FileType vim :setlocal foldlevel=2 foldmethod=marker
 " autocmd BufRead,BufNewFile *.h setlocal filetype=c
 autocmd FileType c :setlocal shiftwidth=8 tabstop=8 softtabstop=8
 autocmd FileType c :setlocal nofoldenable foldmethod=syntax foldcolumn=1 foldlevel=0
+autocmd BufRead,BufNewFile *.h setlocal filetype=c
 
 " customize syntax for c
 " - see 'help usr_44.tx'
@@ -418,7 +419,6 @@ autocmd FileType c :hi cStructureType ctermfg=Yellow
 " ------------------------------------------------------------------------------
 " --- cc
 "
-autocmd BufRead,BufNewFile *.h setlocal filetype=cpp
 autocmd FileType cpp :setlocal shiftwidth=8 tabstop=8 softtabstop=8
 
 " - added more int types and error_t as cType
