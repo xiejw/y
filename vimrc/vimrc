@@ -208,6 +208,10 @@ nmap <silent> <leader>b :bn! <CR>
 nmap <silent> <leader>B :bp! <CR>
 nmap <silent> <leader>t :tabn <CR>
 nmap <silent> <leader>T :tabp <CR>
+nmap <silent> <leader>1 :tabn 1<CR>
+nmap <silent> <leader>2 :tabn 2<CR>
+nmap <silent> <leader>3 :tabn 3<CR>
+nmap <silent> <leader>4 :tabn 4<CR>
 
 " ------------------------------------------------------------------------------
 " some switches for spell, paste, etc
