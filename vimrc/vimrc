@@ -105,7 +105,7 @@ let g:indentLine_enabled = 0
 
 " ------------------------------------------------------------------------------
 " java syntax
-" Plug 'uiiaoo/java-syntax.vim', {'commit': 'eb7b012'} " 2021-11
+Plug 'uiiaoo/java-syntax.vim', {'commit': 'eb7b012'} " 2021-11
 
 " ------------------------------------------------------------------------------
 " go syntax
@@ -473,7 +473,7 @@ autocmd FileType go :setlocal flp=^\\s*-\\s*
 " - put record (since java 14) as similar syntax as `class`
 " - put sealed as similar syntax as `implements`
 "
-autocmd FileType java :setlocal tw=80 shiftwidth=2
+autocmd FileType java :setlocal tw=80 shiftwidth=4
 autocmd FileType java :syntax keyword javaStructure sealed
 autocmd FileType java :hi Constant ctermfg=DarkGreen
 
