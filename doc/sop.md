@@ -104,14 +104,17 @@ libtorch with mps on mac (amd64)
 
 ```
 # prepare the venv
+cd ~/Workspace/build
 python3 -m venv pyenv
-./pyenv/bin/activate
+source ./pyenv/bin/activate
 
 # required for compiling libtorch
 pip3 install pyyaml typing_extensions
 
 # optional for testing pytorch
 pip3 install -U torch numpy
+# if [cpu] only
+pip3 install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 - follow the cmds:
