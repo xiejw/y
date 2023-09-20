@@ -209,6 +209,9 @@ function llvm {
 #   python3 -m venv ${BUILD_HOME}/pyenv
 ed_py() {
   source $BUILD_HOME/pyenv/bin/activate
+  echo "python3 not is `which python3`"
+  echo "alias py=python3 is set up"
+  alias py=python3
 }
 
 # ------------------------------------------------------------------------------
