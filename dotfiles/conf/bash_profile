@@ -24,7 +24,7 @@ export TERM='xterm-256color'
 # ```
 
 function prompt_command {
-  export PS1="\n[\[\033[1;34m\]\w]\[\033[0m\]\n\[\033[1;${PROMPT_COMMAND_COLOR}m\]\u:\h\[\033[1;33m\] $(${DOTFILES}/bin/prompt)-> \[\033[0m\]"
+  export PS1="\n\[\033[1;31m\]${CONDA_PROMPT_MODIFIER}\[\033[0m\][\[\033[1;34m\]\w]\[\033[0m\]\n\[\033[1;${PROMPT_COMMAND_COLOR}m\]\u:\h\[\033[1;33m\] $(${DOTFILES}/bin/prompt)-> \[\033[0m\]"
 }
 
 # makes the color different for different hosts.
@@ -204,13 +204,11 @@ function llvm {
 # ------------------------------------------------------------------------------
 # py
 # ------------------------------------------------------------------------------
-# To set up
-#
-#   python3 -m venv ${BUILD_HOME}/pyenv
-function ed_py {
+function p {
   if [[ $# -eq 1 ]]; then
     conda activate $1
   fi
+
   conda env list
   echo "python3 not is `which python3`"
   echo "alias py=python3 is set up"
