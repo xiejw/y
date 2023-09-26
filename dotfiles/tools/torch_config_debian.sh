@@ -1,20 +1,6 @@
 #!/bin/sh
 #
-# intended to be run on macOS with MPS support.
-
-#
-# check clang
-#
-CLANG=`which clang`
-CLANG_EXPECTED="/usr/bin/clang"
-
-if [ "$CLANG" == "$CLANG_EXPECTED" ]; then
-    echo "clang is correct in PATH: $CLANG"
-else
-    echo "clang is not stock version: $CLANG"
-    echo "panic: libtorch must be compiled with stock version: $CLANG_EXPECTED"
-    exit 1
-fi
+# intended to be run on debian without GPU support.
 
 #
 # prepare cmake
@@ -25,7 +11,6 @@ fi
   pip3 install pyyaml typing_extensions &&                    \
   cmake                                                       \
     -G Ninja                                                  \
-    -DUSE_MPS=ON                                              \
     -DBUILD_PYTHON=OFF                                        \
     -DBUILD_SHARED_LIBS=ON                                    \
     -DCMAKE_BUILD_TYPE:STRING=Release                         \
