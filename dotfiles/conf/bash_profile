@@ -207,8 +207,11 @@ function llvm {
 # To set up
 #
 #   python3 -m venv ${BUILD_HOME}/pyenv
-ed_py() {
-  source $BUILD_HOME/pyenv/bin/activate
+function ed_py {
+  if [[ $# -eq 1 ]]; then
+    conda activate $1
+  fi
+  conda env list
   echo "python3 not is `which python3`"
   echo "alias py=python3 is set up"
   alias py=python3
