@@ -97,10 +97,10 @@ sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
 
 ### Libtorch
 
-libtorch with mps on mac (amd64)
+libtorch with mps on mac (amd64) and debian (amd64).
 
-- ensure clang is built-in verison (not customized clang from source code)
-- prepare the python env
+- ensure `clang` is built-in verison (not customized clang from source code)
+- prepare the python venv
 
 ```
 # prepare the venv
@@ -124,20 +124,26 @@ pip3 install torch --index-url https://download.pytorch.org/whl/cpu
 # prepare source code
 #
 cd build/torch
-git clone --depth 1 --recursive https://github.com/pytorch/pytorch.git src-<date>
-ln -sf src-<date> src
+git clone --recursive https://github.com/pytorch/pytorch.git git
+ln -sf git src
 
 #
 # prepare cmake with ninja
 #
 mkdir build-<date>
 cd build-<date>
+
+# macOS
 ~/Workspace/y/dotfiles/tools/torch_config.sh
 
+# debian
+~/Workspace/y/dotfiles/tools/torch_config_debian.sh
+
 #
-# compile with ninja
+# compile and install with ninja
 #
 time ninja
+ninja install
 
 #
 # finish the install
