@@ -10,7 +10,7 @@ CLANG_FMT       = clang-format -i --style=file
 CFLAGS         +=-std=c99 -O2 -Wall -Werror -pedantic -Wno-c11-extensions
 
 # actions.
-default: prompt sync_git_repo checksum
+default: prompt sync_git_repo
 
 prompt:
 	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
@@ -22,7 +22,7 @@ checksum:
 	mkdir -p bin && ${RS} -o bin/ed_$@ rs/$@.rs
 
 # maintenance.
-fmt: rs_fmt
+fmt:
 	find ${FMT_FOLDERS} ${CLANG_EXTS} | xargs ${CLANG_FMT}
 
 rs_fmt:

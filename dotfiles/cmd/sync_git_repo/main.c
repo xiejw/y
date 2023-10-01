@@ -21,22 +21,22 @@ void    freeRepoList(char **repos, int repo_count);
 int
 main(void)
 {
-        {
-                // ----------------------------------------
-                // A golden list of repos for all machines.
-                // ----------------------------------------
-                char *repos[] = {
-                    /* clang-format off */
+        // {
+        //         // ----------------------------------------
+        //         // A golden list of repos for all machines.
+        //         // ----------------------------------------
+        //         char *repos[] = {
+        //             /* clang-format off */
 
-                    // core
-                    "~/Workspace/y",
+        //             // core
 
-                    /* clang-format on */
-                };
+        //             /* clang-format on */
+        //         };
 
-                int repo_count = sizeof(repos) / sizeof(char *);
-                if (OK != gitPullRepos(repos, repo_count)) return EUNSPECIFIED;
-        }
+        //         int repo_count = sizeof(repos) / sizeof(char *);
+        //         if (OK != gitPullRepos(repos, repo_count)) return
+        //         EUNSPECIFIED;
+        // }
         {
                 // ----------------------------------------
                 // A customized list of repos for local.
