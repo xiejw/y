@@ -6,10 +6,7 @@
 # prepare cmake
 #
 
-. ${HOME}/Workspace/build/pyenv/bin/activate &&               \
-  which python3 &&                                            \
-  pip3 install pyyaml typing_extensions &&                    \
-  cmake                                                       \
+cmake                                                         \
     -G Ninja                                                  \
     -DBUILD_PYTHON=OFF                                        \
     -DBUILD_SHARED_LIBS=ON                                    \

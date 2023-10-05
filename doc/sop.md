@@ -103,13 +103,17 @@ libtorch with mps on mac (amd64) and debian (amd64).
 - prepare the python venv
 
 ```
-# prepare the venv
+# (pip) prepare the venv
 cd ~/Workspace/build
 python3 -m venv pyenv
 source ./pyenv/bin/activate
+# (conda)
+conda create -n <env_name>
+conda activate  <env_name>
 
 # required for compiling libtorch
 pip3 install pyyaml typing_extensions
+conda install pyyaml typing_extensions
 
 # optional for testing pytorch
 pip3 install -U torch numpy
@@ -134,10 +138,10 @@ mkdir build-<date>
 cd build-<date>
 
 # macOS
-~/Workspace/y/dotfiles/tools/torch_config.sh
+~/Workspace/y/tools/torch_config.sh
 
 # debian
-~/Workspace/y/dotfiles/tools/torch_config_debian.sh
+~/Workspace/y/tools/torch_config_debian.sh
 
 #
 # compile and install with ninja
