@@ -202,8 +202,13 @@ function llvm {
 }
 
 # ------------------------------------------------------------------------------
-# py
+# py with conda
 # ------------------------------------------------------------------------------
+ed_conda() {
+  source "${HOME}/.miniconda3/etc/profile.d/conda.sh"
+  export PATH="${HOME}/.miniconda3/bin:$PATH"
+}
+
 function p {
   if [[ $# -eq 1 ]]; then
     conda activate $1
