@@ -14,19 +14,23 @@
 #
 # if you are building eva, run
 #
-#     make eva      # alias
-#     make libeva
+#     make eva             # alias
+#     make libeva_release
+#     make libeva_all
 
-.PHONY: install test eva libeva
+.PHONY: install test eva libeva_release libeva_all
 
 test:
 	@echo "run tests for all components" && \
 		echo "==> ann/eva" && make -C ann/eva test > /tmp/y_eva.txt && \
 		echo "==> ann/taocp/vol4" && make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt
 
-eva: libeva
+eva: libeva_release
 
-libeva:
+libeva_release:
+	make -C ann/eva release
+
+libeva_all:
 	make -C ann/eva all
 
 install:
