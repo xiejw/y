@@ -425,6 +425,10 @@ autocmd FileType c :hi cStructureType ctermfg=Yellow
 "
 autocmd FileType cpp :setlocal shiftwidth=8 tabstop=8 softtabstop=8
 
+function! GoogleCC()
+  :set shiftwidth=2 tabstop=2 softtabstop=2
+endfunction
+
 " - added more int types and error_t as cType
 autocmd FileType cpp :syn keyword	cType	i64_t u64_t i32_t u32_t f32_t f64_t
 
