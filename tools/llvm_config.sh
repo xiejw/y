@@ -12,14 +12,14 @@
 # LLVM_GENERATOR="Unix Makefiles"
 LLVM_GENERATOR="Ninja"
 
+ARCH=`uname -m`
+
 # ------------------------------------------------------------------------------
 # single_arch
-if [[ "$HOSTNAME" == *"arm" ]]; then
-  SINGLE_ARCH="AArch64"
-elif [[ "$HOSTNAME" == "mini"* ]]; then
-  SINGLE_ARCH="AArch64"
-elif [[ "$HOSTNAME" == "debian-12" ]]; then
-  SINGLE_ARCH="AArch64"
+if [[ "$ARCH" == *"arm64"* ]]; then
+  SINGLE_ARCH="AArch64"  # macOs
+elif [[ "$ARCH" == *"aarch64"* ]]; then
+  SINGLE_ARCH="AArch64"  # linux
 else
   SINGLE_ARCH="X86"
 fi
@@ -45,9 +45,12 @@ fi
 if [[ -n "$LITE_LLVM_COMPILE" ]]; then
   echo "compile llvm in minimal mode."
 
+# removed compiler-rt until https://github.com/llvm/llvm-project/issues/69616
+# is resolved.
+
   CMD="cmake -G '${LLVM_GENERATOR}' \
 -DCMAKE_BUILD_TYPE=Release \
--DLLVM_ENABLE_PROJECTS='clang;compiler-rt' \
+-DLLVM_ENABLE_PROJECTS='clang' \
 -DLLVM_ENABLE_ASSERTIONS=NO \
 -DLLVM_ENABLE_THREADS=NO \
 -DLLVM_TARGETS_TO_BUILD='${SINGLE_ARCH}' \
