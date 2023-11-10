@@ -60,3 +60,6 @@ install:
 	@echo "source ~/Workspace/y/dotfiles/conf/bash_profile"
 	@echo "##################################"
 
+clean:
+	find . -name '.build*' -type d  | xargs rm -rf && \
+		find . -not -wholename './.git/*' -not -wholename './vimrc/plugged/*' -type d -empty -delete
