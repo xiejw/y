@@ -1,10 +1,15 @@
-to install
+### To Install
 
-  make install
+Run
+```
+make install
+```
 
+## Repos
 
-toc
-
-- ann
-  - ann/eva
-  - ann/taocp
+| Folder           |  Project                   |
+| -----------      | ---------------            |
+| `/doc`           |  documentation             |
+| `/dotfiles`      |  bash, and other configs   |
+| `/tools`         |  common tools              |
+| `/vimrc`         |  vim configs               |
