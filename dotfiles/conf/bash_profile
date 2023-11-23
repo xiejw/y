@@ -221,20 +221,12 @@ function llvm {
 }
 
 # ------------------------------------------------------------------------------
-# python with conda
+# python with python venv
 # ------------------------------------------------------------------------------
-ed_conda() {
-  source "${HOME}/.miniconda3/etc/profile.d/conda.sh"
-  export PATH="${HOME}/.miniconda3/bin:$PATH"
-}
-
-function p {
-  if [[ $# -eq 1 ]]; then
-    conda activate $1
-  fi
-
-  conda env list
-  echo "python3 not is `which python3`"
+ed_py() {
+  source "${BUILD_HOME}/pyenv/bin/activate"
+  echo "python3 now is `which python3`"
+  echo "pip3    now is `which pip3`"
   echo "alias py=python3 is set up"
   alias py=python3
 }
