@@ -18,12 +18,18 @@
 #     make libeva_release
 #     make libeva_all
 
+C_ALRT = \033[0;33m
+C_INFO = \033[0;32m
+C_REST = \033[0m
+
 .PHONY: install test eva libeva_release libeva_all
 
 test:
-	@echo "run tests for all components" && \
-		echo "==> ann/eva" && make -C ann/eva test > /tmp/y_eva.txt && \
-		echo "==> ann/taocp/vol4" && make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt
+	@echo "${C_ALRT}!!!! run tests for all components (/tmp/y_<project_name>.txt)${C_REST}" && \
+		echo "${C_INFO}<==> ann/eva        ${C_REST}" && make -C ann/eva        test > /tmp/y_eva.txt         && \
+		echo "${C_INFO}<==> ann/taocp/vol4 ${C_REST}" && make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt  && \
+		echo "${C_INFO}<==> ann/luna       ${C_REST}" && make -C ann/luna       test > /tmp/y_luna.txt        && \
+		echo "${C_INFO}<==> bye            ${C_REST}"
 
 eva: libeva_release
 
