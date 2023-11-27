@@ -75,9 +75,9 @@ autocmd FileType text :setlocal tw=80 nocindent smartindent
 "
 " - config flp: for number list, the regexp is for number 1.\ and bullet -\
 autocmd FileType markdown :setlocal tw=80 nocindent
-autocmd FileType markdown :setlocal foldlevel=2
-autocmd FileType markdown :setlocal foldmethod=expr foldexpr=fold#GetMarkdownFold(v:lnum)
-autocmd FileType markdown :setlocal autoindent
+" autocmd FileType markdown :setlocal foldlevel=2
+" autocmd FileType markdown :setlocal foldmethod=expr foldexpr=fold#GetMarkdownFold(v:lnum)
+" autocmd FileType markdown :setlocal autoindent
 autocmd FileType markdown :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
 
 " {{{2 makefile
