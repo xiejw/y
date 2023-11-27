@@ -1,6 +1,6 @@
-## SOP
+# SOP
 
-### Linux Kernel
+## Linux Kernel
 
 #### Bootstrap Linux Kernel Config
 
@@ -42,7 +42,7 @@ sudo make modules_install
 sudo ~/Workspace/y/dotfiles/tools/kernel_install.sh
 ```
 
-### LLVM
+## LLVM
 
 #### Bootstrap
 
@@ -82,20 +82,24 @@ rm build/llvm/install
 ln -sf build/llvm/build-<date> build/llvm/install
 ```
 
-### Go
+## Go
 
-#### Install
+<details>
+  <summary>Click me</summary>
 
-Go [official site](http://golang.org) to download. It is recommended **not** to
-use Linux distro package to install, as it could be super old.
+  #### Install
 
-Typically, the install can be done via:
+  Go [official site](http://golang.org) to download. It is recommended **not** to
+  use Linux distro package to install, as it could be super old.
 
-```
-sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
-```
+  Typically, the install can be done via:
 
-### Libtorch
+  ```
+  sudo tar -C /usr/local -xzf go$VERSION.$OS-$ARCH.tar.gz
+  ```
+</details>
+
+## Libtorch
 
 libtorch with mps on mac (amd64) and debian (amd64).
 
