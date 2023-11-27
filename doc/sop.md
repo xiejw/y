@@ -108,6 +108,58 @@
   ```
 </details>
 
+## Postgresql (psql)
+
+<details>
+  <summary>Click me</summary>
+
+  Refs:
+  - https://www.postgresql.org/ftp/source/v16.1/
+  - https://www.postgresql.org/docs/current/install-make.html
+
+  #### Bootstrap
+
+  ```
+  #
+  ### packages
+  #
+  # debian
+  apt --no-install-recommends install libicu-dev
+  # arch
+  #
+  # macOS
+  brew install icu4c
+  ```
+
+  #### Compile and Install
+
+  ```
+  # compile
+  cd build/psql/src
+  ## next line is needed for macOS brew
+  export PKG_CONFIG_PATH="/opt/homebrew/opt/icu4c/lib/pkgconfig"
+  ./configure --prefix=`pwd`/../build-2023-<date>
+  make
+
+  # install
+  make install
+  cd ..
+  ln -sf build-<date> install
+  ```
+  #### Test
+
+  ```
+  mkdir data16
+  ./install/bin/initdb -D ./data16/
+  cat data16/postgresql.conf  # change port 5433
+  install/bin/pg_ctl -D ./data16/ -l logfile start
+  tail -f logfile
+  ./install/bin/psql -p 5433 -d postgres
+  select current_time;
+  ```
+
+</details>
+
 ## LibTorch
 
 <details>
