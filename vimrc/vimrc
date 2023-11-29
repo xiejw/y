@@ -98,10 +98,9 @@ Plug 'junegunn/fzf.vim', {'commit': '70541d2'} " 2022-01
 Plug 'arcticicestudio/nord-vim', {'commit': 'bc0f057'} " 2022-09
 
 " ------------------------------------------------------------------------------
-" indent line
+" indent guide
 "
-Plug 'Yggdroot/indentLine', {'commit': '7753505'} " 2022-04
-let g:indentLine_enabled = 0
+Plug 'preservim/vim-indent-guides', {'commit': 'a1e1390'} " 2023-11
 
 call plug#end()
 
@@ -130,6 +129,8 @@ hi Comment ctermfg=LightGrey
 hi visual ctermbg=166
 " make the pop up menu more visible. 166 is orange.
 hi PmenuSel ctermfg=White ctermbg=166
+
+
 
 " ==============================================================================
 " {{{1 leaders
@@ -189,7 +190,7 @@ nmap <silent> <leader>zz :call fzf#run({
 " ------------------------------------------------------------------------------
 " indentLine
 "
-nmap <silent> <leader>i :IndentLinesToggle<cr>
+nmap <silent> <leader>i :IndentGuidesToggle<cr>:hi IndentGuidesOdd  ctermbg=red<cr>
 
 " ------------------------------------------------------------------------------
 " open files related
