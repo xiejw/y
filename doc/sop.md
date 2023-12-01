@@ -8,21 +8,19 @@
   #### Bootstrap Linux Kernel Config
 
   ```
-  ##########
-  # packages
-  ##########
+  #
+  ### packages
   #
   # debian
   sudo apt-get install --no-install-recommends build-essential bc kmod flex libncurses5-dev libelf-dev libssl-dev dwarves bison
   # arch
   sudo pacman -S base-devel python bc pahole
 
-  ##########
-  # bootstrap config
-  ##########
+  #
+  ### bootstrap config
   #
   lsmod > /tmp/lsmod.txt
-  make LSMOD=/tmp/mylsmod localmodconfig
+  make LSMOD=/tmp/lsmod.txt localmodconfig
   make menuconfig
     - CONFIG_LOCALVERSION="-xiejw"
 
@@ -43,6 +41,61 @@
   time make [-j1]
   sudo make modules_install
   sudo ~/Workspace/y/dotfiles/tools/kernel_install.sh
+  ```
+
+</details>
+
+## Linux Kernel for Docker Support
+
+<details>
+  <summary>Click me</summary>
+
+  Minimal changes for Docker support
+  ```
+    [*] Networking support  --->
+          Networking options  --->
+            <*> 802.1d Ethernet Bridging
+            [*] Network packet filtering framework (Netfilter)  --->
+                [*] Advanced netfilter configuration
+                [*]  Bridged IP/ARP packets filtering
+                    IP: Netfilter Configuration  --->
+                      <*> IP tables support (required for filtering/masq/NAT)
+                      <*>   Packet filtering
+                      <*>   iptables NAT support
+                      <*>     MASQUERADE target support
+                    Core Netfilter Configuration  --->
+                      <*> Netfilter connection tracking support
+                      <*> Connection tracking netlink interface
+                      *** Xtables matches ***
+                      <*>   "addrtype" address type match support
+                      <*>   "conntrack" connection tracking match support
+    Device Drivers  --->
+        [*] Multiple devices driver support (RAID and LVM)  --->
+            <*>   Device mapper support
+            <*>     Thin provisioning target
+        [*] Network device support  --->
+            [*]   Network core driver support
+            <*>     Virtual ethernet pair device
+    File systems  --->
+        <*> Overlay filesystem support
+        Pseudo filesystems  --->
+            [*] HugeTLB file system support
+  ```
+
+
+  If `nf_tables` is used instead of legacy `iptables` (by run `sudo iptables`),
+  then enable the following options
+
+  ```
+    [*] Networking support  --->
+          Networking options  --->
+            [*] Network packet filtering framework (Netfilter)  --->
+                    Core Netfilter Configuration  --->
+                        <*> Netfilter nf_tables support
+                            <*> Netfilter nf_tables conntrack module
+                            <*> Netfilter nf_tables masquerade support
+                            <*> Netfilter nf_tables nat support
+                            <*> Netfilter x_tables over nf_tables module
   ```
 
 </details>
