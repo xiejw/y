@@ -50,6 +50,11 @@
 <details>
   <summary>Click me</summary>
 
+  Refs:
+  - https://wiki.archlinux.org/title/docker
+  - https://wiki.gentoo.org/wiki/Docker
+  - https://ungleich.ch/en-us/cms/blog/2018/08/18/iptables-vs-nftables/
+
   Minimal changes for Docker support
   ```
     [*] Networking support  --->
