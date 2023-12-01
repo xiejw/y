@@ -103,6 +103,19 @@
                             <*> Netfilter x_tables over nf_tables module
   ```
 
+  FAQ:
+  1. Module sign
+     ```
+     # error
+     make[1]: *** No make rule for making targets <n>, needed for <certs/x509_certificate_list>.  Stop.
+
+     # fix
+     CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
+     CONFIG_SYSTEM_TRUSTED_KEYS=""
+     ```
+
+
+
 </details>
 
 ## LLVM
