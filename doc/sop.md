@@ -242,22 +242,21 @@
   - prepare the python venv
 
   ```
-  # (pip) prepare the venv
+  #
+  # prepare the python venv
+  #
   cd ~/Workspace/build
   python3 -m venv pyenv
   source ./pyenv/bin/activate
-  # (conda)
-  conda create -n <env_name>
-  conda activate  <env_name>
 
   # required for compiling libtorch
   pip3 install pyyaml typing_extensions
-  conda install pyyaml typing_extensions
 
+  #
   # optional for testing pytorch
+  #
   pip3 install -U torch numpy
-  # if [cpu] only
-  pip3 install torch --index-url https://download.pytorch.org/whl/cpu
+  pip3 install torch --index-url https://download.pytorch.org/whl/cpu   # if [cpu] only
   ```
 
   - follow the cmds:
@@ -276,16 +275,13 @@
   mkdir build-<date>
   cd build-<date>
 
-  # macOS
-  ~/Workspace/y/tools/torch_config.sh
-
-  # debian
-  ~/Workspace/y/tools/torch_config_debian.sh
+  ~/Workspace/y/tools/torch_config.sh              # macOS
+  ~/Workspace/y/tools/torch_config_debian.sh       # debian
 
   #
   # compile and install with ninja
   #
-  time ninja
+  time ninja -j4
   ninja install
 
   #
