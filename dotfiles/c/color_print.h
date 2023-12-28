@@ -24,12 +24,12 @@ enum color {
  *     cPrint(COLOR_FYI, "Processing ...\n");
  *
  * Flush is needed to ensure the color reset applied in place immediately. */
-#define cPrintf(c, fmt, ...)                                \
-        printf("\033[1;%dm" fmt "\033[0m", c, __VA_ARGS__); \
-        fflush(stdout)
+#define cPrintf( c, fmt, ... )                                \
+        printf( "\033[1;%dm" fmt "\033[0m", c, __VA_ARGS__ ); \
+        fflush( stdout )
 
-#define cPrint(c, msg)                         \
-        printf("\033[1;%dm" msg "\033[0m", c); \
-        fflush(stdout)
+#define cPrint( c, msg )                         \
+        printf( "\033[1;%dm" msg "\033[0m", c ); \
+        fflush( stdout )
 
 #endif

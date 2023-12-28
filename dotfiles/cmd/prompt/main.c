@@ -13,31 +13,31 @@
 #define NO  0
 
 // all fns return YES/NO or error codes (neg number).
-int vimRunInBg(void);
-int litePrompt(void);
-int gitPending(void);
-int gitBranceName(char *);
+int vimRunInBg( void );
+int litePrompt( void );
+int gitPending( void );
+int gitBranceName( char * );
 
 // ----------------------------------------------------------------------------
 // main
 // ----------------------------------------------------------------------------
 int
-main(void)
+main( void )
 {
         char name[100];
-        if (YES == gitBranceName(name)) {
-                printf("(%s", name);
+        if ( YES == gitBranceName( name ) ) {
+                printf( "(%s", name );
                 // if lite prompt is enabled, skip the potential **slow** git
                 // pending check.
-                if (litePrompt()) {
-                        printf("-?");  // one - to make it clear
-                } else if (YES == gitPending()) {
-                        printf("*");
+                if ( litePrompt( ) ) {
+                        printf( "-?" );  // one - to make it clear
+                } else if ( YES == gitPending( ) ) {
+                        printf( "*" );
                 }
-                printf(") ");
+                printf( ") " );
         }
-        if (YES == vimRunInBg()) printf("--vim-- ");
-        fflush(stdout);
+        if ( YES == vimRunInBg( ) ) printf( "--vim-- " );
+        fflush( stdout );
 }
 
 // ----------------------------------------------------------------------------
@@ -45,34 +45,34 @@ main(void)
 // ----------------------------------------------------------------------------
 
 int
-vimRunInBg(void)
+vimRunInBg( void )
 {
-        char *args[] = {"ps", "-T", NULL};
-        int   fd     = execCmd(args);
+        char *args[] = { "ps", "-T", NULL };
+        int   fd     = execCmd( args );
 
         fr_handle_t *handle;
-        if (frDOpen(&handle, fd) != OK) {
-                cPrint(COLOR_ERROR, "Error: failed to call ps");
-                close(fd);
+        if ( frDOpen( &handle, fd ) != OK ) {
+                cPrint( COLOR_ERROR, "Error: failed to call ps" );
+                close( fd );
                 return EUNSPECIFIED;
         }
 
         int  result = NO;
         char line[MAX_STR_LINE_LEN];
-        while (1) {
-                int len = frNextLine(handle, line);
-                if (len < 0) {
-                        printf("(panic %d)", len);
+        while ( 1 ) {
+                int len = frNextLine( handle, line );
+                if ( len < 0 ) {
+                        printf( "(panic %d)", len );
                         return NO;
                 }
-                if (len == 0) break;
+                if ( len == 0 ) break;
 
-                if (strstr(line, "vim") != NULL) {
+                if ( strstr( line, "vim" ) != NULL ) {
                         result = YES;
                         break;
                 }
         }
-        frClose(handle);
+        frClose( handle );
         return result;
 }
 
@@ -80,67 +80,67 @@ vimRunInBg(void)
 //
 // controlled by env var LITE_PROMPT.
 int
-litePrompt(void)
+litePrompt( void )
 {
-        return NULL != getenv("LITE_PROMPT");
+        return NULL != getenv( "LITE_PROMPT" );
 }
 
 int
-gitPending(void)
+gitPending( void )
 {
-        char *args[] = {"git", "status", "-s", NULL};
-        int   fd     = execCmd(args);
+        char *args[] = { "git", "status", "-s", NULL };
+        int   fd     = execCmd( args );
 
         fr_handle_t *handle;
-        if (frDOpen(&handle, fd) != OK) {
-                cPrint(COLOR_ERROR, "Error: failed to call ps");
-                close(fd);
+        if ( frDOpen( &handle, fd ) != OK ) {
+                cPrint( COLOR_ERROR, "Error: failed to call ps" );
+                close( fd );
                 return EUNSPECIFIED;
         }
 
         int  result = NO;
         char line[MAX_STR_LINE_LEN];
         // read oneline is enough.
-        int len = frNextLine(handle, line);
-        if (len < 0) {
-                printf("(panic %d)", len);
+        int len = frNextLine( handle, line );
+        if ( len < 0 ) {
+                printf( "(panic %d)", len );
                 return NO;
         }
-        if (len > 0) {
+        if ( len > 0 ) {
                 result = YES;
         }
-        frClose(handle);
+        frClose( handle );
         return result;
 }
 
 int
-gitBranceName(char *name)
+gitBranceName( char *name )
 {
-        char *args[] = {"git", "branch", "--no-color", NULL};
-        int   fd     = execCmd(args);
+        char *args[] = { "git", "branch", "--no-color", NULL };
+        int   fd     = execCmd( args );
 
         fr_handle_t *handle;
-        if (frDOpen(&handle, fd) != OK) {
-                cPrint(COLOR_ERROR, "Error: failed to call ps");
-                close(fd);
+        if ( frDOpen( &handle, fd ) != OK ) {
+                cPrint( COLOR_ERROR, "Error: failed to call ps" );
+                close( fd );
                 return EUNSPECIFIED;
         }
 
         int  result = NO;
         char line[MAX_STR_LINE_LEN];
-        while (1) {
-                int len = frNextLine(handle, line);
-                if (len < 0) {
-                        printf("(panic %d)", len);
+        while ( 1 ) {
+                int len = frNextLine( handle, line );
+                if ( len < 0 ) {
+                        printf( "(panic %d)", len );
                         return NO;
                 }
-                if (len == 0) break;
-                if (len < 3) continue;
-                if (line[0] != '*') continue;
-                strcpy(name, line + 2);
+                if ( len == 0 ) break;
+                if ( len < 3 ) continue;
+                if ( line[0] != '*' ) continue;
+                strcpy( name, line + 2 );
                 result = YES;
                 break;
         }
-        frClose(handle);
+        frClose( handle );
         return result;
 }

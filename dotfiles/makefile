@@ -7,10 +7,10 @@ CLANG_FMT       = clang-format -i --style=file
 
 CFLAGS         +=-std=c99 -O2 -Wall -Werror -pedantic -Wno-c11-extensions
 
-#
+# -------
 # actions
 #
-default: prompt sync_git_repo
+default: prompt sync_git_repo nginxfmt
 
 prompt:
 	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
@@ -18,7 +18,10 @@ prompt:
 sync_git_repo:
 	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
 
-#
+nginxfmt:
+	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
+
+# -----------
 # maintenance
 #
 fmt:

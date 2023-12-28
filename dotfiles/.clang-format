@@ -172,5 +172,12 @@ StatementMacros:
   - QT_REQUIRE_VERSION
 TabWidth:        8
 UseTab:          Never
+# BEGIN xiejw Changed
+SpacesInParens: Custom
+SpacesInParensOptions:
+  InConditionalStatements: true
+  InEmptyParentheses: true
+  Other: true
+# END xiejw Changed
 ...
 

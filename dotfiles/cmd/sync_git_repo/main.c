@@ -15,11 +15,11 @@
 
 #define MAX_REPO_COUNT 50
 
-error_t gitPullRepos(char **repo_list, int repo_count);
-void    freeRepoList(char **repos, int repo_count);
+error_t gitPullRepos( char **repo_list, int repo_count );
+void    freeRepoList( char **repos, int repo_count );
 
 int
-main(void)
+main( void )
 {
         // {
         //         // ----------------------------------------
@@ -43,12 +43,14 @@ main(void)
                 // ----------------------------------------
                 char **repos = NULL;
                 int    repo_count;
-                if (OK != readRepoListFromConfig("~/.git_repo_list", &repos,
-                                                 &repo_count, MAX_REPO_COUNT))
+                if ( OK != readRepoListFromConfig( "~/.git_repo_list", &repos,
+                                                   &repo_count,
+                                                   MAX_REPO_COUNT ) )
                         return EUNSPECIFIED;
 
-                if (OK != gitPullRepos(repos, repo_count)) return EUNSPECIFIED;
-                freeRepoList(repos, repo_count);
+                if ( OK != gitPullRepos( repos, repo_count ) )
+                        return EUNSPECIFIED;
+                freeRepoList( repos, repo_count );
         }
 
         return OK;
@@ -60,14 +62,14 @@ main(void)
 
 // Invokes git pull for the repo @ `path`.
 error_t
-gitPull(char *path)
+gitPull( char *path )
 {
         // ---------------------------------------------------------------------------
         // Step 1: normalize the git repository path.
         char normalized_path[MAX_PATH_LEN];
-        if (OK != expand_tilde_path(path, normalized_path)) {
-                cPrintf(COLOR_ERROR, "Error: not a valid path\n  Repo at: %s\n",
-                        path);
+        if ( OK != expand_tilde_path( path, normalized_path ) ) {
+                cPrintf( COLOR_ERROR,
+                         "Error: not a valid path\n  Repo at: %s\n", path );
                 return EUNSPECIFIED;
         }
 
@@ -80,36 +82,36 @@ gitPull(char *path)
 
         // ---------------------------------------------------------------------------
         // Step 2: check existence and permission.
-        if (OK != access(normalized_path, F_OK)) {
-                cPrintf(COLOR_FYI,
-                        "Skip repository as not existed\n  Repo at: %s\n",
-                        normalized_path);
+        if ( OK != access( normalized_path, F_OK ) ) {
+                cPrintf( COLOR_FYI,
+                         "Skip repository as not existed\n  Repo at: %s\n",
+                         normalized_path );
                 return OK;
         }
 
         // ---------------------------------------------------------------------------
         // Step 3: pull repository.
-        cPrintf(COLOR_INFO, "Pulling: %s\n", normalized_path);
+        cPrintf( COLOR_INFO, "Pulling: %s\n", normalized_path );
 
         git_status_t status;
         status.path = normalized_path;  // Lifetime s same as normalized_path.
 
-        error_t s = gitReadStatus(&status);
-        if (OK == s) {
-                cPrint(COLOR_SUCCESS, "Success.\n");
+        error_t s = gitReadStatus( &status );
+        if ( OK == s ) {
+                cPrint( COLOR_SUCCESS, "Success.\n" );
         } else {
-                if (ETERMSIG == s) {
+                if ( ETERMSIG == s ) {
                         cPrintf(
                             COLOR_ERROR,
                             "Error: interrupted by a signal.\n Repo at: %s\n",
-                            normalized_path);
+                            normalized_path );
                         return s;
                 }
 
                 // log an error message, and continue.
-                cPrintf(COLOR_ERROR,
-                        "Error: failed to pull the git repo.\n  Repo at: %s\n",
-                        normalized_path);
+                cPrintf( COLOR_ERROR,
+                         "Error: failed to pull the git repo.\n  Repo at: %s\n",
+                         normalized_path );
         }
 
         return OK;
@@ -117,17 +119,17 @@ gitPull(char *path)
 
 /* Takes actions on a list of git repositories.  */
 error_t
-gitPullRepos(char **repo_list, int repo_count)
+gitPullRepos( char **repo_list, int repo_count )
 {
-        for (int i = 0; i < repo_count; ++i) {
-                if (OK != gitPull(repo_list[i])) return EUNSPECIFIED;
+        for ( int i = 0; i < repo_count; ++i ) {
+                if ( OK != gitPull( repo_list[i] ) ) return EUNSPECIFIED;
         }
         return OK;
 }
 
 void
-freeRepoList(char **repos, int repo_count)
+freeRepoList( char **repos, int repo_count )
 {
-        for (int i = 0; i < repo_count; i++) free(repos[i]);
-        free(repos);
+        for ( int i = 0; i < repo_count; i++ ) free( repos[i] );
+        free( repos );
 }

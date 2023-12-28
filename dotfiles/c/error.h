@@ -15,4 +15,4 @@ typedef int error_t;
 #define EFORKFAIL       -9   // Fork failed.
 #define ETERMSIG        -10  // Terminated via signal.
 
-#endif                       // ERROR_H_
+#endif  // ERROR_H_
