@@ -14,5 +14,6 @@ typedef int error_t;
 #define EPIPEFAIL       -8   // Pipe failed.
 #define EFORKFAIL       -9   // Fork failed.
 #define ETERMSIG        -10  // Terminated via signal.
+#define EEOF            -11  // End of file.
 
 #endif  // ERROR_H_

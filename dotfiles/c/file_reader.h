@@ -33,7 +33,8 @@
 //     line), upon succeed.  Result will be stored to `dst`, which is owned by
 //     call site. It should be at least MAX_STR_LINE_LEN + 1 size.
 //
-//     Specisl case, it returns 0, upon end of file, or negative int for error.
+//     Specisl case, it returns EEOF, upon end of file, or other negative int
+//     for error.
 
 // -----------------------------------------------------------------------------
 // prototypes
@@ -101,7 +102,7 @@ int
 frNextLine( fr_handle_t *handle, char *dst )
 {
         // Special case, returns immediately if EOF.
-        if ( handle->end_of_file_ ) return 0;
+        if ( handle->end_of_file_ ) return EEOF;
 
         // Allocates the buffer for current line. It is 1 larger than the
         // max_line_len_.
@@ -110,7 +111,7 @@ frNextLine( fr_handle_t *handle, char *dst )
         int           i;
 
         // The loop ends in any of the following conditions.
-        // 1. EOF.
+        // 1. EEOF.
         // 2. find an EOL.
         // 3. reach maximul line length limit, i.e., error.
         for ( ;; ) {
@@ -120,12 +121,12 @@ frNextLine( fr_handle_t *handle, char *dst )
                         if ( OK != err ) return err;
                 }
 
-                // Checks whether it is EOF.
+                // Checks whether it is EEOF.
                 if ( handle->allocated_ == 0 ) {
                         handle->end_of_file_ = 1;
                         if ( current_len == 0 ) {
                                 // Nothing left after the last EOL.
-                                return 0;
+                                return EEOF;
                         } else {
                                 line[current_len] = '\0';
                                 strcpy( dst, (const char *)line );

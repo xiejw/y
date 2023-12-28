@@ -61,11 +61,11 @@ vimRunInBg( void )
         char line[MAX_STR_LINE_LEN];
         while ( 1 ) {
                 int len = frNextLine( handle, line );
-                if ( len < 0 ) {
+                if ( len < 0 && len != EEOF ) {
                         printf( "(panic %d)", len );
                         return NO;
                 }
-                if ( len == 0 ) break;
+                if ( len == 0 || len == EEOF ) break;
 
                 if ( strstr( line, "vim" ) != NULL ) {
                         result = YES;
@@ -102,7 +102,7 @@ gitPending( void )
         char line[MAX_STR_LINE_LEN];
         // read oneline is enough.
         int len = frNextLine( handle, line );
-        if ( len < 0 ) {
+        if ( len < 0 && len != EEOF ) {
                 printf( "(panic %d)", len );
                 return NO;
         }
@@ -130,11 +130,11 @@ gitBranceName( char *name )
         char line[MAX_STR_LINE_LEN];
         while ( 1 ) {
                 int len = frNextLine( handle, line );
-                if ( len < 0 ) {
+                if ( len < 0 && len != EEOF ) {
                         printf( "(panic %d)", len );
                         return NO;
                 }
-                if ( len == 0 ) break;
+                if ( len == 0 || len == EEOF ) break;
                 if ( len < 3 ) continue;
                 if ( line[0] != '*' ) continue;
                 strcpy( name, line + 2 );

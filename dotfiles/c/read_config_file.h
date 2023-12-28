@@ -66,9 +66,14 @@ readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
         while ( ( *count ) < max_count ) {
                 char *line = malloc( MAX_PATH_LEN );
                 int   len  = frNextLine( handle, line );
-                if ( len == 0 ) {
+                if ( len == EEOF ) {
                         free( line );
                         break;
+                }
+
+                if ( len == 0 ) {
+                        free( line );  // skip empty line.
+                        continue;
                 }
 
                 if ( len < 0 ) {
