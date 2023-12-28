@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "c/constants.h"
 #include "c/error.h"
 
 // -----------------------------------------------------------------------------
@@ -28,9 +29,9 @@
 // int     frNextLine(fr_handle_t *handle, char *dst);
 //
 //     After open the file, frNextLine can read one more line, until end of
-//     file. It returns the size of the characters read (including new line),
-//     upon succeed.  Result will be stored to `dst`, which is owned by call
-//     site. It should be at least MAX_STR_LINE_LEN + 1 size.
+//     file. It returns the size of the characters read (excluding the new
+//     line), upon succeed.  Result will be stored to `dst`, which is owned by
+//     call site. It should be at least MAX_STR_LINE_LEN + 1 size.
 //
 //     Specisl case, it returns 0, upon end of file, or negative int for error.
 
