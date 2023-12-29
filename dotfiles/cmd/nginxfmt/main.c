@@ -28,6 +28,8 @@ struct state {
         char indent[MAX_INDENT_SIZE];
 };
 
+#define INIT_STATE { 0, 0, { 0 } }
+
 // Process one more line and advance internal state `state`.
 error_t advanceOneLine( struct state *state, char *line );
 void    trimLine( char *line );
@@ -44,9 +46,10 @@ main( void )
         fr_handle_t *hl  = NULL;
         char         line[MAX_STR_LINE_LEN + 1];
 
-        struct state state = { 0, 0, { 0 } };
+        struct state state = INIT_STATE;
 
         if ( OK != frDOpen( &hl, 0 ) ) {
+                err = -1;
                 fprintf( stderr, "failed to open stdin. aborted." );
                 goto cleanup;
         }
@@ -56,6 +59,7 @@ main( void )
                 if ( len_or_err == EEOF ) break;
 
                 if ( len_or_err < 0 ) {
+                        err = -1;
                         fprintf( stderr, "unknown error. aborted." );
                         goto cleanup;
                 }
