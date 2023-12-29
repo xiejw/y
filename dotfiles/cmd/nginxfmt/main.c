@@ -1,3 +1,11 @@
+// This is a very simple nginx conf formatter for my own conf files.
+//
+// It does super simple job to re-indent all lines, collapse empty lines into
+// one of none.
+//
+// Usage:
+//   nginxfmt < input_file > output_file
+//
 #include <stdio.h>
 
 #define INLINE_C_CODE
