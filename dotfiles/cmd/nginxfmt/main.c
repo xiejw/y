@@ -16,10 +16,10 @@
 
 #define MAX_INDENT_SIZE 256
 
-#define EMIT_LINE( line )     printf( "line: `%s`\n", ( line ) )
-#define EMIT_LINE_START( )    printf( "line: `" )
+#define EMIT_LINE( line )     printf( "%s\n", ( line ) )
+#define EMIT_LINE_START( )    printf( "" )
 #define EMIT_LINE_RAW( line ) printf( "%s", line )
-#define EMIT_LINE_END( )      printf( "`\n" )
+#define EMIT_LINE_END( )      printf( "\n" )
 
 // Zero initial state
 struct state {
@@ -28,7 +28,10 @@ struct state {
         char indent[MAX_INDENT_SIZE];
 };
 
-#define INIT_STATE { 0, 0, { 0 } }
+#define INIT_STATE          \
+        {                   \
+                0, 0, { 0 } \
+        }
 
 // Process one more line and advance internal state `state`.
 error_t advanceOneLine( struct state *state, char *line );
