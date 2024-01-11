@@ -56,6 +56,8 @@ CFLAGS          += -Wno-declaration-after-statement -Wno-cast-align
 CFLAGS          += -Wno-format-nonliteral -Wno-padded
 CFLAGS          += -Wno-bad-function-cast -Wno-strict-prototypes
 CFLAGS          += -Wno-unsafe-buffer-usage
+CFLAGS          += -Wno-covered-switch-default
+
 
 endif  # NO_CLANG_FLAGS
 

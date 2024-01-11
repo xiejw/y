@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 // eva internal
+#include <base/error.h>
 #include <mlvm/vm_internal.h>
 
 int
@@ -26,9 +27,8 @@ alloc:
         case VM_U64:
                 data = malloc(s->size * sizeof(u64_t));
                 break;
-                // default:
-                //         return errNew("unsupported dtype for new tensor %d",
-                //         dtype);
+        default:
+                errFatalAndExit("unsupported dtype for new tensor %d", dtype);
         }
 
         vmFillHandle(p, dtype, s, data);
@@ -104,6 +104,8 @@ tensorLikeToSds(sds_t *s, struct vm_sp *sp, enum vm_dtype dtype,
         case VM_U64:
                 sdsCatPrintf(s, "u64");
                 break;
+        default:
+                errFatalAndExit("unsupported dtype for new tensor %d", dtype);
         }
 
         if (nullable_data == NULL) return;

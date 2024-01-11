@@ -1,6 +1,7 @@
 // copyright: see license_rxi-mit file.
 
 #include "base/log.h"
+#include "base/error.h"
 
 #include <stdlib.h>
 #include <string.h>  // strlen
@@ -97,7 +98,7 @@ unlock(void)
 // impl for apis
 // -----------------------------------------------------------------------------
 void
-loge_(int level, const char *file, int line, const char *fmt, ...)
+loge_(int level, int dump, const char *file, int line, const char *fmt, ...)
 {
         if (logIsLevelOn(level)) {
                 struct log_event ev = {
@@ -116,8 +117,13 @@ loge_(int level, const char *file, int line, const char *fmt, ...)
 
                 unlock();
         }
+
         if (level == LOG_FATAL) {
-                exit(1);
+                if (dump) {
+                        errDump("current error stack:");
+                } else {
+                        exit(1);
+                }
         }
 }
 

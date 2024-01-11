@@ -72,7 +72,7 @@ check_long:
         }
         errPanic("should not reach");
 
-check_byte : {
+check_byte: {
         // check the byte in two halfs
         unsigned long b  = v & 0xFF;
         unsigned long b1 = b & 0xF;

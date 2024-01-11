@@ -90,10 +90,10 @@ test_vm_batch()
 #pragma clang diagnostic ignored "-Wmissing-field-initializers"
 
         const struct vm_oparg program[] = {
-  // clang-format off
+            // clang-format off
                 {VM_OP_ADD, td, t1, t2, /*has_opt*/ 0},
                 {VM_OP_MUL, td, td, -1, /*has_opt*/ 1, {.mode = VM_OPT_MODE_F_BIT, .f = 2.0}},
-  // clang-format on
+            // clang-format on
         };
 
 #pragma clang diagnostic pop

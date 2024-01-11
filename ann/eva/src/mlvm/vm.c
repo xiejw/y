@@ -275,8 +275,7 @@ vmExec(struct vm *vm, enum vm_opcode op, const struct vm_opopt *opt, int dst,
                 }
                 return vmOpLossSCELF32(td, t1, t2, tg);
 
-                // default:
-                //         return errNewWithNote(ENOTIMPL, "unimpl op for
-                //         vmExec: %d", op);
+        default:
+                return errNewWithNote(ENOTIMPL, "unimpl op for vmExec: %d", op);
         }
 }
