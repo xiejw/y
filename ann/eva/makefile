@@ -174,7 +174,6 @@ ${BUILD}/sched_%.o: ${SRC}/sched/%.c | ${BUILD}
 
 # alias
 c: cron
-s: sudoku
 
 compile: $(patsubst ${CMD}/%/main.c,${BUILD}/%,$(wildcard ${CMD}/*/main.c))
 

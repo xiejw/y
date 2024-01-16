@@ -14,11 +14,11 @@
 # ------------------------------------------------------------------------------
 # top level configurations
 # ------------------------------------------------------------------------------
-BUILD_BASE      = .build
-BUILD           = ${BUILD_BASE}
-BUILD_RELEASE   = ${BUILD_BASE}_release
 UNAME           = $(shell uname)
 PROCESSOR       = $(shell uname -p)
+
+BUILD_BASE      = .build
+BUILD           = ${BUILD_BASE}
 
 # ------------------------------------------------------------------------------
 # compiler flags
