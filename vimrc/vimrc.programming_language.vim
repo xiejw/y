@@ -14,7 +14,7 @@ autocmd FileType go :setlocal flp=^\\s*-\\s*
 " ------------------------------------------------------------------------------
 " --- cc
 "
-autocmd FileType cpp :setlocal shiftwidth=8 tabstop=8 softtabstop=8
+autocmd FileType cpp :setlocal shiftwidth=2 tabstop=2 softtabstop=2
 
 function! GoogleCC()
   :set shiftwidth=2 tabstop=2 softtabstop=2
