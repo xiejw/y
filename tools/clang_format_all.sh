@@ -1,5 +1,9 @@
 #!/bin/bash
 #
+# The script will find all cc/c files under `folder_path` and format them with
+# clang-format.
+#
+# Usage: <script> <folder_path>
 
 set -e
 
