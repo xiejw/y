@@ -58,6 +58,10 @@ CFLAGS          += -Wno-bad-function-cast -Wno-strict-prototypes
 CFLAGS          += -Wno-unsafe-buffer-usage
 CFLAGS          += -Wno-covered-switch-default
 
+else
+
+# This is too restrict.
+CFLAGS          += -Wno-strict-prototypes
 
 endif  # NO_CLANG_FLAGS
 
