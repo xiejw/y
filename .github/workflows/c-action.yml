@@ -6,6 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CLANG_VERSION: 15
+      CC: clang
+      CXX: clang++
     steps:
       - uses: actions/checkout@v4
       - name: Install LLVM and Clang
