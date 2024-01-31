@@ -1,0 +1,23 @@
+name: Eva Action
+run-name: ${{ github.actor }} is running tests for eva
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CLANG_VERSION: 15
+      CC: clang
+      CXX: clang++
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LLVM and Clang
+        run: sudo apt-get install -y clang-$CLANG_VERSION
+      - name: Run Eva Test
+        env:
+          NO_CLANG_FLAGS: 1
+        run: make -C ${{ github.workspace }}/ann/eva clean test
+      - name: Run Eva Release
+        env:
+          NO_CLANG_FLAGS: 1
+        run: make -C ${{ github.workspace }}/ann/eva release
+
