@@ -11,5 +11,11 @@ jobs:
       - name: Install LLVM and Clang
         run: sudo apt-get install -y clang-$CLANG_VERSION
       - name: Run Eva Test
+        env:
+          NO_CLANG_FLAGS: 1
         run: make -C ${{ github.workspace }}/ann/eva clean test
+      - name: Run Eva Release
+        env:
+          NO_CLANG_FLAGS: 1
+        run: make -C ${{ github.workspace }}/ann/eva release
 
