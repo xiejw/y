@@ -16,6 +16,8 @@ ${BUILD}/test: cmd/test/main.cc | ${BUILD}
 ${BUILD}:
 	mkdir -p ${BUILD}
 
+test: compile
+
 fmt:
 	~/Workspace/y/tools/clang_format_all.sh cmd
 

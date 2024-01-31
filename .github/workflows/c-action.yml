@@ -20,4 +20,6 @@ jobs:
         env:
           NO_CLANG_FLAGS: 1
         run: make -C ${{ github.workspace }}/ann/eva release
+      - name: Run Eve Test
+        run: make -C ${{ github.workspace }}/ann/eve clean test
 
