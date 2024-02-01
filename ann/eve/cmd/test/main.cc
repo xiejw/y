@@ -1,53 +1,8 @@
 #include <iostream>
 
-#include <string>
-#include <vector>
+#include "eve/testing/testing.h"
 
-struct SuiteBaseTest {
-    virtual char *TestBody( ) = 0;
-};
-
-struct Suite {
-    std::string    name;
-    SuiteBaseTest *func;
-};
-
-class SuiteUmbrella {
-  public:
-    static std::vector<Suite> suites;
-
-    void RunAllSuites( )
-    {
-        for ( auto &suite : suites ) {
-            std::cout << "Running: " << suite.name << "\n";
-            suite.func->TestBody( );
-        }
-    }
-};
-
-std::vector<Suite> SuiteUmbrella::suites{ };
-
-class SuiteTestInfo {
-  public:
-    SuiteTestInfo( std::string test_name, SuiteBaseTest *func )
-    {
-        SuiteUmbrella::suites.push_back( Suite{ test_name, func } );
-    }
-};
-
-class SuiteTestName : SuiteBaseTest {
-  public:
-    char *TestBody( ) override;
-
-  private:
-    static SuiteTestInfo *test_info;
-};
-
-SuiteTestInfo *SuiteTestName::test_info =
-    new SuiteTestInfo{ "hello_test_name", new SuiteTestName };
-
-char *
-SuiteTestName::TestBody( )
+EVE_TEST( BaseName, TestName )
 {
     std::cout << "I am SuiteTestName\n";
     return nullptr;
@@ -56,6 +11,6 @@ SuiteTestName::TestBody( )
 int
 main( )
 {
-    SuiteUmbrella suites{ };
-    suites.RunAllSuites( );
+    eve::testing::SuiteDriver driver{ };
+    driver.RunAllSuites( );
 }
