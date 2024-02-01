@@ -1,12 +1,14 @@
-name: Go Action
-run-name: ${{ github.actor }} is performing Go Action
+name: Luna Action
+run-name: ${{ github.actor }} is running tests
 on: [push]
+env:
+  PROJECT_NAME: luna
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [ '1.20', '1.21.x' ]
+        go-version: [ '1.21.x' ]
     steps:
       - uses: actions/checkout@v4
       - name: Setup Go ${{ matrix.go-version }}
@@ -15,3 +17,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Display Go version
         run: go version
+      - name: Run ${{ env.PROJECT_NAME }} Test
+        run: make -C ${{ github.workspace }}/x/ann/$PROJECT_NAME clean test
+      - name: Run ${{ env.PROJECT_NAME }} Release
+        run: make -C ${{ github.workspace }}/x/ann/$PROJECT_NAME release

@@ -1,7 +1,12 @@
 GO_PKG = github.com/xiejw/y/ann/luna
+GO    ?= go
 
 test:
-	go test ${GO_PKG}/...
+	${GO} test ${GO_PKG}/...
 
 fmt:
-	go fmt ${GO_PKG}/...
+	${GO} fmt ${GO_PKG}/...
+
+clean:
+
+release:
