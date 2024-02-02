@@ -1,17 +1,24 @@
 name: Eve Action
-run-name: ${{ github.actor }} is running tests for eve
+run-name: ${{ github.actor }} is running tests.
 on: [push]
+env:
+  PROJECT_NAME: eve
+  CLANG_VERSION: 15
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CLANG_VERSION: 15
-      CC: clang
-      CXX: clang++
     steps:
       - uses: actions/checkout@v4
       - name: Install LLVM and Clang
         run: sudo apt-get install -y clang-$CLANG_VERSION
-      - name: Run Eve Test
+      - name: Set environmental variables
+        run: |
+          echo "CC=clang-$CLANG_VERSION" >> $GITHUB_ENV
+          echo "CXX=clang++-$CLANG_VERSION" >> $GITHUB_ENV
+      - name: Display Clang version
+        run: ${CC} --version
+      - name: Run ${{ env.PROJECT_NAME }} Test
         run: make -C ${{ github.workspace }}/ann/eve clean test
+      - name: Run ${{ env.PROJECT_NAME }} Release
+        run: make -C ${{ github.workspace }}/ann/eve release
 
