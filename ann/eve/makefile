@@ -41,7 +41,7 @@ compile_test: ${BUILD}/test_main
 # Objects actions
 #
 # see https://www.gnu.org/software/make/manual/html_node/Chained-Rules.html
-.NOTINTERMEDIATE:
+.PRECIOUS: ${BUILD}/%_main.o
 
 ${BUILD}:
 	mkdir -p ${BUILD}

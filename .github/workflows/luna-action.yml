@@ -9,8 +9,6 @@ jobs:
         go-version: [ '1.21.x' ]
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: x
       - name: Setup Go ${{ matrix.go-version }}
         uses: actions/setup-go@v4
         with:
@@ -18,6 +16,6 @@ jobs:
       - name: Display Go version
         run: go version
       - name: Run ${{ github.workflow }} Test
-        run: make -C ${{ github.workspace }}/x/ann/${{ github.workflow }} clean test
+        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} clean test
       - name: Run ${{ github.workflow }} Release
-        run: make -C ${{ github.workspace }}/x/ann/${{ github.workflow }} release
+        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} release
