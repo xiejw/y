@@ -18,9 +18,7 @@ jobs:
       - name: Display Clang version
         run: ${CC} --version
       - name: Run ${{ github.workflow }} Test
-        env:
         run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} clean test
       - name: Run ${{ github.workflow }} Release
-        env:
         run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} release
 
