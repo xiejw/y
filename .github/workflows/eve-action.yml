@@ -1,8 +1,7 @@
-name: Eve Action
-run-name: ${{ github.actor }} is running tests.
+name: eve
+run-name: ${{ github.actor }} is running tests for ${{ github.workflow }}
 on: [push]
 env:
-  PROJECT_NAME: eve
   CLANG_VERSION: 15
 jobs:
   build:
@@ -17,8 +16,8 @@ jobs:
           echo "CXX=clang++-$CLANG_VERSION" >> $GITHUB_ENV
       - name: Display Clang version
         run: ${CC} --version
-      - name: Run ${{ env.PROJECT_NAME }} Test
-        run: make -C ${{ github.workspace }}/ann/eve clean test
-      - name: Run ${{ env.PROJECT_NAME }} Release
-        run: make -C ${{ github.workspace }}/ann/eve release
+      - name: Run ${{ github.workflow }} Test
+        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} clean test
+      - name: Run ${{ github.workflow }} Release
+        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} release
 

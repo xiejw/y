@@ -1,8 +1,6 @@
-name: Luna Action
-run-name: ${{ github.actor }} is running tests
+name: luna
+run-name: ${{ github.actor }} is running tests for ${{ github.workflow }}
 on: [push]
-env:
-  PROJECT_NAME: luna
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +17,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Display Go version
         run: go version
-      - name: Run ${{ env.PROJECT_NAME }} Test
-        run: make -C ${{ github.workspace }}/x/ann/$PROJECT_NAME clean test
-      - name: Run ${{ env.PROJECT_NAME }} Release
-        run: make -C ${{ github.workspace }}/x/ann/$PROJECT_NAME release
+      - name: Run ${{ github.workflow }} Test
+        run: make -C ${{ github.workspace }}/x/ann/${{ github.workflow }} clean test
+      - name: Run ${{ github.workflow }} Release
+        run: make -C ${{ github.workspace }}/x/ann/${{ github.workflow }} release
