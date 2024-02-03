@@ -1,23 +1,26 @@
-name: Eva Action
-run-name: ${{ github.actor }} is running tests for eva
+name: eva
+run-name: ${{ github.actor }} is running tests for ${{ github.workflow }}
 on: [push]
+env:
+  CLANG_VERSION: 15
+  NO_CLANG_FLAGS: 1
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CLANG_VERSION: 15
-      CC: clang
-      CXX: clang++
     steps:
       - uses: actions/checkout@v4
       - name: Install LLVM and Clang
         run: sudo apt-get install -y clang-$CLANG_VERSION
-      - name: Run Eva Test
+      - name: Set environmental variables
+        run: |
+          echo "CC=clang-$CLANG_VERSION" >> $GITHUB_ENV
+          echo "CXX=clang++-$CLANG_VERSION" >> $GITHUB_ENV
+      - name: Display Clang version
+        run: ${CC} --version
+      - name: Run ${{ github.workflow }} Test
         env:
-          NO_CLANG_FLAGS: 1
-        run: make -C ${{ github.workspace }}/ann/eva clean test
-      - name: Run Eva Release
+        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} clean test
+      - name: Run ${{ github.workflow }} Release
         env:
-          NO_CLANG_FLAGS: 1
-        run: make -C ${{ github.workspace }}/ann/eva release
+        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} release
 
