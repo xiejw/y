@@ -22,6 +22,8 @@ C_ALRT = \033[0;33m
 C_INFO = \033[0;32m
 C_REST = \033[0m
 
+CC    ?= clang
+
 .PHONY: install test eva libeva_release libeva_all
 
 test:
@@ -55,7 +57,7 @@ install:
 	@echo ""
 	@echo "=>" install dotfiles
 	@echo "==>" compile cmds
-	CC=clang make -C dotfiles
+	make -C dotfiles
 	@echo "==>" link sym links for tmux
 	rm -f ~/.tmux.conf
 	ln -sf ~/Workspace/y/dotfiles/conf/tmux.conf ~/.tmux.conf
