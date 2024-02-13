@@ -23,15 +23,23 @@ C_INFO = \033[0;32m
 C_REST = \033[0m
 
 CC    ?= clang
+MK     = make --no-print-directory
+
+ifdef V
+STDOUT_ROUTE = | tee
+else
+STDOUT_ROUTE = >
+endif
 
 .PHONY: install test eva libeva_release libeva_all
 
 test:
 	@echo "${C_ALRT}!!!! run tests for all components (/tmp/y_<project_name>.txt)${C_REST}" && \
-		echo "${C_INFO}<==> ann/eva        ${C_REST}" && make -C ann/eva        test > /tmp/y_eva.txt         && \
-		echo "${C_INFO}<==> ann/taocp/vol4 ${C_REST}" && make -C ann/taocp/vol4 test > /tmp/y_taocp_vol4.txt  && \
-		echo "${C_INFO}<==> ann/luna       ${C_REST}" && make -C ann/luna       test > /tmp/y_luna.txt        && \
-		echo "${C_INFO}<==> bye            ${C_REST}"
+		$(call TEST_DIR,ann/eva)  && \
+		$(call TEST_DIR,ann/eve)  && \
+		$(call TEST_DIR,ann/luna) && \
+		$(call TEST_DIR,ann/taocp/vol4) && \
+		echo "${C_ALRT}DONE${C_REST}"
 
 eva: libeva_release
 
@@ -68,6 +76,32 @@ install:
 	@echo "source ~/Workspace/y/dotfiles/conf/bash_profile"
 	@echo "##################################"
 
+
+fmt:
+	@$(call FMT_DIR, dotfiles)
+	@$(call FMT_DIR, tools)
+	@$(call FMT_DIR, ann/eve)
+	@$(call FMT_DIR, ann/eva)
+
 clean:
 	find . -name '.build*' -type d  | xargs rm -rf && \
 		find . -not -wholename './.git/*' -not -wholename './vimrc/plugged/*' -type d -empty -delete
+
+# ==============================================================================
+# templates
+# ==============================================================================
+
+# Define a FMT_DIR func
+# Usage:
+#     $(call FMT_DIR,dir_name)
+define FMT_DIR
+	@echo "${C_INFO}fmt $(1)${C_REST}"
+	${MK} -C $(1) fmt
+endef
+
+# Define a TEST_DIR func
+# Usage:
+#     $(call TEST_DIR,dir_name)
+define TEST_DIR
+        echo "${C_INFO}<==> `printf "%-10s" $(1)` ${C_REST}" && make -C $(1) test ${STDOUT_ROUTE} /tmp/y_`basename $(1)`.txt
+endef

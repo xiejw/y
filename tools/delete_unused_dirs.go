@@ -72,7 +72,7 @@ func (gw *GabageWiper) workOnCandidates() bool {
 	for dirToConsider, _ := range dirs {
 
 		files, err := os.ReadDir(dirToConsider)
-                ValidateError(err)
+		ValidateError(err)
 
 		// Rule 1: Empty Dir
 		if len(files) == 0 {
@@ -91,7 +91,7 @@ func (gw *GabageWiper) workOnCandidates() bool {
 		switch act.kind {
 		case DelDirEmpty:
 			err := os.Remove(act.path)
-                        ValidateError(err)
+			ValidateError(err)
 
 			nextDirToWork := filepath.Dir(act.path)
 			candidateDirs[nextDirToWork] = true
