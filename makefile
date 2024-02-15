@@ -6,10 +6,12 @@
 #
 # if you are bootstrap a machine, run
 #
-#     make instal
+#     make install
 #
 # if you are sanity checking (daily run), run
 #
+#     make fmt
+#     make clean
 #     make test
 #
 # if you are building eva, run
@@ -25,16 +27,19 @@ C_REST = \033[0m
 CC    ?= clang
 MK     = make --no-print-directory
 
+TEST_TITLE = '!!!! run tests for all components (/tmp/y_<project_name>.txt)'
+
 ifdef V
 STDOUT_ROUTE = | tee
 else
 STDOUT_ROUTE = >
 endif
 
-.PHONY: install test eva libeva_release libeva_all
+.PHONY: install test fmt clean
+.PHONY: eva libeva_release libeva_all
 
 test:
-	@echo "${C_ALRT}!!!! run tests for all components (/tmp/y_<project_name>.txt)${C_REST}" && \
+	@echo "${C_ALRT}${TEST_TITLE}${C_REST}" && \
 		$(call TEST_DIR,ann/eva)  && \
 		$(call TEST_DIR,ann/eve)  && \
 		$(call TEST_DIR,ann/luna) && \
@@ -84,8 +89,7 @@ fmt:
 	@$(call FMT_DIR, ann/eva)
 
 clean:
-	find . -name '.build*' -type d  | xargs rm -rf && \
-		find . -not -wholename './.git/*' -not -wholename './vimrc/plugged/*' -type d -empty -delete
+	go run tools/delete_unused_dirs.go
 
 # ==============================================================================
 # templates
