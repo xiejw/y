@@ -44,6 +44,13 @@ func (gw *GabageWiper) Init() error {
 			return fs.SkipDir
 		}
 
+                // We don't go into the code as the folder will be entirely
+                // removed.
+		if strings.HasPrefix(filepath.Base(path), ".build") {
+                        gw.candidateDirs[path] = true
+			return fs.SkipDir
+                }
+
 		gw.candidateDirs[path] = true
 		return nil
 	}
