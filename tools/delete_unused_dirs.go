@@ -4,11 +4,11 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	os_path "path"
 	"path/filepath"
 	"runtime/debug"
+	"strings"
 )
-
-var candidateDirs = make(map[string]bool)
 
 func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
@@ -37,15 +37,14 @@ func (gw *GabageWiper) Init() error {
 	// ---------------------------------------------------------------------
 	walkFunc := func(path string, d fs.DirEntry, err error) error {
 		if !d.IsDir() {
-			// TODO: Support a.out
 			return nil
 		}
 
-		if path == ".git" {
+		if filepath.Base(path) == ".git" {
 			return fs.SkipDir
 		}
 
-		candidateDirs[path] = true
+		gw.candidateDirs[path] = true
 		return nil
 	}
 
@@ -54,7 +53,7 @@ func (gw *GabageWiper) Init() error {
 
 func (gw *GabageWiper) Work() error {
 	for {
-		workDone := workOnCandidates()
+		workDone := gw.workOnCandidates()
 		if workDone {
 			break
 		}
@@ -81,20 +80,54 @@ func (gw *GabageWiper) workOnCandidates() bool {
 				path: dirToConsider,
 			})
 			workDone = false
+			continue
 		}
 
-		//if
+		// Rule 2: If the path starts with ".build", delete it
+		if strings.HasPrefix(filepath.Base(dirToConsider), ".build") {
+			actions = append(actions, Action{
+				kind: DelDirAll,
+				path: dirToConsider,
+			})
+			workDone = false
+			continue
+		}
+
+		// Rule 3: If file a.out exists, delete it
+		path_to_a_out := os_path.Join(dirToConsider, "a.out")
+		if _, err := os.Stat(path_to_a_out); err == nil {
+			actions = append(actions, Action{
+				kind: DelFile,
+				path: path_to_a_out,
+			})
+			workDone = false
+			continue
+		}
 	}
 
 	for _, act := range actions {
-		log.Printf("%10v: %v", act.kind, act.path)
+		log.Printf("%12v: %v", act.kind, act.path)
 		switch act.kind {
 		case DelDirEmpty:
 			err := os.Remove(act.path)
 			ValidateError(err)
 
 			nextDirToWork := filepath.Dir(act.path)
-			candidateDirs[nextDirToWork] = true
+			gw.candidateDirs[nextDirToWork] = true
+
+		case DelDirAll:
+			err := os.RemoveAll(act.path)
+			ValidateError(err)
+
+			nextDirToWork := filepath.Dir(act.path)
+			gw.candidateDirs[nextDirToWork] = true
+
+		case DelFile:
+			err := os.Remove(act.path)
+			ValidateError(err)
+
+			nextDirToWork := filepath.Dir(act.path)
+			gw.candidateDirs[nextDirToWork] = true
 		default:
 			panic("unsupported ActionKind")
 		}
@@ -112,6 +145,7 @@ type ActionKind int
 const (
 	DelDirEmpty ActionKind = iota
 	DelDirAll
+	DelFile
 )
 
 type Action struct {
@@ -125,6 +159,8 @@ func (k ActionKind) String() string {
 		return "DelDirEmpty"
 	case DelDirAll:
 		return "DelDirAll"
+	case DelFile:
+		return "DelFile"
 	default:
 		panic("unsupported ActionKind")
 	}
