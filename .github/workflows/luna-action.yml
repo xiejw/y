@@ -12,6 +12,6 @@ jobs:
         with:
           require_go: true
       - name: Run ${{ github.workflow }} Test
-        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} clean test
+        run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} clean test
       - name: Run ${{ github.workflow }} Release
-        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} release
+        run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} release

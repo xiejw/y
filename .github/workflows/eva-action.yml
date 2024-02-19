@@ -13,5 +13,5 @@ jobs:
           compile_eva: true  # This will run release
           require_clang: true
       - name: Run ${{ github.workflow }} Test
-        run: make -C ${{ github.workspace }}/ann/${{ github.workflow }} clean test
+        run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} clean test
 
