@@ -8,10 +8,15 @@ FMT           = ~/Workspace/y/tools/clang_format_all.sh
 AR            = ar -cr
 
 MODULES      += ${BUILD_OBJ}/adt_sds.o
-
 MODULES      += ${BUILD_OBJ}/testing_testing.o
 
 TEST_MODULES +=  ${BUILD_OBJ}/adt_sds_test.o
+
+ifdef ASAN
+# Ref: https://clang.llvm.org/docs/AddressSanitizer.html
+CXXFLAGS     += -fsanitize=address -g
+LDFLAGS      += -fsanitize=address -g
+endif
 
 # ==============================================================================
 # Top Level actions
@@ -55,10 +60,10 @@ ${BUILD_OBJ}:
 	mkdir -p ${BUILD_OBJ}
 
 ${BUILD}/test_main: ${BUILD}/test_main.o ${MODULES} ${TEST_MODULES} | ${BUILD}
-	${CXX} -o $@ $^
+	${CXX} -o $@ ${LDFLAGS} $^
 
 ${BUILD}/%_main: ${BUILD}/%_main.o ${BUILD}/libeve.a ${TEST_MODULES} | ${BUILD}
-	${CXX} -o $@ $^
+	${CXX} -o $@ ${LDFLAGS} $^
 
 ${BUILD}/%_main.o: cmd/%/main.cc | ${BUILD}
 	${CXX} ${CXXFLAGS} -o $@ -c $^
@@ -70,4 +75,5 @@ ${BUILD_OBJ}/testing_%.o: src/testing/%.cc | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $^
 
 ${BUILD_OBJ}/adt_%.o: src/adt/%.cc | ${BUILD_OBJ}
-	${CXX} ${CXXFLAGS} -o $@ -c $^
+	${CXX} ${CXXFLAGS} -o $@ -c $<
+

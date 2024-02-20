@@ -1,6 +1,7 @@
 // vim: ft=cpp
 #pragma once
 
+#include <cstdarg>  // va_list
 #include <memory>
 #include <string_view>
 
@@ -23,10 +24,14 @@ struct Sds {
     Sds( Sds && )                 = default;
     Sds &operator=( Sds && )      = default;
 
-    char       *data( ) const { return (char *)( m_ptr.get( ) ); };
-    std::size_t cap( ) const { return m_cap; };
-    std::size_t len( ) const { return m_len; };
-    std::size_t size( ) const { return m_len; };
+    char       *Data( ) const { return (char *)( m_ptr.get( ) ); };
+    std::size_t Cap( ) const { return m_cap; };
+    std::size_t Len( ) const { return m_len; };
+    std::size_t Size( ) const { return m_len; };
+
+    void Reserve( std::size_t new_len );
+    void Cat( std::string_view s );
+    void CatPrintf( const char *fmt, ... );
 
   private:
     // Create a raw sds with correct cap.
@@ -35,6 +40,8 @@ struct Sds {
     // - allocate `cap` size but only initialize `len` size.
     // - the final `\0` is set; it is the memory space after m_cap.
     void Init( const void *init, std::size_t len, std::size_t cap );
+
+    void CatVprintf( const char *fmt, va_list ap );
 };
 
 }  // namespace eve::adt
