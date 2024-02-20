@@ -1,5 +1,7 @@
 #include "eve/adt/sds.h"
 
+#include <cstring>
+
 namespace eve ::adt {
 
 namespace {

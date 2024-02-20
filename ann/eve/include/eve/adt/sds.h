@@ -1,6 +1,7 @@
 // vim: ft=cpp
 #pragma once
 
+#include <memory>
 #include <string_view>
 
 namespace eve::adt {

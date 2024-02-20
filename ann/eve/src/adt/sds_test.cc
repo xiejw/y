@@ -2,6 +2,7 @@
 
 #include "eve/testing/testing.h"
 
+#include <cstring>
 #include <iostream>
 
 using eve::adt::Sds;
