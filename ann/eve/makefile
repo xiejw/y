@@ -1,20 +1,25 @@
-BUILD        = .build
-BUILD_OBJ    = ${BUILD}/objs
+BUILD         = .build
+BUILD_OBJ     = ${BUILD}/objs
 
-CXXFLAGS    += -std=c++20 -Wall -Werror -pedantic -Wextra
-CXXFLAGS    += -Iinclude
+CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra
+CXXFLAGS     += -Iinclude
 
-FMT          = ~/Workspace/y/tools/clang_format_all.sh
-AR           = ar -cr
+FMT           = ~/Workspace/y/tools/clang_format_all.sh
+AR            = ar -cr
 
-MODULES     += ${BUILD_OBJ}/testing_testing.o
+MODULES      += ${BUILD_OBJ}/adt_sds.o
+
+MODULES      += ${BUILD_OBJ}/testing_testing.o
+
+TEST_MODULES +=  ${BUILD_OBJ}/adt_sds_test.o
 
 # ==============================================================================
 # Top Level actions
 
 release: ${BUILD}/libeve.a
 
-test: compile
+test: compile_test ${BUILD}/test_main
+	${BUILD}/test_main
 
 # Maintenance actions
 fmt:
@@ -49,7 +54,10 @@ ${BUILD}:
 ${BUILD_OBJ}:
 	mkdir -p ${BUILD_OBJ}
 
-${BUILD}/%_main: ${BUILD}/%_main.o ${BUILD}/libeve.a | ${BUILD}
+${BUILD}/test_main: ${BUILD}/test_main.o ${MODULES} ${TEST_MODULES} | ${BUILD}
+	${CXX} -o $@ $^
+
+${BUILD}/%_main: ${BUILD}/%_main.o ${BUILD}/libeve.a ${TEST_MODULES} | ${BUILD}
 	${CXX} -o $@ $^
 
 ${BUILD}/%_main.o: cmd/%/main.cc | ${BUILD}
@@ -61,3 +69,5 @@ ${BUILD}/libeve.a: ${MODULES} | ${BUILD}
 ${BUILD_OBJ}/testing_%.o: src/testing/%.cc | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $^
 
+${BUILD_OBJ}/adt_%.o: src/adt/%.cc | ${BUILD_OBJ}
+	${CXX} ${CXXFLAGS} -o $@ -c $^

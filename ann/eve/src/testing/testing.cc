@@ -26,7 +26,12 @@ SuiteDriver::RunAllSuites( )
 {
     for ( auto &suite : GetSuites( ) ) {
         std::cout << "Running: " << suite.name << "\n";
-        suite.func->TestBody( );
+        const char *result = suite.func->TestBody( );
+        if ( result == nullptr ) {
+            std::cout << "OK\n";
+        } else {
+            std::cout << "Failed: " << result << "\n";
+        }
     }
 }
 

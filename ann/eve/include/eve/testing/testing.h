@@ -1,12 +1,13 @@
 // vim: ft=cpp
 #pragma once
 
+#include <iostream>
 #include <string>
 
 namespace eve::testing {
 
 struct SuiteBaseTest {
-    virtual char *TestBody( ) = 0;
+    virtual const char *TestBody( ) = 0;
 };
 
 struct SuiteDriver {
@@ -22,14 +23,27 @@ struct SuiteTestInfo {
 #define EVE_TEST( test_cls, test_name )                                       \
     class EVA_TEST##test_cls##test_name : eve::testing::SuiteBaseTest {       \
       public:                                                                 \
-        char *TestBody( ) override;                                           \
+        const char *TestBody( ) override;                                     \
                                                                               \
       private:                                                                \
         static eve::testing::SuiteTestInfo *test_info;                        \
     };                                                                        \
                                                                               \
     eve::testing::SuiteTestInfo *EVA_TEST##test_cls##test_name::test_info =   \
-        new eve::testing::SuiteTestInfo{ #test_cls ":" #test_name,            \
+        new eve::testing::SuiteTestInfo{ #test_cls "::" #test_name,           \
                                          new EVA_TEST##test_cls##test_name }; \
                                                                               \
-    char *EVA_TEST##test_cls##test_name::TestBody( )
+    const char *EVA_TEST##test_cls##test_name::TestBody( )
+
+#define EVE_TEST_EXPECT( cond, msg ) \
+    EVE_TEST_EXPECT_( cond, msg, __FILE__, __LINE__ )
+
+#define EVE_TEST_EXPECT_( cond, msg, file, line )                     \
+    do {                                                              \
+        if ( !( cond ) ) {                                            \
+            std::cerr << "FILE " << file << " LINE " << line << "\n"; \
+            return ( msg );                                           \
+        }                                                             \
+    } while ( 0 )
+
+#define EVE_TEST_PASS( ) return nullptr
