@@ -24,14 +24,24 @@ GetSuites( )
 void
 SuiteDriver::RunAllSuites( )
 {
+    auto failed_counter = 0;
     for ( auto &suite : GetSuites( ) ) {
         std::cout << "Running: " << suite.name;
         const char *result = suite.func->TestBody( );
         if ( result == nullptr ) {
-            std::cout << "...OK\n";
+            std::cout << "\033[1;32m...OK\033[0m\n";
         } else {
-            std::cout << "...Failed: " << result << "\n";
+            failed_counter++;
+            std::cout << "\033[1;31m...Failed: " << result
+                      << "\033[0m\n";  // Red
         }
+    }
+
+    if ( failed_counter == 0 ) {
+        std::cout << "\033[1;32mALL TESTS PASSED.\033[0m\n"; /* Green */
+    } else {
+        std::cout << "\033[1;31mFailed counter: " << failed_counter
+                  << "\033[0m\n";  // Red
     }
 }
 

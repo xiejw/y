@@ -38,12 +38,13 @@ struct SuiteTestInfo {
 #define EVE_TEST_EXPECT( cond, msg ) \
     EVE_TEST_EXPECT_( cond, msg, __FILE__, __LINE__ )
 
-#define EVE_TEST_EXPECT_( cond, msg, file, line )                     \
-    do {                                                              \
-        if ( !( cond ) ) {                                            \
-            std::cerr << "FILE " << file << " LINE " << line << "\n"; \
-            return ( msg );                                           \
-        }                                                             \
+#define EVE_TEST_EXPECT_( cond, msg, file, line )                         \
+    do {                                                                  \
+        if ( !( cond ) ) {                                                \
+            std::cerr << "\033[1;33m...FILE " << file << " LINE " << line \
+                      << "\033[0m";                                       \
+            return ( msg );                                               \
+        }                                                                 \
     } while ( 0 )
 
 #define EVE_TEST_PASS( ) return nullptr
