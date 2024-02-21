@@ -5,6 +5,7 @@
 #include <cstring>
 #include <iostream>
 
+using namespace eve::adt::literals;
 using eve::adt::Sds;
 
 EVE_TEST( AdtSds, NewEmptyString )
@@ -102,6 +103,27 @@ EVE_TEST( AdtSds, Reserve )
     EVE_TEST_EXPECT( sds.Cap( ) < 4096, "old cap" );
     sds.Reserve( 4096 );
     EVE_TEST_EXPECT( sds.Cap( ) >= 4096, "new cap" );
+
+    EVE_TEST_PASS( );
+}
+
+EVE_TEST( AdtSds, EqOp )
+{
+    Sds sds{ "hello" };
+    EVE_TEST_EXPECT( sds == "hello", "eq op" );
+    EVE_TEST_EXPECT( sds != "hello1", "neq op" );
+    EVE_TEST_EXPECT( sds == std::string{ "hello" }, "eq op" );
+    EVE_TEST_EXPECT( sds != std::string{ "hello1" }, "neq op" );
+
+    EVE_TEST_PASS( );
+}
+
+EVE_TEST( AdtSds, Literal )
+{
+    auto sds = "hello"_sds;
+    EVE_TEST_EXPECT( sds == "hello", "eq op" );
+    EVE_TEST_EXPECT( sds.Size( ) == 5, "len" );
+    EVE_TEST_EXPECT( sds.Cap( ) >= 5, "cap" );
 
     EVE_TEST_PASS( );
 }

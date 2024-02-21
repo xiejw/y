@@ -33,6 +33,8 @@ struct Sds {
     void Cat( std::string_view s );
     void CatPrintf( const char *fmt, ... );
 
+    bool operator==( std::string_view s );
+
   private:
     // Create a raw sds with correct cap.
     //
@@ -43,5 +45,9 @@ struct Sds {
 
     void CatVprintf( const char *fmt, va_list ap );
 };
+
+namespace literals {
+Sds operator""_sds( const char *s, std::size_t );
+}
 
 }  // namespace eve::adt

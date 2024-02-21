@@ -141,4 +141,19 @@ Sds::Reserve( std::size_t new_len )
     this->m_cap = new_len;
 }
 
+bool
+Sds::operator==( std::string_view s )
+{
+    auto ptr = (char *)this->m_ptr.get( );
+    return ptr != nullptr && strcmp( ptr, s.data( ) ) == 0;
+}
+
+namespace literals {
+Sds
+operator""_sds( const char *s, std::size_t )
+{
+    return Sds{ s };
+}
+}  // namespace literals
+
 }  // namespace eve::adt
