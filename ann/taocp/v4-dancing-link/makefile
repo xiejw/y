@@ -4,13 +4,12 @@ BUILD_OBJ     = ${BUILD}/objs
 CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra
 CXXFLAGS     += -Iinclude
 
-# TODO
-CXXFLAGS     += -I../../eva/include
-LDFLAGS      += ../../eva/.build_release/libeva.a
-
 CMD           =  cmd
 SRC           =  src
 INC           =  include
+
+CXXFLAGS     += -I../../eve/include
+LDFLAGS      += ../../eve/.build/libeve.a
 
 FMT           = ~/Workspace/y/tools/clang_format_all.sh
 

@@ -3,13 +3,10 @@
 // #include <assert.h>
 // #include <stdio.h>
 // #include <stdlib.h>
-//
-// eva
-extern "C" {
-#include <base/log.h>
-}
 
 #include <algos/dal.h>
+
+#include <eve/base/log.h>
 
 #define SIZE 9
 
