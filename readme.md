@@ -13,5 +13,4 @@ make install
 | `/dotfiles`      |  bash, and other configs   |
 | `/tools`         |  common tools              |
 | `/vimrc`         |  vim configs               |
-| `/ann/eva`       |  c common lib              |
-| `/ann/taocp`     |  The Art of Computer Programming coding exercises              |
+| `/ann/`          |  `c`, `cc`, `go` libs      |
