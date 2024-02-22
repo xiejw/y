@@ -1,7 +1,7 @@
 // copyright: see license_rxi-mit file.
 
+#include <eve/base/error.h>
 #include <eve/base/log.h>
-// #include "base/error.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -127,9 +127,7 @@ loge( int level, int dump, const char *file, int line, const char *fmt, ... )
 
     if ( level == Logger::FATAL ) {
         if ( dump ) {
-            std::cout << "dump!!!!";
-            std::exit( 1 );
-            // errDump("current error stack:");
+            errFatalAndExit( "fatal dump!!!" );
         } else {
             exit( 1 );
         }

@@ -142,7 +142,7 @@ Sds::Reserve( std::size_t new_len )
 }
 
 bool
-Sds::operator==( std::string_view s )
+Sds::operator==( std::string_view s ) const
 {
     auto ptr = (char *)this->m_ptr.get( );
     return ptr != nullptr && strcmp( ptr, s.data( ) ) == 0;

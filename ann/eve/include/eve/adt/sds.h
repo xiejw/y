@@ -3,6 +3,7 @@
 
 #include <cstdarg>  // va_list
 #include <memory>
+#include <ostream>
 #include <string_view>
 
 namespace eve::adt {
@@ -33,7 +34,11 @@ struct Sds {
     void Cat( std::string_view s );
     void CatPrintf( const char *fmt, ... );
 
-    bool operator==( std::string_view s );
+    bool                 operator==( std::string_view s ) const;
+    friend std::ostream &operator<<( std::ostream &os, const Sds &dt )
+    {
+        return os << dt.Data( );
+    }
 
   private:
     // Create a raw sds with correct cap.

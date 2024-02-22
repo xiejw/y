@@ -7,12 +7,13 @@ CXXFLAGS     += -Iinclude
 FMT           = ~/Workspace/y/tools/clang_format_all.sh
 AR            = ar -cr
 
-MODULES      += ${BUILD_OBJ}/base_log.o
-MODULES      += ${BUILD_OBJ}/base_error.o
 MODULES      += ${BUILD_OBJ}/adt_sds.o
+MODULES      += ${BUILD_OBJ}/base_error.o
+MODULES      += ${BUILD_OBJ}/base_log.o
 
 TEST_MODULES += ${BUILD_OBJ}/testing_testing.o
 TEST_MODULES +=  ${BUILD_OBJ}/adt_sds_test.o
+TEST_MODULES +=  ${BUILD_OBJ}/base_error_test.o
 
 ifdef ASAN
 # Ref: https://clang.llvm.org/docs/AddressSanitizer.html
@@ -76,8 +77,8 @@ ${BUILD}/libeve.a: ${MODULES} | ${BUILD}
 ${BUILD_OBJ}/testing_%.o: src/testing/%.cc | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $^
 
-${BUILD_OBJ}/adt_%.o: src/adt/%.cc | ${BUILD_OBJ}
+${BUILD_OBJ}/adt_%.o: src/adt/%.cc include/eve/adt/*.h | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $<
 
-${BUILD_OBJ}/base_%.o: src/base/%.cc | ${BUILD_OBJ}
+${BUILD_OBJ}/base_%.o: src/base/%.cc include/eve/base/*.h | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $<

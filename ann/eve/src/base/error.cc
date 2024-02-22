@@ -1,10 +1,35 @@
 #include <eve/base/error.h>
 
+#include <cassert>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <ranges>
 
 namespace eve::base {
+
+ErrorHolder::ErrorHolder( eve::adt::Sds &&msg )
+    : m_kind{ ErrorKind::ERROR }, m_msg{ }
+{
+    EmitNote( std::move( msg ) );
+}
+
+ErrorHolder &
+ErrorHolder::EmitNote( eve::adt::Sds &&msg )
+{
+    this->m_msg.push_back( std::move( msg ) );
+    return *this;
+}
+
+eve::adt::Sds
+ErrorHolder::Msg( ) const noexcept
+{
+    eve::adt::Sds sds{ };
+    for ( auto &msg : this->m_msg | std::views::reverse ) {
+        sds.CatPrintf( "  > %s\n", msg.Data( ) );
+    }
+    return sds;
+}
 
 void
 errFatalAndExit_( const char *file, int line_no, const char *fmt, ... )
@@ -15,10 +40,6 @@ errFatalAndExit_( const char *file, int line_no, const char *fmt, ... )
     vfprintf( stderr, fmt, args );
     va_end( args );
     fprintf( stderr, "\n" );
-
-    // if (err_msg_header != NULL) {
-    //         errDump("\nfound existing error as follows:");
-    // }
 
     fflush( stderr );
     exit( 1 );
