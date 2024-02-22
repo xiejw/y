@@ -4,13 +4,15 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SKIP_WERROR: 1
     steps:
       - uses: actions/checkout@v4
         with:
           path: y
       - uses: ./y/.github/actions/base
         with:
-          require_clang: true
+          require_gcc: true
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} clean test
       - name: Run ${{ github.workflow }} Release

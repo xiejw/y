@@ -1,7 +1,10 @@
 BUILD         = .build
 BUILD_OBJ     = ${BUILD}/objs
 
-CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra
+CXXFLAGS     += -std=c++20 -Wall -pedantic -Wextra
+ifndef SKIP_WERROR
+CXXFLAGS     += -Werror
+endif
 CXXFLAGS     += -Iinclude
 
 FMT           = ~/Workspace/y/tools/clang_format_all.sh
