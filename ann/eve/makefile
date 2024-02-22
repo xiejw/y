@@ -8,6 +8,7 @@ FMT           = ~/Workspace/y/tools/clang_format_all.sh
 AR            = ar -cr
 
 MODULES      += ${BUILD_OBJ}/base_log.o
+MODULES      += ${BUILD_OBJ}/base_error.o
 MODULES      += ${BUILD_OBJ}/adt_sds.o
 
 TEST_MODULES += ${BUILD_OBJ}/testing_testing.o
