@@ -45,6 +45,16 @@ EVE_TEST( AdtSds, Move )
     EVE_TEST_PASS( );
 }
 
+EVE_TEST( AdtSds, MoveConstructor )
+{
+    Sds sds1{ "hello" };
+    Sds sds{ std::move( sds1 ) };
+    EVE_TEST_EXPECT( strcmp( sds.Data( ), "hello" ) == 0, "expect str" );
+    EVE_TEST_EXPECT( sds.Len( ) == 5, "len" );
+    EVE_TEST_EXPECT( sds.Cap( ) >= 5, "cap" );
+    EVE_TEST_PASS( );
+}
+
 EVE_TEST( AdtSds, ConcatSmall )
 {
     Sds  sds{ 4096 };

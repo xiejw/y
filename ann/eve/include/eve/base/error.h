@@ -56,6 +56,11 @@ struct Error {
     Error( ) = default;
     ~Error( ) { delete m_holder; }
 
+    Error( Error const & )            = delete;
+    Error &operator=( Error const & ) = delete;
+    Error( Error && );
+    Error &operator=( Error && );
+
     template <typename... Args>
     Error( const char *fmt, Args &&...args )
     {

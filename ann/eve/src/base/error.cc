@@ -8,6 +8,19 @@
 
 namespace eve::base {
 
+Error::Error( Error &&e )
+{
+    this->m_holder = e.m_holder;
+    e.m_holder     = nullptr;
+}
+Error &
+Error::operator=( Error &&e )
+{
+    this->m_holder = e.m_holder;
+    e.m_holder     = nullptr;
+    return *this;
+}
+
 ErrorHolder::ErrorHolder( eve::adt::Sds &&msg )
     : m_kind{ ErrorKind::ERROR }, m_msg{ }
 {

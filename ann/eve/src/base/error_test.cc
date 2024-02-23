@@ -19,6 +19,15 @@ EVE_TEST( BaseError, Error )
     EVE_TEST_PASS( );
 }
 
+EVE_TEST( BaseError, ErrorMove )
+{
+    Error err1{ "%s", "error" };
+    Error err{ std::move( err1 ) };
+    EVE_TEST_EXPECT( !err.Ok( ), "ok" );
+    EVE_TEST_EXPECT_STR_EQ( "  > error\n", err.Msg( ), "err" );
+    EVE_TEST_PASS( );
+}
+
 EVE_TEST( BaseError, ErrorNote )
 {
     Error err{ "%s", "error1" };
