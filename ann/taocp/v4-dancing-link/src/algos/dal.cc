@@ -6,10 +6,8 @@
 
 namespace algos::dal {
 
-namespace {
-
 void
-FillNode( Node &node, std::size_t id )
+Table::FillNode( Node &node, std::size_t id )
 {
     node.id = id;
     node.L  = id;
@@ -21,7 +19,7 @@ FillNode( Node &node, std::size_t id )
 
 // Link the `id` into table after node `end` (horizantal double link)
 void
-LinkLR( Node *h, size_t end, size_t id )
+Table::LinkLR( Node *h, size_t end, size_t id )
 {
     auto p    = &h[id];
     p->L      = end;
@@ -32,7 +30,7 @@ LinkLR( Node *h, size_t end, size_t id )
 
 // Link the `id` into table with column head `id_c` (vertical double link)
 void
-LinkUD( Node *h, size_t id_c, size_t id )
+Table::LinkUD( Node *h, size_t id_c, size_t id )
 {
     auto *c = &h[id_c];
     auto *p = &h[id];
@@ -48,7 +46,7 @@ LinkUD( Node *h, size_t id_c, size_t id )
 }
 
 void
-CoverColumn( Node *h, size_t c )
+Table::CoverColumn( Node *h, size_t c )
 {
     h[h[c].R].L = h[c].L;
     h[h[c].L].R = h[c].R;
@@ -61,7 +59,19 @@ CoverColumn( Node *h, size_t c )
     }
 }
 
-}  // namespace
+void
+Table::UncoverColumn( Node *h, size_t c )
+{
+    for ( size_t i = h[c].U; i != c; i = h[i].U ) {
+        for ( size_t j = h[i].L; j != i; j = h[j].L ) {
+            ( h[h[j].C].S )++;
+            h[h[j].D].U = j;
+            h[h[j].U].D = j;
+        }
+    }
+    h[h[c].R].L = c;
+    h[h[c].L].R = c;
+}
 
 Table::Table( std::size_t n_col_heads, std::size_t n_options_total )
     : m_nodes{ nullptr, std::free }
@@ -114,63 +124,51 @@ Table::AppendOption( std::span<std::size_t> col_ids, void *data )
     this->m_num_nodes_added += num_ids;
 }
 
+bool
+Table::SearchSolution( std::vector<std::size_t> &sols )
+{
+    assert( sols.size( ) == 0 );
+    return Search( sols, 0 );
+}
+
+bool
+Table::Search( std::vector<std::size_t> &sols, std::size_t k )
+{
+    auto h = this->m_nodes.get( );
+
+    if ( h[0].R == 0 ) {
+        return true;
+    }
+
+    size_t c = h[0].R;
+    if ( h[c].S == 0 ) {
+        return false;
+    }
+
+    this->CoverColumn( h, c );
+    for ( size_t r = h[c].D; r != c; r = h[r].D ) {
+        if ( sols.size( ) == k ) {
+            sols.push_back( r );
+        } else {
+            sols[k] = r;
+        }
+        assert( sols.size( ) >= k );
+        for ( size_t j = h[r].R; j != r; j = h[j].R ) {
+            this->CoverColumn( h, h[j].C );
+        }
+        if ( Search( sols, k + 1 ) ) return true;
+        for ( size_t j = h[r].L; j != r; j = h[j].L ) {
+            this->UncoverColumn( h, h[j].C );
+        }
+    }
+    this->UncoverColumn( h, c );
+    return false;
+}
+
 }  // namespace algos::dal
 
-//// sols must have enough capacity to hold result.
-// int
-// dalSearchSolution(struct dal_table *t, vec_t(size_t) sols)
-//{
-//         vecSetSize(sols, 0);
-//         return search(t->nodes, 0, sols);
-// }
-//
-////
 ///-----------------------------------------------------------------------------
 //// Helper Methods Implementation.
 ////
 ///-----------------------------------------------------------------------------
 //
-// void
-// uncover_col(vec_t(dal_node_t) h, size_t c)
-//{
-//         for (size_t i = h[c].U; i != c; i = h[i].U) {
-//                 for (size_t j = h[i].L; j != i; j = h[j].L) {
-//                         (h[h[j].C].S)++;
-//                         h[h[j].D].U = j;
-//                         h[h[j].U].D = j;
-//                 }
-//         }
-//         h[h[c].R].L = c;
-//         h[h[c].L].R = c;
-// }
-//
-// int
-// search(vec_t(dal_node_t) h, size_t k, vec_t(size_t) sols)
-//{
-//         if (h[0].R == 0) {
-//                 vecSetSize(sols, (size_t)k);
-//                 return 1;
-//         }
-//
-//         size_t c = h[0].R;
-//         if (h[c].S == 0) {
-//                 return 0;
-//         }
-//         if (vecCap(sols) < (size_t)k) {
-//                 vecReserve(&sols, 2 * vecCap(sols));
-//         }
-//
-//         cover_col(h, c);
-//         for (size_t r = h[c].D; r != c; r = h[r].D) {
-//                 sols[k] = r;
-//                 for (size_t j = h[r].R; j != r; j = h[j].R) {
-//                         cover_col(h, h[j].C);
-//                 }
-//                 if (search(h, k + 1, sols)) return 1;
-//                 for (size_t j = h[r].L; j != r; j = h[j].L) {
-//                         uncover_col(h, h[j].C);
-//                 }
-//         }
-//         uncover_col(h, c);
-//         return 0;
-// }

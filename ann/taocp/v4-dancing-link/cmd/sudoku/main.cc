@@ -1,3 +1,4 @@
+#include <cstring>
 #include <vector>
 
 #include <algos/dal.h>
@@ -54,14 +55,14 @@ static const int PROLBEMS[][SIZE * SIZE] = {
 // prototypes.
 //
 // -----------------------------------------------------------------------------
-struct option {
+struct Option {
     int x;
     int y;
     int k;
 };
 
 static void   printProblem( const int *problem );
-static size_t searchOptions( const int *problem, std::vector<option> &options );
+static size_t searchOptions( const int *problem, std::vector<Option> &options );
 static void getColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c,
                           size_t *b );
 //
@@ -81,7 +82,7 @@ main( )
 
     // -------------------------------------------------------------
     // Search options.
-    std::vector<option> options{ };
+    std::vector<Option> options{ };
     options.reserve( 9 * 9 * 9 );  // at most 9^3 options.
     const size_t options_count = searchOptions( problem, options );
 
@@ -137,30 +138,27 @@ main( )
                       /*b=*/item_ids + 3 );
         t.AppendOption( item_ids, o );
     }
-    //
-    //         //
-    //         -------------------------------------------------------------
-    //         vec_t(size_t) sols = vecNew();
-    //         vecReserve(&sols, SIZE * SIZE);
-    //
-    //         if (dalSearchSolution(t, sols)) {
-    //                 // Dup the problem as we are going to modify it.
-    //                 int solution[SIZE * SIZE];
-    //                 memcpy(solution, problem, sizeof(int) * SIZE * SIZE);
-    //
-    //                 logInfo("Found solution:\n");
-    //                 size_t n = vecSize(sols);
-    //                 for (size_t i = 0; i < n; i++) {
-    //                         struct option *o             = dalNodeData(t,
-    //                         sols[i]); solution[o->x * SIZE + o->y] =
-    //                         o->k;
-    //                 }
-    //                 printProblem(solution);
-    //
-    //         } else {
-    //                 printf("No solution.\n");
-    //         }
-    //
+
+    // -------------------------------------------------------------
+    std::vector<std::size_t> sols{ };
+
+    if ( t.SearchSolution( sols ) ) {
+        // Dup the problem as we are going to modify it.
+        int solution[SIZE * SIZE];
+        memcpy( solution, problem, sizeof( int ) * SIZE * SIZE );
+
+        logInfo( "Found solution:\n" );
+        size_t n = sols.size( );
+        for ( size_t i = 0; i < n; i++ ) {
+            Option *o                    = (Option *)t.NodeData( sols[i] );
+            solution[o->x * SIZE + o->y] = o->k;
+        }
+        printProblem( solution );
+
+    } else {
+        printf( "No solution.\n" );
+    }
+
     return 0;
 }
 
@@ -203,7 +201,7 @@ printProblem( const int *problem )
 // The argument options must have enough capacity to hold all potential
 // options
 size_t
-searchOptions( const int *problem, std::vector<option> &options )
+searchOptions( const int *problem, std::vector<Option> &options )
 {
     size_t total = 0;
 
