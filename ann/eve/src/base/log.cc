@@ -105,15 +105,28 @@ void
 loge( int level, int dump, const char *file, int line, const char *fmt, ... )
 {
     if ( logIsLevelOn( level ) ) {
+#if defined( __clang__ )
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
+#if defined( __GNUC__ )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
         struct log_event ev = {
             .fmt   = fmt,
             .file  = file,
             .line  = line,
             .level = level,
         };
+#if defined( __GNUC__ )
+#pragma GCC diagnostic pop
+#endif
+
+#if defined( __clang__ )
 #pragma clang diagnostic pop
+#endif
 
         lock( );
 
