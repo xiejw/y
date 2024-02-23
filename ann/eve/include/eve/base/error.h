@@ -87,3 +87,12 @@ struct Error {
 
 void errFatalAndExit_( const char *file, int line_no, const char *fmt, ... );
 }  // namespace eve::base
+
+namespace eve {
+template <typename... Args>
+eve::base::Error
+Error( const char *fmt, Args &&...args )
+{
+    return eve::base::Error{ fmt, std::forward<Args>( args )... };
+}
+}  // namespace eve
