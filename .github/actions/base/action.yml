@@ -5,6 +5,8 @@ inputs:
     default: y
   compile_eva:
     default: false
+  compile_eve:
+    default: false
   require_clang:
     default: false
   clang_version:
@@ -71,6 +73,15 @@ runs:
       shell: bash
       run: |
         make -C ${{ github.workspace }}/${{ inputs.repo_at }}/ann/eva release
+
+    # --------------------------------------------------------------------------
+    # Eve related
+    #
+    - name: Build Eve
+      if: ${{ inputs.compile_eve == 'true' }}
+      shell: bash
+      run: |
+        make -C ${{ github.workspace }}/${{ inputs.repo_at }}/ann/eve release
 
     # --------------------------------------------------------------------------
     # Go related
