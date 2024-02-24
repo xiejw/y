@@ -33,6 +33,10 @@ ${BUILD_OBJ}: | ${BUILD}
 # incrementally compile all libraries.
 compile: ${MODULES}
 
+release: compile
+
+test: compile
+
 # Maintenance actions
 fmt:
 	${FMT} ${CMD} ${SRC} ${INC}
