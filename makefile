@@ -38,6 +38,18 @@ endif
 .PHONY: install test fmt clean
 .PHONY: eva libeva_release libeva_all
 
+# ------------------------------------------------------------------------------
+# maintaince actions
+
+fmt:
+	@$(call FMT_DIR, dotfiles)
+	@$(call FMT_DIR, tools)
+	@$(call FMT_DIR, ann/eve)
+	@$(call FMT_DIR, ann/eva)
+
+clean:
+	go run tools/delete_unused_dirs.go
+
 test:
 	@echo "${C_ALRT}${TEST_TITLE}${C_REST}" && \
 		$(call TEST_DIR,ann/eva)  && \
@@ -46,6 +58,9 @@ test:
 		$(call TEST_DIR,ann/taocp/vol4) && \
 		echo "${C_ALRT}DONE${C_REST}"
 
+# ------------------------------------------------------------------------------
+# eva related
+
 eva: libeva_release
 
 libeva_release:
@@ -53,6 +68,9 @@ libeva_release:
 
 libeva_all:
 	make -C ann/eva all
+
+# ------------------------------------------------------------------------------
+# install
 
 install:
 	@echo "=>" install vimrc
@@ -63,10 +81,7 @@ install:
 	ln -sf ~/Workspace/y/vimrc       ~/.vim
 	ln -sf ~/Workspace/y/vimrc/vimrc ~/.vimrc
 	@echo "==>" install plugins in vim
-	@echo "##################################"
-	@echo "$$ vim"
-	@echo ":PlugInstall"
-	@echo "##################################"
+	vim -c ":PlugInstall" -c ":sleep 3" -c ":qa"
 	@echo ""
 	@echo "=>" install dotfiles
 	@echo "==>" compile cmds
@@ -82,14 +97,6 @@ install:
 	@echo "##################################"
 
 
-fmt:
-	@$(call FMT_DIR, dotfiles)
-	@$(call FMT_DIR, tools)
-	@$(call FMT_DIR, ann/eve)
-	@$(call FMT_DIR, ann/eva)
-
-clean:
-	go run tools/delete_unused_dirs.go
 
 # ==============================================================================
 # templates
