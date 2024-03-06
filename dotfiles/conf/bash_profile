@@ -106,7 +106,10 @@ alias gdn='git diff --name-only'
 alias gm='git commit -a'
 alias gp='git pull --no-rebase'
 alias gg='git log --graph --oneline --all'
+
+# TODO retire gpa
 alias gpa='~/Workspace/y/dotfiles/bin/sync_git_repo'
+alias jv=' rustc --version > /dev/null 2>&1 || ed_rs && make -C ~/Workspace/x/ann/jarvis'
 
 # tmux
 alias tmux="tmux -2"
