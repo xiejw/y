@@ -109,7 +109,17 @@ alias gg='git log --graph --oneline --all'
 
 # TODO retire gpa
 alias gpa='~/Workspace/y/dotfiles/bin/sync_git_repo'
-alias jv=' rustc --version > /dev/null 2>&1 || ed_rs && make -C ~/Workspace/x/ann/jarvis'
+
+# shortcut jarvis with
+function jv {
+  ed_rs
+
+  if [[ $# -eq 1 ]]; then
+    make ACTION=$1 -C ~/Workspace/x/ann/jarvis
+  else
+    make -C ~/Workspace/x/ann/jarvis
+  fi
+}
 
 # tmux
 alias tmux="tmux -2"
@@ -209,7 +219,7 @@ function llvm {
 # rust
 # ------------------------------------------------------------------------------
 ed_rs() {
-  source "$HOME/.cargo/env"
+  rustc --version > /dev/null 2>&1 || source "$HOME/.cargo/env"
 }
 
 # ------------------------------------------------------------------------------
@@ -240,14 +250,11 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 # 4. no build folder
 export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.*" -not -path "./bin/*" -not -path ".build*/*"'
 
-# put fzf (installed by vimrc project) into PATH
-if [[ -z $TMUX ]]; then
-  export PATH=$HOME/.fzf/bin:$PATH
-fi
-
 ed_fzf() {
-  export PATH=$HOME/.fzf/bin:$PATH
+  fzf --version > /dev/null 2>&1 || export PATH=$HOME/.fzf/bin:$PATH
 }
+
+ed_fzf
 
 # Bash completion
 #
