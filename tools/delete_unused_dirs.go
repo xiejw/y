@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"io/fs"
 	"log"
 	"os"
@@ -10,7 +11,12 @@ import (
 	"strings"
 )
 
+var (
+	flagSkipDir = flag.String("skip_dir", "", "if not empty, the exact matched base dir name will be skipped.")
+)
+
 func main() {
+	flag.Parse()
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
 
 	gw := &GabageWiper{
@@ -31,6 +37,7 @@ type GabageWiper struct {
 
 func (gw *GabageWiper) Init() error {
 	gw.candidateDirs = make(map[string]bool)
+	skipDir := *flagSkipDir
 
 	// ---------------------------------------------------------------------
 	// emit ths dirs for the first round of workOnCandidates
@@ -41,6 +48,10 @@ func (gw *GabageWiper) Init() error {
 		}
 
 		if filepath.Base(path) == ".git" {
+			return fs.SkipDir
+		}
+
+		if skipDir != "" && filepath.Base(path) == skipDir {
 			return fs.SkipDir
 		}
 
