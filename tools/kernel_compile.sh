@@ -3,6 +3,7 @@ set -e
 # Set VERSION
 # VERSION=6.8
 
+rm linux*.tar.xz
 wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${VERSION}.tar.xz
 tar xvf linux-${VERSION}.tar.xz
 rm -rf linux-*-src
