@@ -10,12 +10,12 @@ echo "========================================================================="
 echo "delete files in /lib/modules"
 echo "========================================================================="
 cd /lib/modules
-ls -l -d *${VERSION}*-xiejw || echo "no files"
-sudo rm -rf *${VERSION}*-xiejw
+ls -l -d *${VERSION}*-xiejw* || echo "no files"*
+sudo rm -rf *${VERSION}*-xiejw*
 
 echo "========================================================================="
 echo "delete files in /boot"
 echo "========================================================================="
 cd /boot
-ls -l -d *${VERSION}*-xiejw || echo "no files"
-sudo rm -rf *${VERSION}*-xiejw
+ls -l -d *${VERSION}*-xiejw* || echo "no files"
+sudo rm -rf *${VERSION}*-xiejw*
