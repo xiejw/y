@@ -1,7 +1,18 @@
+#!/bin/bash
+#
+# This script tries to
+# - download the linux kernel,
+# - set up all the folders and config files and then
+# - compile the kernel.
+#
+# Due to long compilation, the install is in a different file as sudo
+# will time out most of time.
 set -e
 
-# Set VERSION
-# VERSION=6.8
+if [ -z "${VERSION}" ]; then
+  echo "Please set VERSION like 6.7"
+  exit 1
+fi
 
 rm linux*.tar.xz
 wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${VERSION}.tar.xz
@@ -16,5 +27,3 @@ cd linux
 make olddefconfig
 cp .config ../linux-${VERSION}-config
 time make -j1
-sudo make modules_install
-sudo ~/Workspace/y/tools/kernel_install.sh
