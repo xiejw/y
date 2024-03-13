@@ -1,5 +1,13 @@
 #!/bin/bash
 #
+# This scripts install the compiled linux kernel. If
+#
+#    --modules_install   # Default false
+#
+# flag is passed, then the script will install modules as well before install
+# kernel.
+set -e
+
 DIST=`grep ^NAME= /etc/os-release | awk -F = '{print $2}'`
 echo "Distribution: $DIST"
 
@@ -18,6 +26,12 @@ arch_install() {
   sudo grub-mkconfig -o /boot/grub/grub.cfg
   echo "Please check grub-mkconfig carefully!"
 }
+
+cd ~/Workspace/kernel/linux
+
+if [[ "$1" == "--modules_install" ]]; then
+  sudo make modules_install
+fi
 
 if [[ "$DIST" == *"Arch Linux"* ]]; then
   echo "Arch:  run script "
