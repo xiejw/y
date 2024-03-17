@@ -48,5 +48,5 @@ else
   # ls /etc/kernel/postinst.d
   # ```
 
-  make install
+  sudo make install
 fi
