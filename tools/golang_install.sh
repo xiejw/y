@@ -28,7 +28,7 @@ find_existing_version
 
 if [ "${VERSION}" == "${GO_VERSION}" ]; then
   echo "Version same. Skip..."
-  exit 1
+  exit 0
 fi
 
 URL="https://go.dev/dl/go${VERSION}.darwin-arm64.pkg"
