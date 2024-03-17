@@ -5,8 +5,19 @@
 # - set up all the folders and config files and then
 # - compile the kernel.
 #
-# Due to long compilation, the install is in a different file as sudo
-# will time out most of time.
+# NOTE:
+# - Due to long compilation, the install is in a different file as sudo will
+#   time out most of time. This means `modules_install` is not part of this
+#   file.
+# - All source code trees are renamed in linux-*-src so the deletion could be
+#   easier.
+#
+#
+# TODO:
+# - The final make cmd is single thread now. We could detect this with
+#
+#     cat /proc/cpuinfo | grep "processor" | wc -l
+#
 set -e
 
 if [ -z "${VERSION}" ]; then
@@ -14,7 +25,8 @@ if [ -z "${VERSION}" ]; then
   exit 1
 fi
 
-rm linux*.tar.xz
+cd ~/Workspace/kernel
+rm -rf linux*.tar.xz
 wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${VERSION}.tar.xz
 tar xvf linux-${VERSION}.tar.xz
 rm -rf linux-*-src
