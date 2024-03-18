@@ -6,9 +6,12 @@
 - https://rust-lang.github.io/rustup/basics.html
 
 ```
-rustup update    # upgrade rust
-rustup doc       # open doc
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup component remove rust-docs
+
+rustup component list | grep installed     # identify the installed components.
+rustup update                              # upgrade rust.
+rustup doc                                 # open doc, if installed.
 ```
 
 ## Cargo
