@@ -6,6 +6,9 @@
 #
 # flag is passed, then the script will install modules as well before install
 # kernel.
+#
+# NOTE
+# - Please run this with normal user.
 set -e
 
 DIST=`grep ^NAME= /etc/os-release | awk -F = '{print $2}'`
@@ -18,7 +21,7 @@ arch_install() {
 
   echo "Copy all files to /boot {image, initramfs, config, system.map}."
   sudo cp -v arch/x86_64/boot/bzImage /boot/vmlinuz-linux-$KV
-  sudo mkinitcpio -k $KV -g /boot/initramfs-linux-$KV.img
+  sudo mkinitcpio -k $KV -g /boot/initramfs-linux-$KV.img || echo "The failure might be ok. Plz check warning/error message."
   sudo cp -v .config /boot/config-$KV
   sudo cp -v System.map /boot/System.map-${KV}
 

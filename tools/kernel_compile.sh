@@ -6,6 +6,7 @@
 # - compile the kernel.
 #
 # NOTE:
+# - Please run this with normal user.
 # - Due to long compilation, the install is in a different file as sudo will
 #   time out most of time. This means `modules_install` is not part of this
 #   file.

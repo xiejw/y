@@ -1,4 +1,11 @@
 #!/bin/bash
+#
+# This script removes all the files installed for the kernel with version
+# $VERSION. Namely, it removes the installed modules and files in /boot. The
+# compiled object files are removed by the compilation process script.
+#
+# NOTE:
+# - Please run this with normal user.
 set -e
 
 if [ -z "${VERSION}" ]; then
