@@ -57,6 +57,7 @@ CFLAGS          += -Wno-format-nonliteral -Wno-padded
 CFLAGS          += -Wno-bad-function-cast -Wno-strict-prototypes
 CFLAGS          += -Wno-unsafe-buffer-usage
 CFLAGS          += -Wno-covered-switch-default
+CFLAGS          += -Wno-pre-c11-compat
 
 else
 
