@@ -32,12 +32,12 @@
                 *((str) + 1) = (uint8_t)((x) >> 16); \
                 *((str) + 0) = (uint8_t)((x) >> 24); \
         } while (0)
-#define SHA2_PACK32(str, x)                               \
-        do {                                              \
-                *(x) = ((uint32_t) * ((str) + 3)) |       \
-                       ((uint32_t) * ((str) + 2) << 8) |  \
-                       ((uint32_t) * ((str) + 1) << 16) | \
-                       ((uint32_t) * ((str) + 0) << 24);  \
+#define SHA2_PACK32(str, x)                             \
+        do {                                            \
+                *(x) = ((uint32_t)*((str) + 3)) |       \
+                       ((uint32_t)*((str) + 2) << 8) |  \
+                       ((uint32_t)*((str) + 1) << 16) | \
+                       ((uint32_t)*((str) + 0) << 24);  \
         } while (0)
 
 // Initialize array of round constants: first 32 bits of the fractional parts
