@@ -10,12 +10,13 @@
 # NOTE
 # - Please run this with normal user.
 set -e
+set -x
 
 DIST=`grep ^NAME= /etc/os-release | awk -F = '{print $2}'`
 echo "Distribution: $DIST"
 
 arch_install() {
-  KV=`make kernelrelease`
+  KV=`make --no-print-directory kernelrelease`
 
   echo "Kernel version: ${KV}"
 
