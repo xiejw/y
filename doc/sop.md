@@ -274,8 +274,9 @@
   #
   # [Optional] Checkout specific tag
   #
-  git tag -l 'v*'
-  git checkout tags/v2.2.1
+  git tag -l 'v*'             # search all tags for releases.
+  git checkout tags/v2.2.1    # ping to latest release.
+  git submodule update        # run once to adjust the submodule.
 
   #
   # prepare cmake with ninja
