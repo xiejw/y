@@ -243,31 +243,40 @@
 
   ```
   #
-  # prepare the python venv
+  # (One-time Setup) Prepare the python venv
   #
   cd ~/Workspace/build
   python3 -m venv pyenv
   source ./pyenv/bin/activate
 
-  # required for compiling libtorch
+  #
+  # (One-time Setup) Required for compiling libtorch
+  #
   pip3 install pyyaml typing_extensions
 
   #
-  # optional for testing pytorch
+  # (One-time Setup) [Optional] for testing pytorch
   #
   pip3 install -U torch numpy
   pip3 install torch --index-url https://download.pytorch.org/whl/cpu   # if [cpu] only
   ```
 
-  - follow the cmds:
+  - Follow the cmds:
 
   ```
   #
-  # prepare source code
+  # (One-time Setup) Prepare source code
   #
   cd build/torch
   git clone --recursive https://github.com/pytorch/pytorch.git git
   ln -sf git src
+
+  #
+  # [Optional] Checkout specific tag
+  #
+  git tag -l 'v*'             # search all tags for releases.
+  git checkout tags/v2.2.1    # ping to latest release.
+  git submodule update        # run once to adjust the submodule.
 
   #
   # prepare cmake with ninja
