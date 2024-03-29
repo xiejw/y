@@ -1,7 +1,7 @@
 // vim: ft=cpp
 #pragma once
 
-// errFatalAndExit( fmt, ... )                  \
+// errFatalAndExit( fmt, ... )
 // err.emitNote()
 // err.isOk()
 // err.getMsg()
