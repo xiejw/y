@@ -25,19 +25,19 @@ struct Sds {
     Sds( Sds && )                 = default;
     Sds &operator=( Sds && )      = default;
 
-    char       *Data( ) const { return (char *)( m_ptr.get( ) ); };
-    std::size_t Cap( ) const { return m_cap; };
-    std::size_t Len( ) const { return m_len; };
-    std::size_t Size( ) const { return m_len; };
+    char       *getData( ) const { return (char *)( m_ptr.get( ) ); };
+    std::size_t getCap( ) const { return m_cap; };
+    std::size_t getLen( ) const { return m_len; };
+    std::size_t getSize( ) const { return m_len; };
 
-    void Reserve( std::size_t new_len );
-    void Cat( std::string_view s );
-    void CatPrintf( const char *fmt, ... );
+    void reserve( std::size_t new_len );
+    void cat( std::string_view s );
+    void catPrintf( const char *fmt, ... );
 
     bool                 operator==( std::string_view s ) const;
     friend std::ostream &operator<<( std::ostream &os, const Sds &dt )
     {
-        return os << dt.Data( );
+        return os << dt.getData( );
     }
 
   private:
@@ -48,7 +48,7 @@ struct Sds {
     // - the final `\0` is set; it is the memory space after m_cap.
     void Init( const void *init, std::size_t len, std::size_t cap );
 
-    void CatVprintf( const char *fmt, va_list ap );
+    void catVprintf( const char *fmt, va_list ap );
 };
 
 namespace literals {

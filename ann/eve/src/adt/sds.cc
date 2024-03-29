@@ -33,16 +33,16 @@ Sds::Init( const void *init, size_t len, size_t cap )
 }
 
 void
-Sds::CatPrintf( const char *fmt, ... )
+Sds::catPrintf( const char *fmt, ... )
 {
     va_list ap;
     va_start( ap, fmt );
-    this->CatVprintf( fmt, ap );
+    this->catVprintf( fmt, ap );
     va_end( ap );
 }
 
 void
-Sds::CatVprintf( const char *fmt, va_list ap )
+Sds::catVprintf( const char *fmt, va_list ap )
 {
     va_list cpy;
 
@@ -53,9 +53,9 @@ Sds::CatVprintf( const char *fmt, va_list ap )
 
     // Path 1: Fast path first. Use the remaining area if possible for speed.
     {
-        size_t avail = this->Cap( ) - this->Size( );
+        size_t avail = this->getCap( ) - this->getSize( );
         if ( buflen <= avail ) {
-            size_t cur_len = this->Size( );
+            size_t cur_len = this->getSize( );
 
             char *buf       = (char *)this->m_ptr.get( ) + cur_len;
             buf[buflen - 2] = '\0';
@@ -107,16 +107,16 @@ Sds::CatVprintf( const char *fmt, va_list ap )
     }
 
     // Finally concat the obtained string to the SDS string and return it.
-    this->Cat( buf );
+    this->cat( buf );
     if ( buf != staticbuf ) free( buf );
 }
 
 void
-Sds::Cat( std::string_view s )
+Sds::cat( std::string_view s )
 {
     size_t curlen = this->m_len;
     size_t newlen = s.size( ) + curlen;
-    this->Reserve( newlen );
+    this->reserve( newlen );
     if ( this->m_ptr.get( ) == nullptr ) return;
 
     memcpy( (char *)this->m_ptr.get( ) + curlen, s.data( ), s.size( ) );
@@ -125,7 +125,7 @@ Sds::Cat( std::string_view s )
 }
 
 void
-Sds::Reserve( std::size_t new_len )
+Sds::reserve( std::size_t new_len )
 {
     size_t cap = this->m_cap;
     if ( cap >= new_len ) return;

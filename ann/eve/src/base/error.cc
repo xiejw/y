@@ -25,7 +25,7 @@ Error::ErrorHolder::getMsg( ) const noexcept
     assert( mMsg.size( ) > 0 );
     eve::adt::Sds sds{ };
     for ( auto &msg : this->mMsg | std::views::reverse ) {
-        sds.CatPrintf( "  > %s\n", msg.Data( ) );
+        sds.catPrintf( "  > %s\n", msg.getData( ) );
     }
     return sds;
 }

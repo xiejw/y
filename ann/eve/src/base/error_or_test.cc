@@ -30,6 +30,6 @@ EVE_TEST( BaseErrorOr, ErrorMove )
     EVE_TEST_EXPECT( !r.Ok( ), "ok" );
 
     Error err = r.ReleaseErr( );
-    EVE_TEST_EXPECT_STR_EQ( msg.Data( ), err.getMsg( ), "err" );
+    EVE_TEST_EXPECT_STR_EQ( msg.getData( ), err.getMsg( ), "err" );
     EVE_TEST_PASS( );
 }

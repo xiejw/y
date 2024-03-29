@@ -52,7 +52,7 @@ struct Error {
         ErrorHolder &emitNote( const char *fmt, Args &&...args ) noexcept
         {
             eve::adt::Sds sds{ };
-            sds.CatPrintf( fmt, std::forward<Args>( args )... );
+            sds.catPrintf( fmt, std::forward<Args>( args )... );
             mMsg.push_back( std::move( sds ) );
             return *this;
         }
