@@ -8,40 +8,43 @@
 
 namespace eve::base {
 
-Error::Error( Error &&e )
-{
-    this->m_holder = e.m_holder;
-    e.m_holder     = nullptr;
-}
-Error &
-Error::operator=( Error &&e )
-{
-    this->m_holder = e.m_holder;
-    e.m_holder     = nullptr;
-    return *this;
-}
+//
+// ErrorHolder
+//
 
-ErrorHolder::ErrorHolder( eve::adt::Sds &&msg )
-    : m_kind{ ErrorKind::ERROR }, m_msg{ }
+Error::ErrorHolder &
+Error::ErrorHolder::emitNote( eve::adt::Sds &&msg ) noexcept
 {
-    EmitNote( std::move( msg ) );
-}
-
-ErrorHolder &
-ErrorHolder::EmitNote( eve::adt::Sds &&msg )
-{
-    this->m_msg.push_back( std::move( msg ) );
+    this->mMsg.push_back( std::move( msg ) );
     return *this;
 }
 
 eve::adt::Sds
-ErrorHolder::Msg( ) const noexcept
+Error::ErrorHolder::getMsg( ) const noexcept
 {
+    assert( mMsg.size( ) > 0 );
     eve::adt::Sds sds{ };
-    for ( auto &msg : this->m_msg | std::views::reverse ) {
+    for ( auto &msg : this->mMsg | std::views::reverse ) {
         sds.CatPrintf( "  > %s\n", msg.Data( ) );
     }
     return sds;
+}
+
+//
+// Error
+//
+
+Error::Error( Error &&e )
+{
+    mHolder   = e.mHolder;
+    e.mHolder = nullptr;
+}
+Error &
+Error::operator=( Error &&e )
+{
+    mHolder   = e.mHolder;
+    e.mHolder = nullptr;
+    return *this;
 }
 
 void

@@ -25,11 +25,11 @@ EVE_TEST( BaseErrorOr, Move )
 EVE_TEST( BaseErrorOr, ErrorMove )
 {
     Error        old{ "error" };
-    auto         msg = old.Msg( );
+    auto         msg = old.getMsg( );
     ErrorOr<int> r{ std::move( old ) };
     EVE_TEST_EXPECT( !r.Ok( ), "ok" );
 
     Error err = r.ReleaseErr( );
-    EVE_TEST_EXPECT_STR_EQ( msg.Data( ), err.Msg( ), "err" );
+    EVE_TEST_EXPECT_STR_EQ( msg.Data( ), err.getMsg( ), "err" );
     EVE_TEST_PASS( );
 }
