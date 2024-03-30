@@ -10,24 +10,29 @@ namespace eve::base {
 template <class T>
 struct ErrorOr {
   private:
-    std::variant<T, Error> m_v;
+    std::variant<T, Error> mValue;
 
   public:
-    explicit ErrorOr( T &&v ) : m_v( std::move( v ) ) {}
-    explicit ErrorOr( Error &&e ) : m_v( std::move( e ) ) {}
+    ErrorOr( ) = delete;
 
-    bool Ok( ) const noexcept { return m_v.index( ) == 0; }
+    static ErrorOr withValue( T &&v ) { return ErrorOr( std::move( v ) ); }
+    static ErrorOr withError( Error &&e ) { return ErrorOr( std::move( e ) ); }
 
-    T &Value( ) noexcept { return std::get<0>( this->m_v ); }
-    T &Err( ) noexcept { return std::get<1>( this->m_v ); }
+    bool isOk( ) const noexcept { return mValue.index( ) == 0; }
+
+    T &Value( ) noexcept { return std::get<0>( this->mValue ); }
+    T &Err( ) noexcept { return std::get<1>( this->mValue ); }
 
     T &&ReleaseValue( ) noexcept
     {
-        return std::move( std::get<0>( this->m_v ) );
+        return std::move( std::get<0>( this->mValue ) );
     }
     Error &&ReleaseErr( ) noexcept
     {
-        return std::move( std::get<1>( this->m_v ) );
+        return std::move( std::get<1>( this->mValue ) );
     }
+
+  private:
+    ErrorOr( std::variant<T, Error> &&v ) : mValue{ std::move( v ) } {};
 };
 }  // namespace eve::base

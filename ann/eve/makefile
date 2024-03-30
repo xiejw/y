@@ -14,10 +14,10 @@ MODULES      += ${BUILD_OBJ}/adt_sds.o
 MODULES      += ${BUILD_OBJ}/base_error.o
 MODULES      += ${BUILD_OBJ}/base_log.o
 
-TEST_MODULES += ${BUILD_OBJ}/testing_testing.o
 TEST_MODULES +=  ${BUILD_OBJ}/adt_sds_test.o
 TEST_MODULES +=  ${BUILD_OBJ}/base_error_test.o
 TEST_MODULES +=  ${BUILD_OBJ}/base_error_or_test.o
+TEST_MODULES += ${BUILD_OBJ}/testing_testing.o
 
 ifdef ASAN
 # Ref: https://clang.llvm.org/docs/AddressSanitizer.html

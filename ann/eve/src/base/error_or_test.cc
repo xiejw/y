@@ -9,27 +9,31 @@ using eve::base::ErrorOr;
 
 EVE_TEST( BaseErrorOr, OK )
 {
-    ErrorOr<int> r{ 1 };
-    EVE_TEST_EXPECT( r.Ok( ), "ok" );
+    auto r = ErrorOr<int>::withValue( 1 );
+    EVE_TEST_EXPECT( r.isOk( ), "ok" );
     EVE_TEST_EXPECT( 1 == r.Value( ), "v" );
     EVE_TEST_PASS( );
 }
 
-EVE_TEST( BaseErrorOr, Move )
+EVE_TEST( BaseErrorOr, ImplicitValue )
 {
-    ErrorOr<Sds> r{ eve::Error( "hello" ) };
-    EVE_TEST_EXPECT( !r.Ok( ), "ok" );
+    auto r = ErrorOr<Sds>::withValue( Sds{ "hello" } );
+    EVE_TEST_EXPECT( r.isOk( ), "ok" );
+    EVE_TEST_EXPECT_STR_EQ( "hello", r.Value( ), "value" );
+    // EVE_TEST_EXPECT_STR_EQ( "hello", r.Value( ).getData(), "value" );
     EVE_TEST_PASS( );
 }
 
-EVE_TEST( BaseErrorOr, ErrorMove )
+EVE_TEST( BaseErrorOr, Error )
 {
-    Error        old{ "error" };
-    auto         msg = old.getMsg( );
-    ErrorOr<int> r{ std::move( old ) };
-    EVE_TEST_EXPECT( !r.Ok( ), "ok" );
+    auto r = ErrorOr<Sds>::withError( Error( "hello" ) );
+    EVE_TEST_EXPECT( !r.isOk( ), "ok" );
+    EVE_TEST_PASS( );
+}
 
-    Error err = r.ReleaseErr( );
-    EVE_TEST_EXPECT_STR_EQ( msg.getData( ), err.getMsg( ), "err" );
+EVE_TEST( BaseErrorOr, ImplicitErrorMsg )
+{
+    auto r = ErrorOr<Sds>::withError( "hello" );
+    EVE_TEST_EXPECT( !r.isOk( ), "ok" );
     EVE_TEST_PASS( );
 }

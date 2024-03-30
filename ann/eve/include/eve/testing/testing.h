@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <string>
+#include <string_view>
+
+#include "eve/adt/sds.h"
 
 namespace eve::testing {
 
@@ -17,6 +20,10 @@ struct SuiteDriver {
 struct SuiteTestInfo {
     SuiteTestInfo( std::string test_name, SuiteBaseTest *func );
 };
+
+bool eve_testing_str_eq_helper( std::string_view s1, std::string_view s2 );
+bool eve_testing_str_eq_helper( std::string_view s1, const eve::adt::Sds &s2 );
+bool eve_testing_str_eq_helper( const eve::adt::Sds &s2, std::string_view s1 );
 
 }  // namespace eve::testing
 
@@ -54,7 +61,7 @@ struct SuiteTestInfo {
     do {                                                                  \
         const auto &ref1 = ( s1 );                                        \
         const auto &ref2 = ( s2 );                                        \
-        if ( !( ref1 == ref2 ) ) {                                        \
+        if ( !eve::testing::eve_testing_str_eq_helper( ref1, ref2 ) ) {   \
             std::cerr << "\033[1;33m...FILE " << file << " LINE " << line \
                       << "\033[0m";                                       \
             std::cerr << "\033[1;33m...\nLHS\n```\n"                      \

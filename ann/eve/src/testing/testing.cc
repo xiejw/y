@@ -50,4 +50,22 @@ SuiteTestInfo::SuiteTestInfo( std::string test_name, SuiteBaseTest *func )
     GetSuites( ).push_back( Suite{ test_name, func } );
 }
 
+bool
+eve_testing_str_eq_helper( std::string_view s1, std::string_view s2 )
+{
+    return s1 == s2;
+}
+
+bool
+eve_testing_str_eq_helper( std::string_view s1, const eve::adt::Sds &s2 )
+{
+    return s1 == s2;
+}
+
+bool
+eve_testing_str_eq_helper( const eve::adt::Sds &s2, std::string_view s1 )
+{
+    return s1 == s2;
+}
+
 }  // namespace eve::testing
