@@ -27,20 +27,30 @@ ifdef ASAN
 CXXFLAGS         += -fsanitize=address -g
 LDFLAGS          += -fsanitize=address -g
 BUILD             = ${BUILD_BASE}_asan
+endif  # ASAN
 
-release: error_asan
-
+ifdef RELEASE
+CXXFLAGS         += -DNDEBUG -O2
+BUILD             = ${BUILD_BASE}_release
+ifdef ASAN
+compile: error_asan
+test: error_asan
 error_asan:
 	@echo release action does not support ASAN.
 	exit 1
-endif
+endif  # ASAN
+endif  # RELEASE
 
 # ==============================================================================
 #
 # Top Level actions
 #
 
-release: ${BUILD}/libeve.a
+release:
+	@echo 'compile release libeve'
+	make -B -j RELEASE=1 libeva || exit 1
+
+libeva: compile ${BUILD}/libeve.a
 
 test: compile_test ${BUILD}/test_main
 	${BUILD}/test_main
@@ -57,11 +67,7 @@ clean:
 # Project actions
 #
 
-.DEFAULT_GOAL = run
-
-run: compile_test
-	${BUILD}/test_main
-
+.DEFAULT_GOAL = compile
 
 compile: compile_test
 
