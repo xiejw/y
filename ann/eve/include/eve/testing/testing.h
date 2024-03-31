@@ -1,9 +1,11 @@
 // vim: ft=cpp
 #pragma once
 
+#include <cstring>
 #include <iostream>
 #include <string>
 #include <string_view>
+#include <type_traits>
 
 #include "eve/adt/sds.h"
 
@@ -21,9 +23,24 @@ struct SuiteTestInfo {
     SuiteTestInfo( std::string test_name, SuiteBaseTest *func );
 };
 
-bool eve_testing_str_eq_helper( std::string_view s1, std::string_view s2 );
-bool eve_testing_str_eq_helper( std::string_view s1, const eve::adt::Sds &s2 );
-bool eve_testing_str_eq_helper( const eve::adt::Sds &s2, std::string_view s1 );
+bool str_eq_helper_views( const std::string_view &s1,
+                          const std::string_view &s2 );
+
+template <class T, class U>
+bool
+str_eq_helper( const T &s1, const U &s2 )
+{
+    if constexpr ( std::is_same_v<T, eve::adt::Sds> &&
+                   std::is_same_v<U, eve::adt::Sds> ) {
+        return strcmp( s1.getData( ), s2.getData( ) ) == 0;
+    } else if constexpr ( std::is_same_v<T, eve::adt::Sds> ) {
+        return s1 == s2;
+    } else if constexpr ( std::is_same_v<U, eve::adt::Sds> ) {
+        return s1 == s2;
+    } else {
+        return str_eq_helper_views( s1, s2 );
+    }
+}
 
 }  // namespace eve::testing
 
@@ -61,7 +78,25 @@ bool eve_testing_str_eq_helper( const eve::adt::Sds &s2, std::string_view s1 );
     do {                                                                  \
         const auto &ref1 = ( s1 );                                        \
         const auto &ref2 = ( s2 );                                        \
-        if ( !eve::testing::eve_testing_str_eq_helper( ref1, ref2 ) ) {   \
+        if ( !eve::testing::str_eq_helper( ref1, ref2 ) ) {               \
+            std::cerr << "\033[1;33m...FILE " << file << " LINE " << line \
+                      << "\033[0m";                                       \
+            std::cerr << "\033[1;33m...\nLHS\n```\n"                      \
+                      << ref1 << "\n```\nRHS\n```\n"                      \
+                      << ref2 << "\n```\n"                                \
+                      << "\033[0m";                                       \
+            return ( msg );                                               \
+        }                                                                 \
+    } while ( 0 )
+
+#define EVE_TEST_EXPECT_STR_NEQ( s1, s2, msg ) \
+    EVE_TEST_EXPECT_STR_NEQ_( s1, s2, msg, __FILE__, __LINE__ )
+
+#define EVE_TEST_EXPECT_STR_NEQ_( s1, s2, msg, file, line )               \
+    do {                                                                  \
+        const auto &ref1 = ( s1 );                                        \
+        const auto &ref2 = ( s2 );                                        \
+        if ( eve::testing::str_eq_helper( ref1, ref2 ) ) {                \
             std::cerr << "\033[1;33m...FILE " << file << " LINE " << line \
                       << "\033[0m";                                       \
             std::cerr << "\033[1;33m...\nLHS\n```\n"                      \

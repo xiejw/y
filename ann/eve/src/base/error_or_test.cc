@@ -20,7 +20,7 @@ EVE_TEST( BaseErrorOr, ImplicitValue )
     auto r = ErrorOr<Sds>::withValue( Sds{ "hello" } );
     EVE_TEST_EXPECT( r.isOk( ), "ok" );
     EVE_TEST_EXPECT_STR_EQ( "hello", r.Value( ), "value" );
-    // EVE_TEST_EXPECT_STR_EQ( "hello", r.Value( ).getData(), "value" );
+    EVE_TEST_EXPECT_STR_EQ( "hello", r.Value( ).getData( ), "value" );
     EVE_TEST_PASS( );
 }
 
