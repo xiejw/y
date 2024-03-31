@@ -1,4 +1,5 @@
-BUILD             = .build
+BUILD_BASE        = .build
+BUILD             = ${BUILD_BASE}
 BUILD_OBJ         = ${BUILD}/objs
 
 CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra -Wfatal-errors
@@ -25,6 +26,13 @@ ifdef ASAN
 # Ref: https://clang.llvm.org/docs/AddressSanitizer.html
 CXXFLAGS         += -fsanitize=address -g
 LDFLAGS          += -fsanitize=address -g
+BUILD             = ${BUILD_BASE}_asan
+
+release: error_asan
+
+error_asan:
+	@echo release action does not support ASAN.
+	exit 1
 endif
 
 # ==============================================================================
@@ -42,7 +50,7 @@ fmt:
 	${FMT} cmd include src
 
 clean:
-	rm -rf ${BUILD} ${BUILD_OBJ}
+	rm -rf ${BUILD_BASE}*
 
 # ==============================================================================
 #
