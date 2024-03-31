@@ -14,4 +14,6 @@ jobs:
           require_clang: true
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} clean test
+      - name: Run ${{ github.workflow }} ASAN Test
+        run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} ASAN=1 clean test
 
