@@ -1,7 +1,7 @@
 BUILD         = .build
 BUILD_OBJ     = ${BUILD}/objs
 
-CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra
+CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra -Wfatal-errors
 CXXFLAGS     += -Iinclude
 
 CMD           =  cmd
@@ -9,9 +9,19 @@ SRC           =  src
 INC           =  include
 
 CXXFLAGS     += -I../../eve/include
-LDFLAGS      += ../../eve/.build/libeve.a
+LDFLAGS      += ../../eve/.build_release/libeve.a
 
 FMT           = ~/Workspace/y/tools/clang_format_all.sh
+
+ifdef RELEASE
+CXXFLAGS     += -DNDEBUG -O2
+endif
+
+ifdef ASAN
+# Ref: https://clang.llvm.org/docs/AddressSanitizer.html
+CXXFLAGS         += -fsanitize=address -g
+LDFLAGS          += -fsanitize=address -g
+endif  # ASAN
 
 # ------------------------------------------------------------------------------
 # libs
@@ -33,9 +43,11 @@ ${BUILD_OBJ}: | ${BUILD}
 # incrementally compile all libraries.
 compile: ${MODULES}
 
-release: compile
+release:
+	@echo compile with RELEASE mode
+	make RELEASE=1 compile || exit 1
 
-test: compile
+test: compile run
 
 # Maintenance actions
 fmt:

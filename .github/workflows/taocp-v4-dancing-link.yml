@@ -16,6 +16,8 @@ jobs:
           compile_eve: true
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ann/taocp/v4-dancing-link clean test
+      - name: Run ${{ github.workflow }} ASAN Test
+        run: make -C ${{ github.workspace }}/y/ann/taocp/v4-dancing-link ASAN=1 clean test
       - name: Run ${{ github.workflow }} Release
-        run: make -C ${{ github.workspace }}/y/ann/taocp/v4-dancing-link release
+        run: make -C ${{ github.workspace }}/y/ann/taocp/v4-dancing-link clean release
 
