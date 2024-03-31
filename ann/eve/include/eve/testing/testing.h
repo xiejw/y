@@ -45,7 +45,7 @@ str_eq_helper( const T &s1, const U &s2 )
 }  // namespace eve::testing
 
 #define EVE_TEST( test_cls, test_name )                                       \
-    class EVA_TEST##test_cls##test_name : eve::testing::SuiteBaseTest {       \
+    class EVE_TEST##test_cls##test_name : eve::testing::SuiteBaseTest {       \
       public:                                                                 \
         const char *TestBody( ) override;                                     \
                                                                               \
@@ -53,11 +53,11 @@ str_eq_helper( const T &s1, const U &s2 )
         static eve::testing::SuiteTestInfo *test_info;                        \
     };                                                                        \
                                                                               \
-    eve::testing::SuiteTestInfo *EVA_TEST##test_cls##test_name::test_info =   \
+    eve::testing::SuiteTestInfo *EVE_TEST##test_cls##test_name::test_info =   \
         new eve::testing::SuiteTestInfo{ #test_cls "::" #test_name,           \
-                                         new EVA_TEST##test_cls##test_name }; \
+                                         new EVE_TEST##test_cls##test_name }; \
                                                                               \
-    const char *EVA_TEST##test_cls##test_name::TestBody( )
+    const char *EVE_TEST##test_cls##test_name::TestBody( )
 
 #define EVE_TEST_EXPECT( cond, msg ) \
     EVE_TEST_EXPECT_( cond, msg, __FILE__, __LINE__ )

@@ -37,7 +37,7 @@ static struct {
 static const char *level_strings[] = { "TRACE", "DEBUG", "INFO",
                                        "WARN",  "ERROR", "FATAL" };
 
-#ifndef EVA_LOG_NO_COLOR
+#ifndef EVE_LOG_NO_COLOR
 // see here for color codes.
 // https://docs.microsoft.com/en-us/windows/terminal/images/one-half-dark-color-scheme.png
 static const char *level_colors[] = { "\x1b[94m", "\x1b[36m", "\x1b[32m",
@@ -49,7 +49,7 @@ stdout_callback( struct log_event *ev )
 {
     char buf[25];
     buf[strftime( buf, sizeof( buf ), "%F %H:%M:%S", ev->time )] = '\0';
-#ifndef EVA_LOG_NO_COLOR
+#ifndef EVE_LOG_NO_COLOR
     fprintf( (FILE *)ev->out, "%s %s%-5s\x1b[0m \x1b[1;34m%s:%d:\x1b[0m ", buf,
              level_colors[ev->level], level_strings[ev->level], ev->file,
              ev->line );

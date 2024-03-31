@@ -1,33 +1,36 @@
-BUILD         = .build
-BUILD_OBJ     = ${BUILD}/objs
+BUILD             = .build
+BUILD_OBJ         = ${BUILD}/objs
 
-CXXFLAGS     += -std=c++20 -Wall -pedantic -Wextra
+CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra
+CXXFLAGS         += -Iinclude
+
 ifndef SKIP_WERROR
-CXXFLAGS     += -Werror
+CXXFLAGS         += -Werror
 endif
-CXXFLAGS     += -Iinclude
 
-FMT           = ~/Workspace/y/tools/clang_format_all.sh
-AR            = ar -cr
+FMT               = ~/Workspace/y/tools/clang_format_all.sh
+AR                = ar -cr
 
-MODULES      += ${BUILD_OBJ}/adt_sds.o
-MODULES      += ${BUILD_OBJ}/base_error.o
-MODULES      += ${BUILD_OBJ}/base_log.o
+MODULES          += ${BUILD_OBJ}/adt_sds.o
+MODULES          += ${BUILD_OBJ}/base_error.o
+MODULES          += ${BUILD_OBJ}/base_log.o
 
-TEST_MODULES += ${BUILD_OBJ}/adt_sds_test.o
-TEST_MODULES += ${BUILD_OBJ}/base_error_test.o
-TEST_MODULES += ${BUILD_OBJ}/base_error_or_test.o
-TEST_MODULES += ${BUILD_OBJ}/testing_testing_test.o
-TEST_MODULES += ${BUILD_OBJ}/testing_testing.o
+TEST_MODULES     += ${BUILD_OBJ}/adt_sds_test.o
+TEST_MODULES     += ${BUILD_OBJ}/base_error_test.o
+TEST_MODULES     += ${BUILD_OBJ}/base_error_or_test.o
+TEST_MODULES     += ${BUILD_OBJ}/testing_testing_test.o
+TEST_MODULES     += ${BUILD_OBJ}/testing_testing.o
 
 ifdef ASAN
 # Ref: https://clang.llvm.org/docs/AddressSanitizer.html
-CXXFLAGS     += -fsanitize=address -g
-LDFLAGS      += -fsanitize=address -g
+CXXFLAGS         += -fsanitize=address -g
+LDFLAGS          += -fsanitize=address -g
 endif
 
 # ==============================================================================
+#
 # Top Level actions
+#
 
 release: ${BUILD}/libeve.a
 
@@ -41,9 +44,10 @@ fmt:
 clean:
 	rm -rf ${BUILD} ${BUILD_OBJ}
 
-
 # ==============================================================================
+#
 # Project actions
+#
 
 .DEFAULT_GOAL = run
 
