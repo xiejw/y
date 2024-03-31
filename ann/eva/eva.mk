@@ -27,7 +27,7 @@ BUILD           = ${BUILD_BASE}
 # --------------------------------
 # common flags used for all cases.
 # --------------------------------
-CFLAGS          += -std=c11 -Wall -Werror -pedantic
+CFLAGS          += -std=c11 -Wall -Werror -pedantic -Wfatal-errors
 
 # --------------------------------
 # all flags I am testing with clang.
