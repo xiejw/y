@@ -27,6 +27,10 @@ bool str_eq_helper_views( const std::string_view &s1,
                           const std::string_view &s2 );
 
 template <class T, class U>
+    requires( ( std::is_same_v<T, eve::adt::Sds> ||
+                std::is_constructible_v<std::string_view, T> ) &&
+              (std::is_same_v<U, eve::adt::Sds> ||
+               std::is_constructible_v<std::string_view, U>))
 bool
 str_eq_helper( const T &s1, const U &s2 )
 {

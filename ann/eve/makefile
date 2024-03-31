@@ -1,7 +1,7 @@
 BUILD             = .build
 BUILD_OBJ         = ${BUILD}/objs
 
-CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra
+CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra -Wfatal-errors
 CXXFLAGS         += -Iinclude
 
 ifndef SKIP_WERROR
