@@ -15,5 +15,5 @@ jobs:
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} clean test
       - name: Run ${{ github.workflow }} ASAN Test
-        run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} ASAN=1 clean test
+        run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} ASAN=1 V=1 clean test
 
