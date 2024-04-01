@@ -7,7 +7,7 @@
 // err.isOk()
 // err.getMsg()
 // err.dump()
-// err.dumpAndExit()
+// err.dumpAndPanic()
 
 #include <eve/adt/sds.h>
 
@@ -99,9 +99,9 @@ struct Error {
     }
 
     void dump( ) const noexcept { std::cerr << mHolder->getMsg( ); };
-    void dumpAndExit( ) const noexcept
+    void dumpAndPanic( ) const noexcept
     {
-        std::cerr << "fatal error:\n" << mHolder->getMsg( );
+        std::cerr << "panic error:\n" << mHolder->getMsg( ) << std::flush;
         std::exit( 1 );
     };
 };

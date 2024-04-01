@@ -16,9 +16,11 @@
 #
 # if you are building eva, run
 #
-#     make eva             # alias
 #     make libeva_release
-#     make libeva_all
+#     make eva             # alias
+#
+#     make libeve_release
+#     make eve             # alias
 
 C_ALRT = \033[0;33m
 C_INFO = \033[0;32m
@@ -36,7 +38,7 @@ STDOUT_ROUTE = >
 endif
 
 .PHONY: install test fmt clean
-.PHONY: eva libeva_release libeva_all
+.PHONY: eva libeva_release  libeve_release
 
 # ------------------------------------------------------------------------------
 # maintaince actions
@@ -59,15 +61,17 @@ test:
 		echo "${C_ALRT}DONE${C_REST}"
 
 # ------------------------------------------------------------------------------
-# eva related
+# eva/eva related
 
 eva: libeva_release
 
 libeva_release:
 	make -C ann/eva release
 
-libeva_all:
-	make -C ann/eva all
+eve: libeve_release
+
+libeve_release:
+	make -C ann/eve release
 
 # ------------------------------------------------------------------------------
 # install

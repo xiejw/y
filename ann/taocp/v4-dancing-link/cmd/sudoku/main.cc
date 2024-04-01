@@ -120,10 +120,10 @@ main( )
                           /*r=*/item_ids + 1,
                           /*c=*/item_ids + 2,
                           /*b=*/item_ids + 3 );
-            t.CoverCol( item_ids[0] );
-            t.CoverCol( item_ids[1] );
-            t.CoverCol( item_ids[2] );
-            t.CoverCol( item_ids[3] );
+            t.coverCol( item_ids[0] );
+            t.coverCol( item_ids[1] );
+            t.coverCol( item_ids[2] );
+            t.coverCol( item_ids[3] );
         }
     }
 
@@ -136,13 +136,13 @@ main( )
                       /*r=*/item_ids + 1,
                       /*c=*/item_ids + 2,
                       /*b=*/item_ids + 3 );
-        t.AppendOption( item_ids, o );
+        t.appendOption( item_ids, o );
     }
 
     // -------------------------------------------------------------
     std::vector<std::size_t> sols{ };
 
-    if ( t.SearchSolution( sols ) ) {
+    if ( t.searchSolution( sols ) ) {
         // Dup the problem as we are going to modify it.
         int solution[SIZE * SIZE];
         memcpy( solution, problem, sizeof( int ) * SIZE * SIZE );
@@ -150,7 +150,7 @@ main( )
         logInfo( "Found solution:\n" );
         size_t n = sols.size( );
         for ( size_t i = 0; i < n; i++ ) {
-            Option *o                    = (Option *)t.NodeData( sols[i] );
+            Option *o                    = (Option *)t.getNodeData( sols[i] );
             solution[o->x * SIZE + o->y] = o->k;
         }
         printProblem( solution );

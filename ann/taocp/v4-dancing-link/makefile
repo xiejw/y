@@ -43,7 +43,7 @@ ${BUILD_OBJ}: | ${BUILD}
 # incrementally compile all libraries.
 compile: ${MODULES}
 
-release:
+release: clean
 	@echo compile with RELEASE mode
 	make RELEASE=1 compile || exit 1
 
