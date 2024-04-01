@@ -141,7 +141,8 @@ ${BUILD}/libeva.a: ${ALL_LIBS}
 ifdef RELEASE
 	${EVA_AR} $@ $^
 else
-	@echo "building libeva.a must be RELEASE mode."
+	@echo building libeva.a must be RELEASE mode.
+	exit 1
 endif  # RELEASE
 
 # ==============================================================================

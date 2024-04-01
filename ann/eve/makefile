@@ -32,12 +32,9 @@ endif  # ASAN
 ifdef RELEASE
 CXXFLAGS         += -DNDEBUG -O2
 BUILD             = ${BUILD_BASE}_release
+
 ifdef ASAN
-compile: error_asan
-test: error_asan
-error_asan:
-	@echo release action does not support ASAN.
-	exit 1
+$(error release mode does not support ASAN)
 endif  # ASAN
 endif  # RELEASE
 
@@ -46,13 +43,13 @@ endif  # RELEASE
 # Top Level actions
 #
 
-release:
+release: clean
 	@echo 'compile release libeve'
-	make -B -j RELEASE=1 libeva || exit 1
+	make -B -j RELEASE=1 libeve || exit 1
 
-libeva: compile ${BUILD}/libeve.a
+libeve: compile ${BUILD}/libeve.a
 
-test: compile_test ${BUILD}/test_main
+test: compile_test
 	${BUILD}/test_main
 
 # Maintenance actions
@@ -88,20 +85,26 @@ ${BUILD_OBJ}:
 ${BUILD}/test_main: ${BUILD}/test_main.o ${MODULES} ${TEST_MODULES} | ${BUILD}
 	${CXX} -o $@ ${LDFLAGS} $^
 
-${BUILD}/%_main: ${BUILD}/%_main.o ${BUILD}/libeve.a ${TEST_MODULES} | ${BUILD}
-	${CXX} -o $@ ${LDFLAGS} $^
+# ${BUILD}/%_main: ${BUILD}/%_main.o ${BUILD}/libeve.a ${TEST_MODULES} | ${BUILD}
+# 	${CXX} -o $@ ${LDFLAGS} $^
 
 ${BUILD}/%_main.o: cmd/%/main.cc | ${BUILD}
 	${CXX} ${CXXFLAGS} -o $@ -c $^
 
 ${BUILD}/libeve.a: ${MODULES} | ${BUILD}
+ifdef RELEASE
 	${AR} $@ $^
-
-${BUILD_OBJ}/testing_%.o: src/testing/%.cc | ${BUILD_OBJ}
-	${CXX} ${CXXFLAGS} -o $@ -c $^
+else
+	@echo building libeve.a must be RELEASE mode.
+	exit 1
+endif
 
 ${BUILD_OBJ}/adt_%.o: src/adt/%.cc include/eve/adt/*.h | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $<
 
 ${BUILD_OBJ}/base_%.o: src/base/%.cc include/eve/base/*.h | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $<
+
+${BUILD_OBJ}/testing_%.o: src/testing/%.cc | ${BUILD_OBJ}
+	${CXX} ${CXXFLAGS} -o $@ -c $^
+

@@ -71,12 +71,7 @@ endif  # NO_CLANG_FLAGS
 # --------------------------------
 ifdef NO_CLANG_ASAN
 ifdef ASAN
-
-compile: check_asan_mode
-
-check_asan_mode:
-	@echo "asan mode is disabled by env NO_CLANG_ASAN."
-	@exit 1
+$(error asan mode is disabled by env NO_CLANG_ASAN)
 endif  # ASAN
 endif  # NO_CLANG_ASAN
 
@@ -162,19 +157,12 @@ ifdef RELEASE
 	# related macros will have trouble.
         CFLAGS  += -Wno-unused-macros
 
-# add a check for release folder
-compile: check_release_mode
+ifdef ASAN
+$(error release mode does not support ASAN)
+endif  # ASAN
 else
         CFLAGS  += -g
 
-endif  # RELEASE
-
-check_release_mode:
-ifdef RELEASE
-ifdef ASAN
-	@echo "release mode cannot mix with asan."
-	@exit 1
-endif  # ASAN
 endif  # RELEASE
 
 # ------------------------------------------------------------------------------
