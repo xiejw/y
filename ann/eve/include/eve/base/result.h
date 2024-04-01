@@ -20,16 +20,13 @@ struct Result {
 
     bool isOk( ) const noexcept { return mValue.index( ) == 0; }
 
-    T &getValue( ) noexcept { return std::get<0>( this->mValue ); }
-    T &getError( ) noexcept { return std::get<1>( this->mValue ); }
+    T     &getValue( ) noexcept { return std::get<0>( mValue ); }
+    Error &getError( ) noexcept { return std::get<1>( mValue ); }
 
-    T &&releaseValue( ) noexcept
+    T &&releaseValue( ) noexcept { return std::move( std::get<0>( mValue ) ); }
+    Error &&releaseError( ) noexcept
     {
-        return std::move( std::get<0>( this->mValue ) );
-    }
-    Error &&releaseErr( ) noexcept
-    {
-        return std::move( std::get<1>( this->mValue ) );
+        return std::move( std::get<1>( mValue ) );
     }
 
   private:
