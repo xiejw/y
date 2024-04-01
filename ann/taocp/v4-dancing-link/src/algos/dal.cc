@@ -105,7 +105,7 @@ Table::AppendOption( std::span<std::size_t> col_ids, void *data )
     auto   num_ids   = col_ids.size( );
 
     if ( offset_id + num_ids > this->m_num_nodes_total ) {
-        errFatalAndExit(
+        panic(
             "Reserved space is not enough for dancing link table: reserved "
             "with %d, used %d, needed %d more.",
             this->m_num_nodes_total, offset_id, num_ids );

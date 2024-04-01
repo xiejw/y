@@ -48,9 +48,10 @@ Error::operator=( Error &&e )
 }
 
 void
-errFatalAndExit_( const char *file, int line_no, const char *fmt, ... )
+panic_impl_( const char *msg, const char *file, int line_no, const char *fmt,
+             ... )
 {
-    fprintf( stderr, "fatal error: at %s line %d:\n  -> ", file, line_no );
+    fprintf( stderr, "%s: at %s line %d:\n  -> ", msg, file, line_no );
     va_list args;
     va_start( args, fmt );
     vfprintf( stderr, fmt, args );

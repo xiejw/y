@@ -1,7 +1,8 @@
 // vim: ft=cpp
 #pragma once
 
-// errFatalAndExit( fmt, ... )
+// panic( fmt, ... )
+// unimplemented( fmt, ... )
 // err.emitNote()
 // err.isOk()
 // err.getMsg()
@@ -13,9 +14,12 @@
 #include <iostream>
 #include <list>
 
-#define errFatalAndExit( fmt, ... )                  \
-    eve::base::errFatalAndExit_( __FILE__, __LINE__, \
-                                 fmt __VA_OPT__(, ) __VA_ARGS__ )
+#define panic( fmt, ... )                                \
+    eve::base::panic_impl_( "panic", __FILE__, __LINE__, \
+                            fmt __VA_OPT__(, ) __VA_ARGS__ )
+#define unimplemented( fmt, ... )                                \
+    eve::base::panic_impl_( "unimplemented", __FILE__, __LINE__, \
+                            fmt __VA_OPT__(, ) __VA_ARGS__ )
 
 namespace eve::base {
 
@@ -102,7 +106,8 @@ struct Error {
     };
 };
 
-void errFatalAndExit_( const char *file, int line_no, const char *fmt, ... );
+void panic_impl_( const char *msg, const char *file, int line_no,
+                  const char *fmt, ... );
 }  // namespace eve::base
 
 namespace eve {

@@ -140,7 +140,7 @@ loge( int level, int dump, const char *file, int line, const char *fmt, ... )
 
     if ( level == Logger::FATAL ) {
         if ( dump ) {
-            errFatalAndExit( "fatal dump!!!" );
+            panic( "fatal dump!!!" );
         } else {
             exit( 1 );
         }
