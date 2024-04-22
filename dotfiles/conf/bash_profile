@@ -199,7 +199,9 @@ export CC=clang
 export CXX=clang++
 
 ed_llvm() {
-  export PATH=$BUILD_HOME/llvm/install/bin:$PATH
+  if [[ "$PATH" != *"$BUILD_HOME/llvm/install/bin"* ]]; then
+    export PATH=$BUILD_HOME/llvm/install/bin:$PATH
+  fi
   if [[ "$OSTYPE" == "darwin"* ]]; then
     # for clang compiled from source, SDKROOT is needed to provide sdk path for
     # include. man xcrun and search for SDKROOT.
