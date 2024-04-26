@@ -13,6 +13,13 @@ SDKROOT=`xcrun --show-sdk-path`
 man xcrun
 ```
 
+### Clang
+
+```
+# Print the header file included
+clang -H
+```
+
 ### Clang-format
 
 https://clang.llvm.org/docs/ClangFormatStyleOptions.html
