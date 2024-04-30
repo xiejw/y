@@ -121,6 +121,9 @@ function jv {
   fi
 }
 
+# shortcut for email
+alias email='~/Workspace/y/tools/email.sh'
+
 # tmux
 alias tmux="tmux -2"
 alias tad='tmux attach -t 0 -d'
