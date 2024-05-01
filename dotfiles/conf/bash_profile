@@ -38,9 +38,9 @@ elif [[ "$HOSTNAME" =~ .*arm.* ]]; then
 elif [[ "$HOSTNAME" =~ debian-12 ]]; then
   export PROMPT_COMMAND_COLOR=33 # yellow 2023-06
 elif [[ "$HOSTNAME" =~ dt ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2023-10
-elif [[ "$HOSTNAME" =~ uj ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2023-10
+  export PROMPT_COMMAND_COLOR=33 # yellow 2024-05
+elif [[ "$HOSTNAME" =~ u24 ]]; then
+  export PROMPT_COMMAND_COLOR=33 # yellow 2024-05
 
 # -----------------------------------------------
 # xieqi vpc category
