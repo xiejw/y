@@ -35,6 +35,7 @@ rm -rf linux
 mv linux-${VERSION} linux-${VERSION}-src
 ln -sf linux-${VERSION}-src linux
 cp *-config linux/.config
+mkdir -p configs
 mv *-config configs
 cd linux
 make olddefconfig
