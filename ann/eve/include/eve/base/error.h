@@ -23,7 +23,7 @@
 
 namespace eve::base {
 
-struct Error {
+struct [[nodiscard]] Error {
     //
     // nested private data structure
     //
@@ -88,6 +88,7 @@ struct Error {
 
   public:
     bool          isOk( ) const noexcept { return mHolder == nullptr; }
+    bool          isError( ) const noexcept { return !isOk( ); }
     eve::adt::Sds getMsg( ) const noexcept { return mHolder->getMsg( ); };
     ErrorKind     getKind( ) const noexcept { return mHolder->getKind( ); };
 
@@ -113,7 +114,7 @@ void panic_impl_( const char *msg, const char *file, int line_no,
 namespace eve {
 template <typename... Args>
 eve::base::Error
-Error( const char *fmt, Args &&...args )
+NewError( const char *fmt, Args &&...args )
 {
     return eve::base::Error{ fmt, std::forward<Args>( args )... };
 }

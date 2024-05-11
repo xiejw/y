@@ -8,7 +8,7 @@
 namespace eve::base {
 
 template <class T>
-struct Result {
+struct [[nodiscard]] Result {
   private:
     std::variant<T, Error> mValue;
 
@@ -19,6 +19,7 @@ struct Result {
     static Result ofError( Error &&e ) { return Result( std::move( e ) ); }
 
     bool isOk( ) const noexcept { return mValue.index( ) == 0; }
+    bool isError( ) const noexcept { return !isOk( ); }
 
     T     &getValue( ) noexcept { return std::get<0>( mValue ); }
     Error &getError( ) noexcept { return std::get<1>( mValue ); }
