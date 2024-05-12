@@ -92,6 +92,11 @@ struct [[nodiscard]] Error {
     eve::adt::Sds getMsg( ) const noexcept { return mHolder->getMsg( ); };
     ErrorKind     getKind( ) const noexcept { return mHolder->getKind( ); };
 
+    inline void unwrap( )
+    {
+        if ( isError( ) ) dumpAndPanic( );
+    }
+
     template <typename... Args>
     Error &emitNote( const char *fmt, Args &&...args )
     {
