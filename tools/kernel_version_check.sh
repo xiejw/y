@@ -12,6 +12,13 @@ find_latest() {
       grep -o -E '>[^<]+' |
       grep -o -E '[^>]+'`
   fi
+
+  # Official site reports .0 version as X.Y rather than X.Y.0. So here, convert
+  # X.Y to X.Y.0 as the uname -r reports that format.
+  if [[ "${VERSION}" =~ ^[0-9]+\.[0-9]+$ ]]; then
+    VERSION="${VERSION}.0"
+  fi
+
   echo "Find latest Kernel version ${VERSION}"
 }
 
