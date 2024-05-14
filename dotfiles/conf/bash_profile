@@ -253,7 +253,7 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 # 2. no hidden file.
 # 3. no bin folder
 # 4. no build folder
-export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.*" -not -path "./bin/*" -not -path ".build*/*"'
+export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.*" -not -path "./bin/*" -not -path ".build*/*" -not -path "./node_modules*/*"'
 
 ed_fzf() {
   fzf --version > /dev/null 2>&1 || export PATH=$HOME/.fzf/bin:$PATH
