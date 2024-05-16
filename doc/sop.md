@@ -195,7 +195,7 @@
   ### packages
   #
   # debian
-  apt --no-install-recommends install libicu-dev
+  apt --no-install-recommends install libicu-dev libreadline-dev
   # arch
   #
   # macOS
