@@ -185,7 +185,7 @@
   <summary>Click me</summary>
 
   Refs:
-  - https://www.postgresql.org/ftp/source/v16.1/
+  - https://www.postgresql.org/ftp/source/
   - https://www.postgresql.org/docs/current/install-make.html
 
   #### Bootstrap
@@ -205,14 +205,15 @@
   #### Compile and Install
 
   ```
-  # compile
+  # Compile
   cd build/psql/src
+
   ## next line is needed for macOS brew
   export PKG_CONFIG_PATH="/opt/homebrew/opt/icu4c/lib/pkgconfig"
-  ./configure --prefix=`pwd`/../build-2023-<date>
+  ./configure --prefix=`pwd`/../build-`date +'%Y-%m-%d'`
   make
 
-  # install
+  # Install
   make install
   cd ..
   ln -sf build-<date> install
@@ -222,11 +223,13 @@
   ```
   mkdir data16
   ./install/bin/initdb -D ./data16/
-  cat data16/postgresql.conf  # change port 5433
+  cat data16/postgresql.conf  # change port 5433. default is 5432
   install/bin/pg_ctl -D ./data16/ -l logfile start
   tail -f logfile
   ./install/bin/psql -p 5433 -d postgres
+  select current_date;
   select current_time;
+  \c                     # print current user.
   ```
 
 </details>
