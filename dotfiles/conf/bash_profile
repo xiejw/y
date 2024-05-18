@@ -159,17 +159,7 @@ function w {
     then
       cd ~/Workspace/$1
     else
-      if [ -d ~/Workspace/core/"$1" ]
-      then
-        cd ~/Workspace/core/$1
-      else
-        if [ -d ~/Workspace/xieqi/"$1" ]
-        then
-          cd ~/Workspace/xieqi/$1
-        else
-          echo "unknown project for 'w': $1"
-        fi
-      fi
+      echo "unknown project for 'w': $1"
     fi
  else
    cd ~/Workspace
