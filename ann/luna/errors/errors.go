@@ -1,8 +1,41 @@
+// Package errors provides toolkit around `error`. The receiver of the `error`
+// can emit a note to help to explain the context for the underlying situation.
+// In addition upon creation and emiting a note, the caller stack is recorded
+// as well.
+//
+// Usages:
+//
+//	-- Constructor
+//	New(fmt, ...)
+//	From(err)
+//
+//	-- Emit note
+//	err.EmitNote(fmt, ...)        // in place recording
+//	return err.EmitNote(fmt, ...) // returns itself.
+//
+// Example ()
+//
+//	// err could be raw 'error' or 'DError'
+//	if err != nil {
+//	    return From(err).EmitNote(fmt, ...)
+//	}
+//
+//	// err is known to be 'DError'
+//	if err != nil {
+//	    return err.EmitNote(fmt, ...)
+//	}
 package errors
 
 import (
 	"bytes"
 	"fmt"
+	"path/filepath"
+	"runtime"
+)
+
+var (
+	// stub for testing
+	printLongPath = true
 )
 
 // =============================================================================
@@ -14,6 +47,10 @@ import (
 type DError struct {
 	notes     []string // Reverse order. The tail is the outer/recent.
 	rootCause error
+
+	// len(filePos) == len(linePos) == len(notes) + 1
+	filePos []string // Reverse order. The tail is out/recent.
+	linePos []int    //  Reverse order. The tail is out/recent.
 }
 
 // -----------------------------------------------------------------------------
@@ -33,10 +70,10 @@ func (de *DError) String() string {
 
 	fmt.Fprint(&buf, "error stack:\n")
 	for index := len(de.notes) - 1; index >= 0; index-- {
-		fmt.Fprintf(&buf, "  > %v\n", de.notes[index])
+		fmt.Fprintf(&buf, "  > %v (%v:%v)\n", de.notes[index], de.filePos[index+1], de.linePos[index+1])
 	}
 
-	fmt.Fprintf(&buf, "  @ %v\n", de.rootCause)
+	fmt.Fprintf(&buf, "  @ %v (%v:%v)\n", de.rootCause, de.filePos[0], de.linePos[0])
 	return buf.String()
 }
 
@@ -44,24 +81,15 @@ func (de *DError) String() string {
 // factory Methods
 // -----------------------------------------------------------------------------
 
-// WrapNote wraps a note to the diagnosis error.
-//
-// This is (almost) same as From(error).EmitNote(...).
-func WrapNote(err error, sfmt string, args ...interface{}) *DError {
-	if de, ok := err.(*DError); ok { // fast path
-		note := fmt.Sprintf(sfmt, args...)
-		de.notes = append(de.notes, note)
-		return de
-	}
-
-	return From(err).EmitNote(sfmt, args...)
-}
-
 // New creates a DError with root cause specified by the message.
 func New(sfmt string, args ...interface{}) *DError {
-	return &DError{
+	de := &DError{
 		rootCause: fmt.Errorf(sfmt, args...),
 	}
+	file, line := getCaller(1)
+	de.filePos = append(de.filePos, file)
+	de.linePos = append(de.linePos, line)
+	return de
 }
 
 // From creates a DError with root cause specified by err.
@@ -72,9 +100,13 @@ func From(err error) *DError {
 		return de
 	}
 
-	return &DError{
+	de := &DError{
 		rootCause: err,
 	}
+	file, line := getCaller(1)
+	de.filePos = append(de.filePos, file)
+	de.linePos = append(de.linePos, line)
+	return de
 }
 
 // -----------------------------------------------------------------------------
@@ -83,7 +115,26 @@ func From(err error) *DError {
 
 // EmitNote emits one more note to the DError.
 func (de *DError) EmitNote(sfmt string, args ...interface{}) *DError {
+	return de.emitNote(1, sfmt, args...)
+}
+
+func (de *DError) emitNote(startLevel int, sfmt string, args ...interface{}) *DError {
 	note := fmt.Sprintf(sfmt, args...)
+	file, line := getCaller(startLevel + 1)
 	de.notes = append(de.notes, note)
+	de.filePos = append(de.filePos, file)
+	de.linePos = append(de.linePos, line)
 	return de
+}
+
+func getCaller(startLevel int) (string, int) {
+	_, file, line, ok := runtime.Caller(startLevel + 1)
+	if !ok {
+		return "???", -1
+	}
+	if printLongPath {
+		return file, line
+	} else {
+		return filepath.Base(file), line
+	}
 }
