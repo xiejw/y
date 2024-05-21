@@ -181,7 +181,7 @@ nmap <silent> <leader>lt :TagbarToggle fc<CR>
 "
 " check FZF_DEFAULT_COMMAND env var for the command to use.
 "
-nmap <silent> <leader>zz :call fzf#run({
+nmap <silent> <leader>z :call fzf#run({
         \ 'source': $FZF_DEFAULT_COMMAND,
         \ 'sink': 'e',
         \ 'options': '-i',
@@ -198,8 +198,8 @@ nmap <silent> <leader>i :IndentGuidesToggle<cr>:hi IndentGuidesOdd  ctermbg=red<
 " open in current working dir
 " open in current working dir but in a new tab
 "
-nmap <silent> <leader>ee :e %:p:h/
-nmap <silent> <leader>et :tabnew %:p:h/
+nmap <silent> <leader>e :e %:p:h/
+nmap <silent> <leader>t :tabnew %:p:h/
 
 " ------------------------------------------------------------------------------
 " put `` and '' around a word
