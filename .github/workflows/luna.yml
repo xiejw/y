@@ -10,7 +10,6 @@ jobs:
           path: y
       - uses: ./y/.github/actions/base
         with:
-          go_version: 1.22
           require_go: true
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ann/${{ github.workflow }} clean test
