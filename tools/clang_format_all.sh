@@ -12,6 +12,5 @@ if [ "$(which clang-format)" == "" ]; then
     exit 1
 fi
 
-export CLANG_FMT_EXT="-type f -iname *.h -o -iname *.c -o -name *.cc -o -name *.cu"
 export CLANG_FMT_CLI="clang-format -i --style=file"
-sh -c 'find "$@" ${CLANG_FMT_EXT} | xargs ${CLANG_FMT_CLI}' sh "$@"
+find "$@" -type f -iname '*.h' -o -iname '*.c' -o -name '*.cc' -o -name '*.cu' | xargs ${CLANG_FMT_CLI}
