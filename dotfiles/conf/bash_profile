@@ -83,9 +83,9 @@ alias less='less -i'
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
-alias ll='exa --header --long --color=always'
-alias llg='exa --git --header --long --color=always'
-alias ll2='exa --header --long --color=always --tree --level=2'
+alias ll='eza --header --long --color=always'
+alias llg='eza --git --header --long --color=always'
+alias ll2='eza --header --long --color=always --tree --level=2'
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   alias ls='ls --color'
