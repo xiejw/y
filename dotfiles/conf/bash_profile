@@ -255,8 +255,8 @@ ed_fzf
 
 __fzf_history__() {
      output=`
-       builtin fc -lnr -2147483648 |
-       uniq -u |
+       builtin fc -ln -2147483648 |
+       uniq |
        sed 's/^[[:space:]]*/  /' |
        fzf --query "$READLINE_LINE" |
        sed 's/^[[:space:]]*//' `
