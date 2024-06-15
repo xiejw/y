@@ -149,6 +149,25 @@ alias v='vim'
 alias vf='vim `fzf`'
 alias vv='vim -c ":call fns#LoadPendingFiles()"'
 
+# bat
+alias bat='bat --theme="Sublime Snazzy"'
+alias less='bat --theme="Sublime Snazzy"'
+
+# fd
+alias fd='fd -c always'
+
+# ------------------------------------------------------------------------------
+# brew
+#
+if [[ "$(uname)" == 'Darwin' ]]; then
+  export PATH=/opt/homebrew/bin:$PATH
+fi
+
+# ------------------------------------------------------------------------------
+# zoxide (must be after brew)
+#
+eval "$(zoxide init bash)"
+
 # ------------------------------------------------------------------------------
 # shortcut for ~/Workspace
 # ------------------------------------------------------------------------------
