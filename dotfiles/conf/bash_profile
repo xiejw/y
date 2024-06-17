@@ -177,23 +177,7 @@ fi
 # zoxide (must be after brew)
 #
 eval "$(zoxide init bash)"
-
-# ------------------------------------------------------------------------------
-# shortcut for ~/Workspace
-# ------------------------------------------------------------------------------
-function w {
-  # try three possible places before give up.
-  if [[ $# -eq 1 ]]; then
-    if [ -d ~/Workspace/"$1" ]
-    then
-      cd ~/Workspace/$1
-    else
-      echo "unknown project for 'w': $1"
-    fi
- else
-   cd ~/Workspace
- fi
-}
+alias w='z'
 
 #
 # ==============================================================================
