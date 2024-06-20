@@ -75,13 +75,17 @@ function ed_lite_prompt {
 export EDITOR=vim
 
 # ------------------------------------------------------------------------------
-# global path
+# global path and alias fix
 #
 if [[ "$HOSTNAME" =~ dt ]]; then
   # for fd-find
   export PATH=$PATH:/usr/lib/cargo/bin/
+  # for bat
+  alias batcli=batcat
 elif [[ "$HOSTNAME" =~ u24 ]]; then
   export PATH=$PATH:/usr/lib/cargo/bin/
+else
+  alias batcli=bat
 fi
 
 # ------------------------------------------------------------------------------
@@ -109,8 +113,8 @@ fi
 alias g='git'
 alias ga='git add . && git status -s'
 alias gs='git status -s'
-alias gd='git diff'
-alias gdd='git diff --cached'
+alias gd='git diff --color=always'
+alias gdd='git diff --color=always --cached'
 alias gdu='git diff --name-only --diff-filter=U'
 alias gdn='git diff --name-only'
 alias gm='git commit -a'
@@ -160,8 +164,7 @@ alias vf='vim `fzf`'
 alias vv='vim -c ":call fns#LoadPendingFiles()"'
 
 # bat
-alias bat='bat --theme="Sublime Snazzy"'
-alias less='bat --theme="Sublime Snazzy"'
+alias less='batcli --theme="Sublime Snazzy"'
 
 # fd
 alias fd='fd -c always'
