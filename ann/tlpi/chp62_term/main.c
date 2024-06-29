@@ -1,13 +1,92 @@
+#include <stdio.h>
+#include <string.h>
+
+#include "base.h"
+#include "tty.h"
+
+error_t GetUserInput( void *data, char *in );
+
 int
-ttySetCbreak(int fd, struct termios *prevTermios) {
-    struct termios t;
-    if (tcgetattr(fd, &t) == -1)
-        return -1;
-    if (prevTermios != NULL)
-        *prevTermios = t;
-    t.c_lflag &= ~(ICANON | ECHO);
-    t.c_lflag |= ISIG;
-    t.c_iflag &= ~ICRNL;
-    t.c_cc[VMIN] = 1; /* Character-at-a-time input */ t.c_cc[VTIME] = 0; /* with blocking */
-if (tcsetattr(fd, TCSAFLUSH, &t) == -1) return -1;
-return 0; }
+main( )
+{
+    error_t err        = OK;
+    int     QuitSignal = 0;
+
+    while ( 1 ) {
+        printf( "Your Choice? [Left or Right arrow to select]: \n" );
+        fflush( stdout );
+
+        err = TtyRun( GetUserInput, &QuitSignal );
+        if ( err == EEOF && QuitSignal == 1 ) {
+            printf( "Bye.\n" );
+            err = OK;
+            break;
+        }
+        if ( err == EEOF && QuitSignal == 0 ) {
+            continue;
+        }
+
+        if ( err != OK ) {
+            printf( "Unexpected error. Quit.\n" );
+            break;
+        }
+    }
+
+    return err;
+}
+
+error_t
+GetUserInput( void *QuitSignal, char *input )
+{
+    static int answer      = 0;
+    static int EscapeCount = 0;
+
+    if ( strcmp( input, "\x1b" ) == 0 ) {  // Esc
+        if ( EscapeCount == 1 ) {
+            *(int *)QuitSignal = 1;
+            printf( "[Quit]\n" );
+            return EEOF;
+        }
+
+        EscapeCount++;
+        printf( "[Escape] One more time to quit.\n" );
+        fflush( stdout );
+        return OK;
+    }
+
+    EscapeCount = 0;
+
+    if ( strcmp( input, "\r" ) == 0 ) {  // Enter
+        answer++;
+        printf( "[Enter] Choice %d\n", answer );
+        fflush( stdout );
+        *(int *)QuitSignal = 0;
+        return EEOF;
+    }
+
+    // if (*input == 0) {return EEOF;}
+    if ( strcmp( input, "\x1b[D" ) == 0 ) {
+        answer--;
+        printf( "Choice %d\n", answer );
+        fflush( stdout );
+        return OK;
+    } else if ( strcmp( input, "\x1b[C" ) == 0 ) {
+        answer++;
+        printf( "Choice %d\n", answer );
+        fflush( stdout );
+        return OK;
+    } else if ( *input == '\x1b' ) {
+        printf( "[RAW %lu] ESC %s\n", strlen( input ), input + 1 );
+        fflush( stdout );
+        return OK;
+    } else {
+        size_t len = strlen( input );
+        if ( len == 1 ) {
+            printf( "[RAW] %s, (%x)\n", input, *input );
+        } else {
+            printf( "[RAW %lu] %s\n", len, input );
+        }
+        fflush( stdout );
+        return OK;
+    }
+}
