@@ -1,8 +1,11 @@
-BUILD     = .build
-LDFLAGS  +=
+BUILD         = .build
+
+CXXFLAGS     += -std=c++20
+CXXFLAGS     += -Wall -pedantic -Wextra -Wfatal-errors
+LDFLAGS      +=
 
 compile: | ${BUILD}
-	${CC} -std=c11 -o ${BUILD}/main tty.c main.c ${LDFLAGS}
+	${CXX} ${CXXFLAGS} -o ${BUILD}/main tty.cc main.cc ${LDFLAGS}
 
 ${BUILD}:
 	mkdir -p $@
