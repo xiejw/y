@@ -6,6 +6,12 @@
 - compiler-rt is needed for asan https://compiler-rt.llvm.org
 - clang-format is moved under clang (not confirmed yet)
 
+### Best Practices for Clang Flags
+
+```
+${CXX} -std=<PLACEHOLDER> -Wall -pedantic -Wextra -Wfatal-errors -Wconversion
+```
+
 ### Clang on macOS
 
 ```
