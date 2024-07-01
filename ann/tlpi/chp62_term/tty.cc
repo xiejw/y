@@ -3,8 +3,11 @@
 #include <termios.h>
 #include <unistd.h>
 
-static error_t
-TtySetCbreak( int fd, struct termios *prevTermios )
+namespace eve::tty {
+
+namespace {
+error_t
+SetCbreak( int fd, struct termios *prevTermios )
 {
     struct termios t;
     if ( tcgetattr( fd, &t ) == -1 ) return ERR;
@@ -18,21 +21,22 @@ TtySetCbreak( int fd, struct termios *prevTermios )
     return OK;
 }
 
-static error_t
-TtyReset( int fd, struct termios *prevTermios )
+error_t
+Reset( int fd, struct termios *prevTermios )
 {
     if ( tcsetattr( fd, TCSAFLUSH, prevTermios ) == -1 ) return ERR;
     return OK;
 }
+}  // namespace
 
 error_t
-TtyRun( TtyCallbackFn fn, void *data )
+Run( CallbackFn fn, void *data )
 {
     error_t         err;
     struct termios  save;
     struct termios *psave = NULL;
 
-    err = TtySetCbreak( 0, &save );
+    err = SetCbreak( 0, &save );
     if ( err != OK ) {
         goto cleanup;
     }
@@ -50,8 +54,9 @@ TtyRun( TtyCallbackFn fn, void *data )
 cleanup:
 
     if ( psave != NULL ) {
-        TtyReset( 0, psave );
+        Reset( 0, psave );
     }
 
     return err;
 }
+}  // namespace eve::tty

@@ -4,6 +4,8 @@
 #include "base.h"
 #include "tty.h"
 
+using eve::tty::Run;
+
 error_t GetUserInput( void *data, char *in );
 
 int
@@ -16,7 +18,7 @@ main( )
         printf( "Your Choice? [Left or Right arrow to select]: \n" );
         fflush( stdout );
 
-        err = TtyRun( GetUserInput, &QuitSignal );
+        err = Run( GetUserInput, &QuitSignal );
         if ( err == EEOF && QuitSignal == 1 ) {
             printf( "Bye.\n" );
             err = OK;
