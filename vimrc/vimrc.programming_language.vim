@@ -22,6 +22,7 @@ endfunction
 
 " - added more int types and error_t as cType
 autocmd FileType cpp :syn keyword	cType	i64_t u64_t i32_t u32_t f32_t f64_t
+autocmd FileType cpp :syn keyword	cType	vec_t error_t sds_t
 
 " - highlight field (-> or .) for c and adjust the colors for it and String.
 autocmd FileType cpp :syn match cField /\(->\|\.\)\<\k\+\>/
