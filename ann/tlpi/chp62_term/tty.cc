@@ -6,15 +6,18 @@
 namespace eve::tty {
 
 namespace {
+
+const int MAX_BUF_LIMIT = 256;  // Max key input buf length limit.
+
 error_t
 SetCbreak( int fd, struct termios *prevTermios )
 {
     struct termios t;
     if ( tcgetattr( fd, &t ) == -1 ) return ERR;
     if ( prevTermios != NULL ) *prevTermios = t;
-    t.c_lflag &= ~( ICANON | ECHO );
+    t.c_lflag &= ( tcflag_t ) ~( ICANON | ECHO );
     t.c_lflag |= ISIG;
-    t.c_iflag &= ~ICRNL;
+    t.c_iflag &= (tcflag_t)~ICRNL;
     t.c_cc[VMIN]  = 1;
     t.c_cc[VTIME] = 0;
     if ( tcsetattr( fd, TCSAFLUSH, &t ) == -1 ) return ERR;
@@ -32,31 +35,39 @@ Reset( int fd, struct termios *prevTermios )
 error_t
 Run( CallbackFn fn, void *data )
 {
-    error_t         err;
-    struct termios  save;
-    struct termios *psave = NULL;
+    error_t         err{ };
+    struct termios  save;          // Will be set later.
+    struct termios *psave = NULL;  // Upon save is set, point to save.
 
     err = SetCbreak( 0, &save );
     if ( err != OK ) {
         goto cleanup;
     }
-    psave = &save;  // cleanup will handle now.
+    psave = &save;  // Goto `cleanup` will handle restoring.
 
-    char buf[256];
+    char buf[MAX_BUF_LIMIT];
     for ( ;; ) {
-        size_t n = read( 0, buf, 256 );
-        buf[n]   = 0;
+        ssize_t n = read( 0, buf, MAX_BUF_LIMIT );
 
-        err = fn( data, buf );
-        if ( err == EEOF ) break;
+        if ( n == -1 ) {  // This should really not happen for stdin.
+            err = ERR;
+            goto cleanup;
+        }
+
+        if ( n == MAX_BUF_LIMIT ) {  // Should not happen though.
+            err = ELIMIT;
+            goto cleanup;
+        }
+
+        buf[n] = 0;
+        err    = fn( data, buf );
+        if ( err != OK ) goto cleanup;
     }
 
 cleanup:
-
     if ( psave != NULL ) {
         Reset( 0, psave );
     }
-
     return err;
 }
 }  // namespace eve::tty

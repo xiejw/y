@@ -28,7 +28,7 @@ main( )
             continue;
         }
 
-        if ( err != OK ) {
+        if ( err != OK ) {  // Now it is totally unexpected.
             printf( "Unexpected error. Quit.\n" );
             break;
         }
