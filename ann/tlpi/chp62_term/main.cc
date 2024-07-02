@@ -4,12 +4,14 @@
 #include "base.h"
 #include "tty.h"
 
+using eve::tty::KeyInfo;
+using eve::tty::KeyKind;
 using eve::tty::Run;
 
-error_t GetUserInput( void *data, char *in );
+auto GetUserInput( void *data, const KeyInfo *Info ) -> error_t;
 
-int
-main( )
+auto
+main( ) -> int
 {
     error_t err        = OK;
     int     QuitSignal = 0;
@@ -37,13 +39,14 @@ main( )
     return err;
 }
 
-error_t
-GetUserInput( void *QuitSignal, char *input )
+auto
+GetUserInput( void *QuitSignal, const KeyInfo *Info ) -> error_t
 {
-    static int answer      = 0;
-    static int EscapeCount = 0;
+    static int  answer      = 0;
+    static int  EscapeCount = 0;
+    const char *input       = Info->Str;
 
-    if ( strcmp( input, "\x1b" ) == 0 ) {  // Esc
+    if ( Info->Kind == KeyKind::Esc ) {
         if ( EscapeCount == 1 ) {
             *(int *)QuitSignal = 1;
             printf( "[Quit]\n" );
@@ -58,37 +61,32 @@ GetUserInput( void *QuitSignal, char *input )
 
     EscapeCount = 0;
 
-    if ( strcmp( input, "\r" ) == 0 ) {  // Enter
-        answer++;
+    switch ( Info->Kind ) {
+    case KeyKind::Enter:
         printf( "[Enter] Choice %d\n", answer );
         fflush( stdout );
         *(int *)QuitSignal = 0;
         return EEOF;
-    }
 
-    // if (*input == 0) {return EEOF;}
-    if ( strcmp( input, "\x1b[D" ) == 0 ) {
+    case KeyKind::ArrowLeft:
         answer--;
         printf( "Choice %d\n", answer );
         fflush( stdout );
         return OK;
-    } else if ( strcmp( input, "\x1b[C" ) == 0 ) {
+
+    case KeyKind::ArrowRight:
         answer++;
         printf( "Choice %d\n", answer );
         fflush( stdout );
         return OK;
-    } else if ( *input == '\x1b' ) {
-        printf( "[RAW %lu] ESC %s\n", strlen( input ), input + 1 );
-        fflush( stdout );
-        return OK;
-    } else {
-        size_t len = strlen( input );
-        if ( len == 1 ) {
-            printf( "[RAW] %s, (%x)\n", input, *input );
-        } else {
-            printf( "[RAW %lu] %s\n", len, input );
+
+    default:
+        if ( *input == '\x1b' ) {
+            // Debugging Purpose.
+            printf( "[RAW %lu] ESC %s\n", strlen( input ), input + 1 );
+            fflush( stdout );
+            return OK;
         }
-        fflush( stdout );
         return OK;
     }
 }
