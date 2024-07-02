@@ -52,7 +52,7 @@ static const int PROLBEMS[][SIZE * SIZE] = {
 // clang-format on
 
 // -----------------------------------------------------------------------------
-// prototypes.
+// Prototypes.
 //
 // -----------------------------------------------------------------------------
 struct Option {
@@ -61,30 +61,31 @@ struct Option {
     int k;
 };
 
-static void   printProblem( const int *problem );
-static size_t searchOptions( const int *problem, std::vector<Option> &options );
-static void getColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c,
-                          size_t *b );
+static auto PrintProblem( const int *problem ) -> void;
+static auto SearchOptions( const int           *problem,
+                           std::vector<Option> &options ) -> size_t;
+static auto GetColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c,
+                          size_t *b ) -> void;
 //
 //
 // -----------------------------------------------------------------------------
 // main.
 //
 // -----------------------------------------------------------------------------
-int
-main( )
+auto
+main( ) -> int
 {
     // -------------------------------------------------------------
     // Select and print problem
     const int *problem = PROLBEMS[PID];
     logInfo( "Problem:\n" );
-    printProblem( problem );
+    PrintProblem( problem );
 
     // -------------------------------------------------------------
     // Search options.
     std::vector<Option> options{ };
     options.reserve( 9 * 9 * 9 );  // at most 9^3 options.
-    const size_t options_count = searchOptions( problem, options );
+    const size_t options_count = SearchOptions( problem, options );
 
     if ( DEBUG ) {
         logInfo( "total options count %zu\n", options_count );
@@ -99,10 +100,10 @@ main( )
     // Step 1: Prepare dancing links table.
     //
     // For each column head (item) and option, we need 4 columns to cover.  See
-    // getColHeadId for details. The extra one is the header.
+    // GetColHeadId for details. The extra one is the header.
 
-    algos::dal::Table t{ /*n_col_heads=*/4 * 81,
-                         /*n_options_total=*/4 * options_count };
+    eve::algos::dal::Table t{ /*n_col_heads=*/4 * 81,
+                              /*n_options_total=*/4 * options_count };
 
     //
     // -------------------------------------------------------------
@@ -115,15 +116,15 @@ main( )
             int num = problem[offset + y];
             if ( num == 0 ) continue;
 
-            getColHeadId( x, y, num,
+            GetColHeadId( x, y, num,
                           /*p=*/item_ids,
                           /*r=*/item_ids + 1,
                           /*c=*/item_ids + 2,
                           /*b=*/item_ids + 3 );
-            t.coverCol( item_ids[0] );
-            t.coverCol( item_ids[1] );
-            t.coverCol( item_ids[2] );
-            t.coverCol( item_ids[3] );
+            t.CoverCol( item_ids[0] );
+            t.CoverCol( item_ids[1] );
+            t.CoverCol( item_ids[2] );
+            t.CoverCol( item_ids[3] );
         }
     }
 
@@ -132,17 +133,17 @@ main( )
     // Step 3: Append options to the dancing links table;
     for ( size_t i = 0; i < options_count; i++ ) {
         auto o = &options[i];
-        getColHeadId( o->x, o->y, o->k, /*p=*/item_ids,
+        GetColHeadId( o->x, o->y, o->k, /*p=*/item_ids,
                       /*r=*/item_ids + 1,
                       /*c=*/item_ids + 2,
                       /*b=*/item_ids + 3 );
-        t.appendOption( item_ids, o );
+        t.AppendOption( item_ids, o );
     }
 
     // -------------------------------------------------------------
     std::vector<std::size_t> sols{ };
 
-    if ( t.searchSolution( sols ) ) {
+    if ( t.SearchSolution( sols ) ) {
         // Dup the problem as we are going to modify it.
         int solution[SIZE * SIZE];
         memcpy( solution, problem, sizeof( int ) * SIZE * SIZE );
@@ -150,10 +151,10 @@ main( )
         logInfo( "Found solution:\n" );
         size_t n = sols.size( );
         for ( size_t i = 0; i < n; i++ ) {
-            Option *o                    = (Option *)t.getNodeData( sols[i] );
+            Option *o                    = (Option *)t.GetNodeData( sols[i] );
             solution[o->x * SIZE + o->y] = o->k;
         }
-        printProblem( solution );
+        PrintProblem( solution );
 
     } else {
         printf( "No solution.\n" );
@@ -169,8 +170,8 @@ main( )
 // -----------------------------------------------------------------------------
 
 // print the Sudoku Problem on screen.
-void
-printProblem( const int *problem )
+auto
+PrintProblem( const int *problem ) -> void
 {
     // header
     printf( "+-----+-----+-----+\n" );
@@ -200,8 +201,8 @@ printProblem( const int *problem )
 //
 // The argument options must have enough capacity to hold all potential
 // options
-size_t
-searchOptions( const int *problem, std::vector<Option> &options )
+auto
+SearchOptions( const int *problem, std::vector<Option> &options ) -> size_t
 {
     size_t total = 0;
 
@@ -259,8 +260,9 @@ searchOptions( const int *problem, std::vector<Option> &options )
 // - r{i,k} // row with digit
 // - c{j,k} // col with digit
 // - b{x,k} // box with digit where x = 3 * floor(i/3) + floor(j/3).
-void
-getColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c, size_t *b )
+auto
+GetColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c,
+              size_t *b ) -> void
 {
     int x      = 3 * ( i / 3 ) + ( j / 3 );
     int offset = 0;

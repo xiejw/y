@@ -2,6 +2,7 @@ BUILD         = .build
 BUILD_OBJ     = ${BUILD}/objs
 
 CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra -Wfatal-errors
+CXXFLAGS     += -Wconversion
 CXXFLAGS     += -Iinclude
 
 CMD           =  cmd

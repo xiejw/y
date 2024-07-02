@@ -6,7 +6,7 @@
 #include <span>
 #include <vector>
 
-namespace algos::dal {
+namespace eve::algos::dal {
 
 struct Node {
   private:
@@ -44,7 +44,7 @@ struct Table {
   public:
     //  Cover all nodes in a column. Also unlink nodes from their columns
     //  belonging to the same option.
-    void coverCol( size_t c );
+    auto CoverCol( size_t c ) -> void;
 
     // Append a group of options which are mutually exclusive.
     //
@@ -52,28 +52,23 @@ struct Table {
     // horizantal list of this group.
     //
     // The `priv_data` is not owned by this table.
-    void appendOption( std::span<std::size_t> col_ids, void *priv_data );
+    auto AppendOption( std::span<std::size_t> col_ids,
+                       void                  *priv_data ) -> void;
 
-    void *getNodeData( std::size_t Id )
+    auto GetNodeData( std::size_t Id ) -> void *
     {
         return this->mNodes.get( )[Id].Data;
     };
 
-    bool searchSolution( std::vector<std::size_t> &sols );
+    auto SearchSolution( std::vector<std::size_t> &sols ) -> bool;
 
   private:
-    void fillNode( Node &node, std::size_t Id );
-    void linkLR( Node *h, size_t end, size_t Id );
-    void linkUD( Node *h, size_t id_c, size_t Id );
-    void coverColumn( Node *h, size_t c );
-    void uncoverColumn( Node *h, size_t c );
-    bool search( std::vector<std::size_t> &sols, std::size_t depth );
+    auto FillNode( Node &node, std::size_t Id ) -> void;
+    auto LinkLR( Node *h, size_t end, size_t Id ) -> void;
+    auto LinkUD( Node *h, size_t id_c, size_t Id ) -> void;
+    auto CoverColumn( Node *h, size_t c ) -> void;
+    auto UncoverColumn( Node *h, size_t c ) -> void;
+    auto Search( std::vector<std::size_t> &sols, std::size_t depth ) -> bool;
 };
 
-//
-//
-// // search a solution and stop. return 1 if found any.
-// extern int dalSearchSolution(struct dal_table *h, vec_t(size_t) sols);
-//
-// #define dalNodeData(t, Id) ((t)->nodes[Id].Data) //
-}  // namespace algos::dal
+}  // namespace eve::algos::dal

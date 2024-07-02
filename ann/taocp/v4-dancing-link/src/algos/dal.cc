@@ -4,10 +4,10 @@
 
 #include <eve/base/error.h>
 
-namespace algos::dal {
+namespace eve::algos::dal {
 
-void
-Table::fillNode( Node &node, std::size_t Id )
+auto
+Table::FillNode( Node &node, std::size_t Id ) -> void
 {
     node.Id = Id;
     node.L  = Id;
@@ -18,8 +18,8 @@ Table::fillNode( Node &node, std::size_t Id )
 }
 
 // Link the `Id` into table after node `end` (horizantal double link)
-void
-Table::linkLR( Node *h, size_t end, size_t Id )
+auto
+Table::LinkLR( Node *h, size_t end, size_t Id ) -> void
 {
     auto p    = &h[Id];
     p->L      = end;
@@ -29,8 +29,8 @@ Table::linkLR( Node *h, size_t end, size_t Id )
 }
 
 // Link the `Id` into table with column head `Id_c` (vertical double link)
-void
-Table::linkUD( Node *h, size_t Id_c, size_t Id )
+auto
+Table::LinkUD( Node *h, size_t Id_c, size_t Id ) -> void
 {
     auto *c = &h[Id_c];
     auto *p = &h[Id];
@@ -45,8 +45,8 @@ Table::linkUD( Node *h, size_t Id_c, size_t Id )
     p->U          = Id_end;
 }
 
-void
-Table::coverColumn( Node *h, size_t c )
+auto
+Table::CoverColumn( Node *h, size_t c ) -> void
 {
     h[h[c].R].L = h[c].L;
     h[h[c].L].R = h[c].R;
@@ -59,8 +59,8 @@ Table::coverColumn( Node *h, size_t c )
     }
 }
 
-void
-Table::uncoverColumn( Node *h, size_t c )
+auto
+Table::UncoverColumn( Node *h, size_t c ) -> void
 {
     for ( size_t i = h[c].U; i != c; i = h[i].U ) {
         for ( size_t j = h[i].L; j != i; j = h[j].L ) {
@@ -83,22 +83,22 @@ Table::Table( std::size_t n_col_heads, std::size_t n_options_total )
         (Node *)malloc( sizeof( Node ) * total_reserved_nodes_count ) );
 
     auto nodes = this->mNodes.get( );
-    fillNode( nodes[0], /*Id=*/0 );
+    FillNode( nodes[0], /*Id=*/0 );
 
     for ( std::size_t i = 1; i <= n_col_heads; i++ ) {
-        fillNode( nodes[i], i );
-        linkLR( nodes, i - 1, i );
+        FillNode( nodes[i], i );
+        LinkLR( nodes, i - 1, i );
     }
 }
 
-void
-Table::coverCol( size_t c )
+auto
+Table::CoverCol( size_t c ) -> void
 {
-    coverColumn( this->mNodes.get( ), c );
+    CoverColumn( this->mNodes.get( ), c );
 }
 
-void
-Table::appendOption( std::span<std::size_t> col_Ids, void *Data )
+auto
+Table::AppendOption( std::span<std::size_t> col_Ids, void *Data ) -> void
 {
     auto  *nodes     = this->mNodes.get( );
     size_t offset_Id = this->mNumNodesAdded;
@@ -113,26 +113,26 @@ Table::appendOption( std::span<std::size_t> col_Ids, void *Data )
 
     for ( size_t i = 0; i < num_Ids; i++ ) {
         size_t Id = offset_Id + i;
-        fillNode( nodes[Id], Id );
-        linkUD( nodes, col_Ids[i], Id );
+        FillNode( nodes[Id], Id );
+        LinkUD( nodes, col_Ids[i], Id );
         nodes[Id].Data = Data;
         if ( i != 0 ) {
-            linkLR( nodes, Id - 1, Id );
+            LinkLR( nodes, Id - 1, Id );
         }
     }
 
     this->mNumNodesAdded += num_Ids;
 }
 
-bool
-Table::searchSolution( std::vector<std::size_t> &sols )
+auto
+Table::SearchSolution( std::vector<std::size_t> &sols ) -> bool
 {
     assert( sols.size( ) == 0 );
-    return search( sols, 0 );
+    return Search( sols, 0 );
 }
 
-bool
-Table::search( std::vector<std::size_t> &sols, std::size_t k )
+auto
+Table::Search( std::vector<std::size_t> &sols, std::size_t k ) -> bool
 {
     auto h = this->mNodes.get( );
 
@@ -145,7 +145,7 @@ Table::search( std::vector<std::size_t> &sols, std::size_t k )
         return false;
     }
 
-    this->coverColumn( h, c );
+    this->CoverColumn( h, c );
     for ( size_t r = h[c].D; r != c; r = h[r].D ) {
         if ( sols.size( ) == k ) {
             sols.push_back( r );
@@ -154,21 +154,15 @@ Table::search( std::vector<std::size_t> &sols, std::size_t k )
         }
         assert( sols.size( ) >= k );
         for ( size_t j = h[r].R; j != r; j = h[j].R ) {
-            this->coverColumn( h, h[j].C );
+            this->CoverColumn( h, h[j].C );
         }
-        if ( search( sols, k + 1 ) ) return true;
+        if ( Search( sols, k + 1 ) ) return true;
         for ( size_t j = h[r].L; j != r; j = h[j].L ) {
-            this->uncoverColumn( h, h[j].C );
+            this->UncoverColumn( h, h[j].C );
         }
     }
-    this->uncoverColumn( h, c );
+    this->UncoverColumn( h, c );
     return false;
 }
 
-}  // namespace algos::dal
-
-///-----------------------------------------------------------------------------
-//// Helper Methods Implementation.
-////
-///-----------------------------------------------------------------------------
-//
+}  // namespace eve::algos::dal
