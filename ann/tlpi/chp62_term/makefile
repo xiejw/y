@@ -1,7 +1,8 @@
 BUILD         = .build
 
 CXXFLAGS     += -std=c++20
-CXXFLAGS     += -Wall -pedantic -Wextra -Wfatal-errors -Wconversion
+CXXFLAGS     += -Wall -pedantic -Wextra -Wfatal-errors -Werror
+CXXFLAGS     += -Wconversion -Wshadow
 LDFLAGS      +=
 
 compile: | ${BUILD}

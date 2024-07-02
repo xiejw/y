@@ -3,6 +3,7 @@ BUILD             = ${BUILD_BASE}
 BUILD_OBJ         = ${BUILD}/objs
 
 CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra -Wfatal-errors
+CXXFLAGS         += -Wconversion -Wshadow
 CXXFLAGS         += -Iinclude
 
 ifndef SKIP_WERROR

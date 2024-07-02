@@ -18,7 +18,7 @@ struct Sds {
   public:
     Sds( std::string_view v ) { Init( v.data( ), v.size( ), v.size( ) ); };
     Sds( ) { Init( nullptr, 0, 0 ); };
-    Sds( int cap ) { Init( nullptr, 0, cap ); };
+    Sds( std::size_t cap ) { Init( nullptr, 0, cap ); };
 
     Sds( Sds const & )            = delete;
     Sds &operator=( Sds const & ) = delete;
