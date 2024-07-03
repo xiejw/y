@@ -8,7 +8,7 @@ using eve::tty::KeyInfo;
 using eve::tty::KeyKind;
 using eve::tty::Run;
 
-auto GetUserInput( void *data, const KeyInfo *Info ) -> error_t;
+auto GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t;
 
 auto
 main( ) -> int
@@ -20,7 +20,9 @@ main( ) -> int
         printf( "Your Choice? [Left or Right arrow to select]: \n" );
         fflush( stdout );
 
-        err = Run( GetUserInput, &QuitSignal );
+        err = Run( [&]( auto *info ) -> error_t {
+            return GetUserInput( QuitSignal, info );
+        } );
         if ( err == EEOF && QuitSignal == 1 ) {
             printf( "Bye.\n" );
             err = OK;
@@ -40,7 +42,7 @@ main( ) -> int
 }
 
 auto
-GetUserInput( void *QuitSignal, const KeyInfo *Info ) -> error_t
+GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t
 {
     static int  answer      = 0;
     static int  EscapeCount = 0;
@@ -48,7 +50,7 @@ GetUserInput( void *QuitSignal, const KeyInfo *Info ) -> error_t
 
     if ( Info->Kind == KeyKind::Esc ) {
         if ( EscapeCount == 1 ) {
-            *(int *)QuitSignal = 1;
+            QuitSignal = 1;
             printf( "[Quit]\n" );
             return EEOF;
         }
@@ -65,7 +67,7 @@ GetUserInput( void *QuitSignal, const KeyInfo *Info ) -> error_t
     case KeyKind::Enter:
         printf( "[Enter] Choice %d\n", answer );
         fflush( stdout );
-        *(int *)QuitSignal = 0;
+        QuitSignal = 0;
         return EEOF;
 
     case KeyKind::ArrowLeft:

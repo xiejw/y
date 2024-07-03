@@ -74,7 +74,7 @@ LookupMapping( const char *Str ) -> KeyKind
 }  // namespace
 
 auto
-Run( CallbackFn fn, void *data ) -> error_t
+Run( CallbackFn fn ) -> error_t
 {
     error_t         err{ };
     struct termios  save;          // Will be set later.
@@ -110,7 +110,7 @@ Run( CallbackFn fn, void *data ) -> error_t
         auto    Kind = LookupMapping( Buf );
         KeyInfo Info = { Kind, Buf };
 
-        err = fn( data, &Info );
+        err = fn( &Info );
         if ( err != OK ) goto cleanup;
     }
 

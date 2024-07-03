@@ -1,6 +1,8 @@
 // vim: ft=cpp
 #pragma once
 
+#include <functional>
+
 #include "base.h"
 
 namespace eve::tty {
@@ -28,12 +30,11 @@ enum class KeyKind {
 };
 
 struct KeyInfo {
-    KeyKind     Kind;
-    const char *Str;
+    KeyKind     Kind;  // The Kind.
+    const char *Str;   // Lifetime: Valid in CallbackFn invocation period.
 };
 
-using CallbackFn = auto ( * )( void *data, const KeyInfo *Info ) -> error_t;
-
-auto Run( CallbackFn fn, void *data ) -> error_t;
+using CallbackFn = std::function<auto( const KeyInfo *Info )->error_t>;
+auto Run( CallbackFn fn ) -> error_t;
 
 }  // namespace eve::tty
