@@ -1,6 +1,8 @@
 BUILD         = .build
 BUILD_OBJ     = ${BUILD}/objs
 
+EVE_LIB       = ../../eve/.build_release/libeve.a
+
 CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra -Wfatal-errors
 CXXFLAGS     += -Wconversion
 CXXFLAGS     += -Iinclude
@@ -10,7 +12,7 @@ SRC           =  src
 INC           =  include
 
 CXXFLAGS     += -I../../eve/include
-LDFLAGS      += ../../eve/.build_release/libeve.a
+LDFLAGS      += ${EVE_LIB}
 
 FMT           = ~/Workspace/y/tools/clang_format_all.sh
 
@@ -69,8 +71,11 @@ ${BUILD_OBJ}/algos_%.o: ${SRC}/algos/%.cc ${INC}/algos/*.h | ${BUILD_OBJ}
 ${BUILD}/%_main.o: cmd/%/main.cc | ${BUILD}
 	${CXX} ${CXXFLAGS} -o $@ -c $^
 
-${BUILD}/sudoku_main: ${BUILD}/sudoku_main.o ${MODULES} | ${BUILD}
+${BUILD}/sudoku_main: ${BUILD}/sudoku_main.o ${MODULES} ${EVE_LIB} | ${BUILD}
 	${CXX} -o $@ $^ ${LDFLAGS}
+
+${EVE_LIB}:
+	make -C $(shell dirname $(shell dirname $@)) release
 
 run: compile
 	${BUILD}/sudoku_main
