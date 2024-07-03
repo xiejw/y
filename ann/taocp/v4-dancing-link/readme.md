@@ -1,4 +1,4 @@
-## Code for TAOCP Dancing Link v4
+## TAOCP v4 Dancing Link
 
 ### Advanced Data Structures and Algorithm: Dancing Links
 
