@@ -1,0 +1,20 @@
+name: taocp-v4-horn-clause
+run-name: ${{ github.actor }} is running tests for ${{ github.workflow }}
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SKIP_WERROR: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: y
+      - uses: ./y/.github/actions/base
+        with:
+          compile_eva: true
+      - name: Run ${{ github.workflow }} Test
+        run: make -C ${{ github.workspace }}/y/ann/taocp/v4-horn-clause clean test
+      - name: Run ${{ github.workflow }} Release
+        run: make -C ${{ github.workspace }}/y/ann/taocp/v4-horn-clause clean release
+
