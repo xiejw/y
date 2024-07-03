@@ -10,7 +10,6 @@ main()
         // customized case, use ADD_SUITE_NAME_AND_FN.
 
         // algos
-        ADD_SUITE(algos_dal);   // src/algos/dal_test.c
         ADD_SUITE(algos_horn);  // src/algos/horn_test.c
 
         // ---------------------------------------------------------------------

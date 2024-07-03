@@ -57,4 +57,8 @@ general. The idea is quite simple:
 
 #### Sample Code
 
-See [`cmd/horn/main.cc`](cmd/horn/main.cc).
+See [`cmd/horn/main.c`](cmd/horn/main.c). To play with it, try
+```
+make test
+make horn
+```
