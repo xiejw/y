@@ -13,6 +13,7 @@ jobs:
       - uses: ./y/.github/actions/base
         with:
           compile_eva: true
+          require_clang: true
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ann/taocp/v4-horn-clause clean test
       - name: Run ${{ github.workflow }} Release
