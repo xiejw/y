@@ -2,27 +2,19 @@
 
 ### Advanced Data Structures and Algorithm: Dancing Links
 
-Ref:
-- VOLUME 4B
-- VOLUME 4 PRE-FASCICLE 5C
-
 Dancing link is an advanced data strucuture for backtrack algorithms.  It is
-very efficient for {undo} operations. One example for its use cases is solving
+very efficient for _undo_ operations. One example for its use cases is solving
 Exact Cover Problems.
 
-Also see
+Reference Books and Papers
+- [VOLUME 4B](https://www.amazon.com/Art-Computer-Programming-Combinatorial-Information/dp/0201038064).
+- [VOLUME 4 PRE-FASCICLE 5C](https://www.amazon.com/Art-Computer-Programming-Fascicle-Preliminaries/dp/0134671791).
+- [Dancing Links][1] Paper.
 
-- https://arxiv.org/pdf/cs/0011047.pdf
-- `cmd/main.cc`
+### Use Case: Sudoku
 
-### SUDOKU
-
-See code, `cmd/main.cc`, for an interesting example demonstrates Dancing Links
-algorithm.
-
-- Based on Dancing Links [1] by Donald E. Knuth.
-- Soduku is based on The Art of Computer Programming [2] Vol 4, Dancing
-  Linkss, by Donald E. Knuth
+See code, [`cmd/sudoku/main.cc`](cmd/sudoku/main.cc), for an interesting example
+demonstrates Dancing Links algorithm. It is based on Dancing Links [1] Paper by
+Donald E. Knuth.
 
 [1]: https://arxiv.org/pdf/cs/0011047.pdf
-[2]: https://www-cs-faculty.stanford.edu/~knuth/taocp.html
