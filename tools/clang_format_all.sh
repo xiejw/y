@@ -13,4 +13,5 @@ if [ "$(which clang-format)" == "" ]; then
 fi
 
 export CLANG_FMT_CLI="clang-format -i --style=file"
-find "$@" -type f -iname '*.h' -o -iname '*.c' -o -name '*.cc' -o -name '*.cu' | xargs ${CLANG_FMT_CLI}
+fd . "$@" -t f -e h -e c -e cc -e cu -x ${CLANG_FMT_CLI} {}
+#find "$@" -type f -iname '*.h' -o -iname '*.c' -o -name '*.cc' -o -name '*.cu' | xargs ${CLANG_FMT_CLI}

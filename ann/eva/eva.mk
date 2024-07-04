@@ -105,9 +105,7 @@ endif  # Linux
 #
 # See FMT_FOLDERS above
 # ------------------------------------------------------------------------------
-CLANG_EXTS      = -iname *.h -o -iname *.c
-CLANG_FMT       = clang-format -i --style=file
-FMT             = sh -c 'find "$$@" ${CLANG_EXTS} | xargs ${CLANG_FMT}' sh
+FMT             = ~/Workspace/y/tools/clang_format_all.sh
 
 # ------------------------------------------------------------------------------
 # make
