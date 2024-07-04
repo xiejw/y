@@ -1,92 +1,56 @@
-BUILD         = .build
-BUILD_OBJ     = ${BUILD}/objs
+CMD              =  cmd
+SRC              =  src
+INC              =  include
 
-EVE_LIB       = ../../eve/.build_release/libeve.a
+EVE_FMT_FOLDERS  = ${CMD} ${SRC} ${INC}
+EVE_PATH         = ../../eve
+include ${EVE_PATH}/eve.mk
 
-CXXFLAGS     += -std=c++20 -Wall -Werror -pedantic -Wextra -Wfatal-errors
-CXXFLAGS     += -Wconversion
-CXXFLAGS     += -Iinclude
-
-CMD           =  cmd
-SRC           =  src
-INC           =  include
-
-CXXFLAGS     += -I../../eve/include
-LDFLAGS      += ${EVE_LIB}
-
-FMT           = ~/Workspace/y/tools/clang_format_all.sh
-
-ifdef RELEASE
-CXXFLAGS     += -DNDEBUG -O2
-endif
-
-ifdef ASAN
-# Ref: https://clang.llvm.org/docs/AddressSanitizer.html
-CXXFLAGS         += -fsanitize=address -g
-LDFLAGS          += -fsanitize=address -g
-endif  # ASAN
+CXXFLAGS        += -I${EVE_PATH}/include
+LDFLAGS         += ${EVE_LIB}
 
 # ------------------------------------------------------------------------------
-# libs
-# ------------------------------------------------------------------------------
-MODULES       = ${BUILD_OBJ}/algos_dal.o
+# Libs
+#
+MODULES          = ${BUILD_OBJ}/algos_dal.o
 
 # ------------------------------------------------------------------------------
-# actions
-# ------------------------------------------------------------------------------
+# Actions
+#
 
 .DEFAULT_GOAL   = compile
-
-${BUILD}:
-	@mkdir -p $@
-
-${BUILD_OBJ}: | ${BUILD}
-	@mkdir -p $@
 
 # incrementally compile all libraries.
 compile: ${MODULES}
 
-release: clean
+run: compile
+	${BUILD}/sudoku_main
+
+release:
 	@echo compile with RELEASE mode
 	make RELEASE=1 compile || exit 1
 
 test: compile run
 
-# Maintenance actions
-fmt:
-	${FMT} ${CMD} ${SRC} ${INC}
-clean:
-	rm -rf ${BUILD} ${BUILD_OBJ}
-
 # ------------------------------------------------------------------------------
-# rules for sub-modules
-# ------------------------------------------------------------------------------
+# Rules for sub-modules
+#
 ${BUILD_OBJ}/algos_%.o: ${SRC}/algos/%.cc ${INC}/algos/*.h | ${BUILD_OBJ}
 	${CXX} -o $@ ${CXXFLAGS} -c $<
 
 # ------------------------------------------------------------------------------
-# cmds
-# ------------------------------------------------------------------------------
-
-${BUILD}/%_main.o: cmd/%/main.cc | ${BUILD}
-	${CXX} ${CXXFLAGS} -o $@ -c $^
+# Cmds
+#
+compile: ${BUILD}/sudoku_main
 
 ${BUILD}/sudoku_main: ${BUILD}/sudoku_main.o ${MODULES} ${EVE_LIB} | ${BUILD}
 	${CXX} -o $@ $^ ${LDFLAGS}
 
-${EVE_LIB}:
-	make -C $(shell dirname $(shell dirname $@)) release
-
-run: compile
-	${BUILD}/sudoku_main
-
-compile: ${BUILD}/sudoku_main
+${BUILD}/%_main.o: cmd/%/main.cc | ${BUILD}
+	${CXX} ${CXXFLAGS} -o $@ -c $^
 
 # ------------------------------------------------------------------------------
-# tests
-# ------------------------------------------------------------------------------
+# Tests
+#
 
-# unit tests
 TEST_LIBS       = ${BUILD_OBJ}/algos_dal_test.o
-
-
