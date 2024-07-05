@@ -1,11 +1,14 @@
+SRC                 = src
+CMD                 = cmd
+INCLUDE             = include
+
+EVA_FMT_FOLDERS     = ${INCLUDE} ${SRC} ${CMD}
+EVA_PATH            = .
 include eva.mk
 
 # ==============================================================================
-# configurations
-# ==============================================================================
-SRC             = src
-CMD             = cmd
-INCLUDE         = include
+# Configurations
+#
 
 # public   headers are in INCLUDE
 # internal headers are in SRC
@@ -14,11 +17,6 @@ CFLAGS         += -I${SRC}
 
 # MLVM needs MLVM_VM_INTERNAL guard
 CFLAGS         += -DMLVM_VM_INTERNAL=1
-
-# ------------------------------------------------------------------------------
-# clang-format related, required by eva.mk
-# ------------------------------------------------------------------------------
-FMT_FOLDERS     = ${INCLUDE} ${SRC} ${CMD}
 
 # ==============================================================================
 # libs

@@ -1,33 +1,67 @@
 # ==============================================================================
-# global knobs
-# ==============================================================================
+# Global Knobs
+#
 
 # NO_CLANG_FLAGS disable customized clang flags
 # NO_CLANG_ASAN  disable asan mode
 
-# ==============================================================================
-# configurations
-# ==============================================================================
+# ------------------------------------------------------------------------------
+# Required Inputs and Outputs
+#
+# Inputs
+#   - EVA_PATH
+#   - EVA_FMT_FOLDERS
+#
+# Outputs
+#   - BUILD
+#   - BUILD_OBJ
+#   - EVA_LIB
+#
+# Actions:
+#   - fmt
+#   - clean
+#   - ${EVA_LIB}
 
-# FMT_FOLDERS   =  <user_provide>
+ifndef EVA_PATH
+$(error EVA_PATH must be set)
+endif  # EVA_PATH
+
+ifndef EVA_FMT_FOLDERS
+$(error EVA_FMT_FOLDERS must be set)
+endif  # EVA_FMT_FOLDERS
+
+# ==============================================================================
+# Configurations
+#
 
 # ------------------------------------------------------------------------------
-# top level configurations
-# ------------------------------------------------------------------------------
+# Top level configurations
+#
 UNAME           = $(shell uname)
 PROCESSOR       = $(shell uname -p)
 
 BUILD_BASE      = .build
 BUILD           = ${BUILD_BASE}
+BUILD_OBJ       = ${BUILD}/objs
+
+ifdef PHTREAD
+EVA_LIB         = ${EVA_PATH}/.build_release_pthread/libeva.a
+else
+EVA_LIB         = ${EVA_PATH}/.build_release/libeva.a
+endif
+
+FMT             = ~/Workspace/y/tools/clang_format_all.sh
 
 # ------------------------------------------------------------------------------
-# compiler flags
-# ------------------------------------------------------------------------------
+# Compiler flags
+#
 
 # --------------------------------
-# common flags used for all cases.
-# --------------------------------
+# Common flags used for all cases.
+#
 CFLAGS          += -std=c11 -Wall -Werror -pedantic -Wfatal-errors
+CFLAGS          += -Wconversion -Wshadow
+CFLAGS          += -Iinclude
 
 # --------------------------------
 # all flags I am testing with clang.
@@ -67,8 +101,8 @@ CFLAGS          += -Wno-strict-prototypes
 endif  # NO_CLANG_FLAGS
 
 # --------------------------------
-# error out asan if NO_CLANG_ASAN.
-# --------------------------------
+# Error out asan if NO_CLANG_ASAN.
+#
 ifdef NO_CLANG_ASAN
 ifdef ASAN
 $(error asan mode is disabled by env NO_CLANG_ASAN)
@@ -76,12 +110,12 @@ endif  # ASAN
 endif  # NO_CLANG_ASAN
 
 # ------------------------------------------------------------------------------
-# linker flags
-# ------------------------------------------------------------------------------
+# Linker flags
+#
 LDFLAGS         += -lm
 
 # ------------------------------
-# enable POSIX and LLD for linux
+# Enable POSIX and LLD for linux
 # ------------------------------
 #
 # See
@@ -101,21 +135,14 @@ ifeq ($(UNAME), Linux)
 endif  # Linux
 
 # ------------------------------------------------------------------------------
-# clang-format
-#
-# See FMT_FOLDERS above
-# ------------------------------------------------------------------------------
-FMT             = ~/Workspace/y/tools/clang_format_all.sh
-
-# ------------------------------------------------------------------------------
-# make
+# Make
 #
 # Only BSD has different names. Linux is fine.
 # ------------------------------------------------------------------------------
 MK              = make
 
 # ------------------------------------------------------------------------------
-# asan
+# Asan
 #
 # Enable by `make ASAN=1`
 # ------------------------------------------------------------------------------
@@ -175,10 +202,10 @@ ifdef PTHREAD
 endif  # PTHREAD
 
 # ==============================================================================
-# color printing
+# Color printing
 #
 # Enable verbose by `make V=1`
-# ==============================================================================
+#
 EVA_CC          = ${QUIET_CC}${CC} ${CFLAGS}
 EVA_LD          = ${QUIET_LD}${CC} ${LDFLAGS} ${CFLAGS}
 EVA_AR          = ${QUIET_AR}ar -cr
@@ -201,25 +228,33 @@ QUIET_AR  = @printf '    %b %b\n' $(LINKCOLOR)AR$(ENDCOLOR) \
 QUIET_EX  = @printf '    %b %b\n' $(LINKCOLOR)EX$(ENDCOLOR) \
 				  $(BINCOLOR)$@$(ENDCOLOR) 1>&2;
 QUIET_FM  = @printf '    %b %b\n' $(LINKCOLOR)FM$(ENDCOLOR) \
-	                          $(BINCOLOR)"$(FMT_FOLDERS)"$(ENDCOLOR) 1>&2;
+	                          $(BINCOLOR)"$(EVA_FMT_FOLDERS)"$(ENDCOLOR) 1>&2;
 endif  # V
 
 # ==============================================================================
 # common actions
 # ==============================================================================
 
-${BUILD}:
-	@mkdir -p ${BUILD}
+fmt:
+	${EVA_FM} ${EVA_FMT_FOLDERS}
 
 clean:
 	${EVA_EX} rm -rf ${BUILD_BASE}*
 
-fmt:
-	${EVA_FM} ${FMT_FOLDERS}
+release: clean
+
+${BUILD}:
+	@mkdir -p ${BUILD}
+
+${BUILD_OBJ}:
+	mkdir -p ${BUILD_OBJ}
+
+${EVA_LIB}:
+	make -C ${EVA_PATH} release
 
 # ==============================================================================
-# template to generate c binary rules
-# ==============================================================================
+# Template to generate c binary rules
+#
 
 # The convention is for cmd <binary> the main file is cmd/<binary>/main.c.
 #

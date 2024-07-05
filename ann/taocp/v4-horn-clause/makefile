@@ -1,59 +1,36 @@
-EVA_PATH        = ../../eva
-
-ifdef PHTREAD
-EVA_LIB         = ${EVA_PATH}/.build_release_pthread/libeva.a
-else
-EVA_LIB         = ${EVA_PATH}/.build_release/libeva.a
-endif
-
-include ${EVA_PATH}/eva.mk
-
-# ------------------------------------------------------------------------------
-# configurations
-# ------------------------------------------------------------------------------
-
 CMD             =  cmd
 SRC             =  src
 INC             =  include
 
-CFLAGS          += -I${EVA_PATH}/include -I${SRC} -I${INC}
+EVA_FMT_FOLDERS =  ${CMD} ${SRC} ${INC}
+EVA_PATH        = ../../eva
+
+include ${EVA_PATH}/eva.mk
+
+# ------------------------------------------------------------------------------
+# Configurations
+#
+
+CFLAGS          += -I${EVA_PATH}/include -I${SRC}
 LDFLAGS         += ${EVA_LIB}
 
-BUILD_OBJS      = ${BUILD}/objs
+ALL_LIBS       += ${BUILD_OBJ}/algos_horn.o
 
 # ------------------------------------------------------------------------------
-# configurations, required by eva.mk
-# ------------------------------------------------------------------------------
-FMT_FOLDERS     =  ${CMD} ${SRC} ${INC}
-
-# ------------------------------------------------------------------------------
-# libs
-# ------------------------------------------------------------------------------
-ALGOS_LIBS      = ${BUILD_OBJS}/algos_horn.o
-
-ALL_LIBS       += ${ALGOS_LIBS}
-
-# ------------------------------------------------------------------------------
-# actions
-# ------------------------------------------------------------------------------
+# Actions
+#
 
 .DEFAULT_GOAL   = compile
 
-${BUILD_OBJS}: | ${BUILD}
-	@mkdir -p ${BUILD_OBJS}
-
-# incrementally compile all libraries.
+# Incrementally compile all libraries.
 compile: ${ALL_LIBS} ${EVA_LIB}
-
-${EVA_LIB}:
-	make -C ${EVA_PATH} release
 
 release: horn
 
 # ------------------------------------------------------------------------------
 # rules for sub-modules
 # ------------------------------------------------------------------------------
-${BUILD_OBJS}/algos_%.o: ${SRC}/algos/%.c ${INC}/algos/*.h | ${BUILD_OBJS}
+${BUILD_OBJ}/algos_%.o: ${SRC}/algos/%.c ${INC}/algos/*.h | ${BUILD_OBJ}
 	${EVA_CC} -o $@ -c $<
 
 # ------------------------------------------------------------------------------
@@ -62,14 +39,14 @@ ${BUILD_OBJS}/algos_%.o: ${SRC}/algos/%.c ${INC}/algos/*.h | ${BUILD_OBJS}
 
 compile: $(patsubst ${CMD}/%/main.c,${BUILD}/%,$(wildcard ${CMD}/*/main.c))
 
-$(eval $(call objs,horn,  $(BUILD), ${ALGOS_LIBS}))
+$(eval $(call objs,horn,  $(BUILD), ${ALL_LIBS}))
 
 # ------------------------------------------------------------------------------
 # tests
 # ------------------------------------------------------------------------------
 
 # unit tests
-TEST_LIBS       = ${BUILD_OBJS}/algos_horn_test.o
+TEST_LIBS       = ${BUILD_OBJ}/algos_horn_test.o
 
 $(eval $(call objs,test,$(BUILD),$(ALL_LIBS) $(TEST_LIBS)))
 
