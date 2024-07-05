@@ -1,20 +1,20 @@
 # === WHAT ===
 #
-# makefile for project y
+# Makefile for project y
 #
 # === HOW ===
 #
-# if you are bootstrap a machine, run
+# If you are bootstrap a machine, run
 #
 #     make install
 #
-# if you are sanity checking (daily run), run
+# If you are sanity checking (daily run), run
 #
 #     make fmt
 #     make clean
 #     make test
 #
-# if you are building eva, run
+# If you are building eva, run
 #
 #     make libeva_release
 #     make eva             # alias
@@ -22,6 +22,9 @@
 #     make libeve_release
 #     make eve             # alias
 
+# ------------------------------------------------------------------------------
+# Color Configurations
+#
 C_ALRT = \033[0;33m
 C_INFO = \033[0;32m
 C_REST = \033[0m
@@ -41,27 +44,34 @@ endif
 .PHONY: eva libeva_release  libeve_release
 
 # ------------------------------------------------------------------------------
-# maintaince actions
+# Maintaince actions
 
 fmt:
 	@$(call FMT_DIR, dotfiles)
 	@$(call FMT_DIR, tools)
-	@$(call FMT_DIR, ann/eve)
 	@$(call FMT_DIR, ann/eva)
+	@$(call FMT_DIR, ann/eve)
+	@$(call FMT_DIR, ann/luna)
+	@$(call FMT_DIR, ann/taocp/v4-dancing-link)
+	@$(call FMT_DIR, ann/taocp/v4-horn-clause)
+	@$(call FMT_DIR, ann/tlpi/chp62_term)
 
 clean:
 	go run tools/delete_unused_dirs.go
 
 test:
-	@echo "${C_ALRT}${TEST_TITLE}${C_REST}" && \
-		$(call TEST_DIR,ann/eva)  && \
-		$(call TEST_DIR,ann/eve)  && \
-		$(call TEST_DIR,ann/luna) && \
-		$(call TEST_DIR,ann/taocp/vol4) && \
+	@echo "${C_ALRT}${TEST_TITLE}${C_REST}"                && \
+		$(call TEST_DIR,ann/eva)                       && \
+		$(call TEST_DIR,ann/eve)                       && \
+		$(call TEST_DIR,ann/luna)                      && \
+		$(call TEST_DIR, ann/taocp/v4-dancing-link)    && \
+		$(call TEST_DIR, ann/taocp/v4-horn-clause)     && \
+		$(call TEST_DIR, ann/tlpi/chp62_term)          && \
 		echo "${C_ALRT}DONE${C_REST}"
 
 # ------------------------------------------------------------------------------
-# eva/eva related
+# Lib eva/eva related
+#
 
 eva: libeva_release
 
@@ -74,7 +84,8 @@ libeve_release:
 	make -C ann/eve release
 
 # ------------------------------------------------------------------------------
-# install
+# Install
+#
 
 install:
 	@echo "=>" install vimrc
@@ -103,8 +114,8 @@ install:
 
 
 # ==============================================================================
-# templates
-# ==============================================================================
+# Templates
+#
 
 # Define a FMT_DIR func
 # Usage:
