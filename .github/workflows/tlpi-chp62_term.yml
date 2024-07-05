@@ -1,0 +1,21 @@
+name: tlpi-chp62_term
+run-name: ${{ github.actor }} is running tests for ${{ github.workflow }}
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SKIP_WERROR: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: y
+      - uses: ./y/.github/actions/base
+        with:
+          compile_eve: true
+          require_gcc: true
+      - name: Run ${{ github.workflow }} Test
+        run: make -C ${{ github.workspace }}/y/ann/tlpi/chp62_term clean test
+      - name: Run ${{ github.workflow }} Release
+        run: make -C ${{ github.workspace }}/y/ann/tlpi/chp62_term clean release
+

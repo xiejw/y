@@ -1,18 +1,19 @@
-BUILD         = .build
+EVE_PATH            = ../../eve
+EVE_FMT_FOLDERS     = .
 
-CXXFLAGS     += -std=c++20
-CXXFLAGS     += -Wall -pedantic -Wextra -Wfatal-errors -Werror
-CXXFLAGS     += -Wconversion -Wshadow
-LDFLAGS      +=
+include ${EVE_PATH}/eve.mk
 
-compile: | ${BUILD}
+.DEFAULT_GOAL       = compile
+
+compile: ${BUILD}/main
+
+${BUILD}/main: | ${BUILD}
 	${CXX} ${CXXFLAGS} -o ${BUILD}/main tty.cc main.cc ${LDFLAGS}
-
-${BUILD}:
-	mkdir -p $@
 
 run: compile
 	${BUILD}/main
 
-fmt:
-	~/Workspace/y/tools/clang_format_all.sh .
+test: compile
+
+release:
+	make RELEASE=1 test
