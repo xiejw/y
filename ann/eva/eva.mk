@@ -61,7 +61,7 @@ FMT             = ~/Workspace/y/tools/clang_format_all.sh
 #
 CFLAGS          += -std=c11 -Wall -Werror -pedantic -Wfatal-errors
 CFLAGS          += -Wconversion -Wshadow
-CFLAGS          += -Iinclude
+CFLAGS          += -I${EVA_PATH}/include
 
 # --------------------------------
 # all flags I am testing with clang.
