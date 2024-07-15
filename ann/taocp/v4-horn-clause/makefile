@@ -11,7 +11,7 @@ include ${EVA_PATH}/eva.mk
 # Configurations
 #
 
-CFLAGS          += -I${EVA_PATH}/include -I${SRC}
+CFLAGS          += -Iinclude -I${SRC}
 LDFLAGS         += ${EVA_LIB}
 
 ALL_LIBS       += ${BUILD_OBJ}/algos_horn.o
