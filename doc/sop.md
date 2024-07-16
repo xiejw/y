@@ -136,11 +136,24 @@
   pacman -S cmake ninja python3
   ```
 
-  #### Download
+  #### Download and Setup
 
+  Refs:
   - https://releases.llvm.org/
   - https://github.com/llvm/llvm-project.git
 
+  Setup:
+  - Machines with enough disk spaces.
+    ```
+    git clone https://github.com/llvm/llvm-project.git
+    ln -sf llvm-project src
+    ```
+  - Machine with small disks.
+    ```
+    git clone --depth 1 https://github.com/llvm/llvm-project.git
+    rm -rf llvm-project/.git     # ensure jarvis does not pull history
+    ln -sf llvm-project src
+    ```
 
   #### Compile
 
