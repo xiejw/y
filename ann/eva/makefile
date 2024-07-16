@@ -2,6 +2,7 @@ SRC                 = src
 CMD                 = cmd
 INCLUDE             = include
 
+EVA_ROOT            = yes
 EVA_FMT_FOLDERS     = ${INCLUDE} ${SRC} ${CMD}
 EVA_PATH            = .
 include eva.mk
@@ -109,25 +110,25 @@ all:
 	@echo 'clean.'
 	${MK} clean
 	@echo 'compile non-release libs.'
-	${MK} -B -j compile                          || exit 1
+	${MK} -B -j RELEASE='' PTHREAD='' compile      || exit 1
 	@echo 'compile release libeva.'
-	${MK} -B -j RELEASE=1 libeva                 || exit 1
+	${MK} -B -j RELEASE=1  PTHREAD='' libeva       || exit 1
 	@echo 'compile release pthread libeva.'
-	${MK} -B -j RELEASE=1 PTHREAD=1 libeva       || exit 1
+	${MK} -B -j RELEASE=1  PTHREAD=1  libeva       || exit 1
 	@echo 'run asan tests.'
-	${MK} -B -j ASAN=1 test                      || exit 1
+	${MK} -B -j RELEASE='' ASAN=1 PTHREAD='' test  || exit 1
 	@echo 'run asan pthread tests.'
-	${MK} -B -j ASAN=1 PTHREAD=1 test            || exit 1
+	${MK} -B -j RELEASE='' ASAN=1 PTHREAD=1 test   || exit 1
 
 release:
 	@echo 'clean.'
 	${MK} clean
 	@echo 'compile non-release libs.'
-	${MK} -B -j compile                          || exit 1
+	${MK} -B -j RELEASE='' PTHREAD='' compile      || exit 1
 	@echo 'compile release libeva.'
-	${MK} -B -j RELEASE=1 libeva                 || exit 1
+	${MK} -B -j RELEASE=1  PTHREAD='' libeva       || exit 1
 	@echo 'compile release pthread libeva.'
-	${MK} -B -j RELEASE=1 PTHREAD=1 libeva       || exit 1
+	${MK} -B -j RELEASE=1  PTHREAD=1  libeva       || exit 1
 
 # incrementally compile all libraries
 compile: ${BUILD} ${ALL_LIBS}

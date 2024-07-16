@@ -249,8 +249,12 @@ ${BUILD}:
 ${BUILD_OBJ}:
 	mkdir -p ${BUILD_OBJ}
 
+# For most projects, EVA_LIB should be set so they can use it as a dependency.
+# For the EVA itself (EVA_ROOT defined), this is not overriden
+ifndef EVA_ROOT
 ${EVA_LIB}:
 	make -C ${EVA_PATH} release
+endif
 
 # ==============================================================================
 # Template to generate c binary rules
