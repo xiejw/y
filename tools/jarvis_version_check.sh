@@ -7,7 +7,7 @@ set -e
 find_latest() {
   VERSION=`cat ~/Workspace/x/ann/jarvis/Cargo.toml |
     grep -o -E '^version = ".*"' |
-    grep -o -E '[0-9\.]*'`
+    grep -o -E '[0-9\.]+'`
 
   echo "Find latest Jarvis version ${VERSION}"
 }
