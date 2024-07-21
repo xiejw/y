@@ -121,17 +121,14 @@ alias gm='git commit -a'
 alias gp='git pull --no-rebase'
 alias gg='git log --graph --oneline --all'
 
-# TODO retire gpa
-alias gpa='~/Workspace/y/dotfiles/bin/sync_git_repo'
-
 # shortcut jarvis with
 function jv {
   ed_rs
 
   if [[ $# -eq 1 ]]; then
-    make ACTION=$1 -C ~/Workspace/x/ann/jarvis
+    ~/Workspace/.bin/jarvis $1
   else
-    make -C ~/Workspace/x/ann/jarvis
+    ~/Workspace/.bin/jarvis house-keeping
   fi
 }
 
