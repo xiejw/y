@@ -7,6 +7,6 @@
 // Programming", Chapter 9.
 //
 // Only supports meta chars: ^ $ . *
-int regex_match(const char *regexp, const char *text);
+int regex_match( const char *regexp, const char *text );
 
 #endif  // EVA_REGEX_H_

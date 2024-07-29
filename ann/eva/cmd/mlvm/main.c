@@ -32,73 +32,73 @@
 #include <crypto/rng64.h>
 #include <mlvm/vm.h>
 
-#define NE(e) _NO_ERR_IMPL_(e, __FILE__, __LINE__)
+#define NE( e ) _NO_ERR_IMPL_( e, __FILE__, __LINE__ )
 
-#define _NO_ERR_IMPL_(e, f, l)                                               \
-        do {                                                                 \
-                if (e) {                                                     \
-                        err = e;                                             \
-                        errDump("unexpected error @ file %s line %d", f, l); \
-                        goto cleanup;                                        \
-                }                                                            \
-        } while (0)
+#define _NO_ERR_IMPL_( e, f, l )                                   \
+    do {                                                           \
+        if ( e ) {                                                 \
+            err = e;                                               \
+            errDump( "unexpected error @ file %s line %d", f, l ); \
+            goto cleanup;                                          \
+        }                                                          \
+    } while ( 0 )
 
 #define DEFAULT_SHAPE \
-        2, (int[]) { 4096, 4096 }
+    2, ( int[] ) { 4096, 4096 }
 
 #define DEFAULT_ITERATION_COUNT 10
 
 int
-main()
+main( )
 {
-        error_t err = OK;
+    error_t err = OK;
 
-        logInfo("MLVM Demo: Matmul\n");
+    logInfo( "MLVM Demo: Matmul\n" );
 
-        // ---
-        // Defines vm with some shapes.
+    // ---
+    // Defines vm with some shapes.
 
-        struct vm *vm   = vmNew();
-        struct vm_sp *s = spNew(DEFAULT_SHAPE);
-        struct vm_opopt opt;
+    struct vm      *vm = vmNew( );
+    struct vm_sp   *s  = spNew( DEFAULT_SHAPE );
+    struct vm_opopt opt;
 
-        // ---
-        // Prepares the seeds, one for model and one for input.
+    // ---
+    // Prepares the seeds, one for model and one for input.
 
-        struct rng64 *seed = rng64New(123);
-        struct rng64 *rng;  // free after each use.
+    struct rng64 *seed = rng64New( 123 );
+    struct rng64 *rng;  // free after each use.
 
-        // ---
-        // Allocates the tensors for inputs (x,y) and output (z).
+    // ---
+    // Allocates the tensors for inputs (x,y) and output (z).
 
-        int x = vmTensorNew(vm, VM_F32, s);
-        int y = vmTensorNew(vm, VM_F32, s);
-        int z = vmTensorNew(vm, VM_F32, s);
+    int x = vmTensorNew( vm, VM_F32, s );
+    int y = vmTensorNew( vm, VM_F32, s );
+    int z = vmTensorNew( vm, VM_F32, s );
 
-        // ---
-        // Initializes x and y.
-        rng      = rng64Split(seed);
-        opt.mode = VM_OPT_RNG_STD_NORMAL | VM_OPT_MODE_R_BIT;
-        opt.r    = *rng;
-        NE(vmExec(vm, VM_OP_RNG, &opt, x, -1, -1));
-        rng64Free(rng);
+    // ---
+    // Initializes x and y.
+    rng      = rng64Split( seed );
+    opt.mode = VM_OPT_RNG_STD_NORMAL | VM_OPT_MODE_R_BIT;
+    opt.r    = *rng;
+    NE( vmExec( vm, VM_OP_RNG, &opt, x, -1, -1 ) );
+    rng64Free( rng );
 
-        rng      = rng64Split(seed);
-        opt.mode = VM_OPT_RNG_STD_NORMAL | VM_OPT_MODE_R_BIT;
-        opt.r    = *rng;
-        NE(vmExec(vm, VM_OP_RNG, &opt, y, -1, -1));
-        rng64Free(rng);
+    rng      = rng64Split( seed );
+    opt.mode = VM_OPT_RNG_STD_NORMAL | VM_OPT_MODE_R_BIT;
+    opt.r    = *rng;
+    NE( vmExec( vm, VM_OP_RNG, &opt, y, -1, -1 ) );
+    rng64Free( rng );
 
-        // ---
-        // Executes the matmul z = matmul(x, y).
-        for (int i = 0; i < DEFAULT_ITERATION_COUNT; i++) {
-                logInfo("iteration %d\n", i);
-                NE(vmExec(vm, VM_OP_MATMUL, NULL, z, x, y));
-        }
+    // ---
+    // Executes the matmul z = matmul(x, y).
+    for ( int i = 0; i < DEFAULT_ITERATION_COUNT; i++ ) {
+        logInfo( "iteration %d\n", i );
+        NE( vmExec( vm, VM_OP_MATMUL, NULL, z, x, y ) );
+    }
 
 cleanup:
-        spDecRef(s);
-        rng64Free(seed);
-        vmFree(vm);
-        return err;
+    spDecRef( s );
+    rng64Free( seed );
+    vmFree( vm );
+    return err;
 }

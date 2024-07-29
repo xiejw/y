@@ -12,43 +12,43 @@
  * On error, NULL is returned. Otherwise the pointer to the new list.
  */
 struct list *
-listNew(void)
+listNew( void )
 {
-        struct list *list;
+    struct list *list;
 
-        if ((list = malloc(sizeof(*list))) == NULL) return NULL;
-        list->head = list->tail = NULL;
-        list->len               = 0;
-        list->dup               = NULL;
-        list->free              = NULL;
-        list->match             = NULL;
-        return list;
+    if ( ( list = malloc( sizeof( *list ) ) ) == NULL ) return NULL;
+    list->head = list->tail = NULL;
+    list->len               = 0;
+    list->dup               = NULL;
+    list->free              = NULL;
+    list->match             = NULL;
+    return list;
 }
 
 /* Remove all the elements from the list without destroying the list itself. */
 void
-listClear(struct list *list)
+listClear( struct list *list )
 {
-        unsigned long len;
-        struct list_node *current, *next;
+    unsigned long     len;
+    struct list_node *current, *next;
 
-        current = list->head;
-        len     = list->len;
-        while (len--) {
-                next = current->next;
-                if (list->free) list->free(current->v.data);
-                free(current);
-                current = next;
-        }
-        list->head = list->tail = NULL;
-        list->len               = 0;
+    current = list->head;
+    len     = list->len;
+    while ( len-- ) {
+        next = current->next;
+        if ( list->free ) list->free( current->v.data );
+        free( current );
+        current = next;
+    }
+    list->head = list->tail = NULL;
+    list->len               = 0;
 }
 
 void
-listFree(struct list *list)
+listFree( struct list *list )
 {
-        listClear(list);
-        free(list);
+    listClear( list );
+    free( list );
 }
 
 /* Add a new node to the list, to head.
@@ -58,22 +58,22 @@ listFree(struct list *list)
  * On success the new 'node' pointer is returned.
  */
 struct list_node *
-listAddNodeHead(struct list *list)
+listAddNodeHead( struct list *list )
 {
-        struct list_node *node;
+    struct list_node *node;
 
-        if ((node = malloc(sizeof(*node))) == NULL) return NULL;
-        if (list->len == 0) {
-                list->head = list->tail = node;
-                node->prev = node->next = NULL;
-        } else {
-                node->prev       = NULL;
-                node->next       = list->head;
-                list->head->prev = node;
-                list->head       = node;
-        }
-        list->len++;
-        return node;
+    if ( ( node = malloc( sizeof( *node ) ) ) == NULL ) return NULL;
+    if ( list->len == 0 ) {
+        list->head = list->tail = node;
+        node->prev = node->next = NULL;
+    } else {
+        node->prev       = NULL;
+        node->next       = list->head;
+        list->head->prev = node;
+        list->head       = node;
+    }
+    list->len++;
+    return node;
 }
 
 /* Add a new node to the list, to tail.
@@ -83,112 +83,112 @@ listAddNodeHead(struct list *list)
  * On success the new 'node' pointer is returned.
  */
 struct list_node *
-listAddNodeTail(struct list *list)
+listAddNodeTail( struct list *list )
 {
-        struct list_node *node;
+    struct list_node *node;
 
-        if ((node = malloc(sizeof(*node))) == NULL) return NULL;
-        if (list->len == 0) {
-                list->head = list->tail = node;
-                node->prev = node->next = NULL;
-        } else {
-                node->prev       = list->tail;
-                node->next       = NULL;
-                list->tail->next = node;
-                list->tail       = node;
-        }
-        list->len++;
-        return node;
+    if ( ( node = malloc( sizeof( *node ) ) ) == NULL ) return NULL;
+    if ( list->len == 0 ) {
+        list->head = list->tail = node;
+        node->prev = node->next = NULL;
+    } else {
+        node->prev       = list->tail;
+        node->next       = NULL;
+        list->tail->next = node;
+        list->tail       = node;
+    }
+    list->len++;
+    return node;
 }
 
 struct list_node *
-listInsertNode(struct list *list, struct list_node *old_node, int after)
+listInsertNode( struct list *list, struct list_node *old_node, int after )
 {
-        struct list_node *node;
+    struct list_node *node;
 
-        if ((node = malloc(sizeof(*node))) == NULL) return NULL;
-        if (after) {
-                node->prev = old_node;
-                node->next = old_node->next;
-                if (list->tail == old_node) {
-                        list->tail = node;
-                }
-        } else {
-                node->next = old_node;
-                node->prev = old_node->prev;
-                if (list->head == old_node) {
-                        list->head = node;
-                }
+    if ( ( node = malloc( sizeof( *node ) ) ) == NULL ) return NULL;
+    if ( after ) {
+        node->prev = old_node;
+        node->next = old_node->next;
+        if ( list->tail == old_node ) {
+            list->tail = node;
         }
-        if (node->prev != NULL) {
-                node->prev->next = node;
+    } else {
+        node->next = old_node;
+        node->prev = old_node->prev;
+        if ( list->head == old_node ) {
+            list->head = node;
         }
-        if (node->next != NULL) {
-                node->next->prev = node;
-        }
-        list->len++;
-        return node;
+    }
+    if ( node->prev != NULL ) {
+        node->prev->next = node;
+    }
+    if ( node->next != NULL ) {
+        node->next->prev = node;
+    }
+    list->len++;
+    return node;
 }
 
 // Remove the specified node from the specified list and free it.
 void
-listDelNode(struct list *list, struct list_node *node)
+listDelNode( struct list *list, struct list_node *node )
 {
-        listUnlinkNode(list, node);
-        if (list->free) list->free(node->v.data);
-        free(node);
+    listUnlinkNode( list, node );
+    if ( list->free ) list->free( node->v.data );
+    free( node );
 }
 
 // Remove the specified node from the specified list.
 void
-listUnlinkNode(struct list *list, struct list_node *node)
+listUnlinkNode( struct list *list, struct list_node *node )
 {
-        if (node->prev)
-                node->prev->next = node->next;
-        else
-                list->head = node->next;
-        if (node->next)
-                node->next->prev = node->prev;
-        else
-                list->tail = node->prev;
-        list->len--;
+    if ( node->prev )
+        node->prev->next = node->next;
+    else
+        list->head = node->next;
+    if ( node->next )
+        node->next->prev = node->prev;
+    else
+        list->tail = node->prev;
+    list->len--;
 }
 
 // returns a list iterator 'iter'. After the initialization every
 // call to listNext() will return the next element of the list.
 struct list_iter *
-listNewIter(struct list *list, int direction)
+listNewIter( struct list *list, int direction )
 {
-        struct list_iter *iter;
+    struct list_iter *iter;
 
-        if ((iter = malloc(sizeof(*iter))) == NULL) return NULL;
-        if (direction == 1)
-                iter->next = list->head;
-        else
-                iter->next = list->tail;
-        iter->direction = direction;
-        return iter;
+    if ( ( iter = malloc( sizeof( *iter ) ) ) == NULL ) return NULL;
+    if ( direction == 1 )
+        iter->next = list->head;
+    else
+        iter->next = list->tail;
+    iter->direction = direction;
+    return iter;
 }
 
 void
-listFreeIter(struct list_iter *iter)
+listFreeIter( struct list_iter *iter )
 {
-        free(iter);
+    free( iter );
 }
 
 /* Create an iterator in the list private iterator structure */
 void
-listRewind(struct list *list, struct list_iter *li)
+listRewind( struct list *list, struct list_iter *li )
 {
-        li->next      = list->head;
-        li->direction = 1;
+    li->next      = list->head;
+    li->direction = 1;
 }
 
 void
-listRewindTail(struct list *list, struct list_iter *li)
+listRewindTail( struct list *list, struct list_iter *li )
 {
-        li->next      = list->tail;
-        li->direction = 0;
+    li->next      = list->tail;
+    li->direction = 0;
 }
 
 /* Return the next element of an iterator.
@@ -206,17 +206,17 @@ listRewindTail(struct list *list, struct list_iter *li)
  *
  * */
 struct list_node *
-listNext(struct list_iter *iter)
+listNext( struct list_iter *iter )
 {
-        struct list_node *current = iter->next;
+    struct list_node *current = iter->next;
 
-        if (current != NULL) {
-                if (iter->direction == 1)
-                        iter->next = current->next;
-                else
-                        iter->next = current->prev;
-        }
-        return current;
+    if ( current != NULL ) {
+        if ( iter->direction == 1 )
+            iter->next = current->next;
+        else
+            iter->next = current->prev;
+    }
+    return current;
 }
 
 /* Duplicate the whole list. On out of memory NULL is returned.
@@ -228,42 +228,42 @@ listNext(struct list_iter *iter)
  *
  * The original list both on success or error is never modified. */
 struct list *
-listDup(struct list *orig)
+listDup( struct list *orig )
 {
-        struct list *copy;
-        struct list_iter iter;
-        struct list_node *node;
-        struct list_node *new_node;
+    struct list      *copy;
+    struct list_iter  iter;
+    struct list_node *node;
+    struct list_node *new_node;
 
-        if ((copy = listNew()) == NULL) return NULL;
-        copy->dup   = orig->dup;
-        copy->free  = orig->free;
-        copy->match = orig->match;
-        listRewind(orig, &iter);
-        while ((node = listNext(&iter)) != NULL) {
-                void *data;
+    if ( ( copy = listNew( ) ) == NULL ) return NULL;
+    copy->dup   = orig->dup;
+    copy->free  = orig->free;
+    copy->match = orig->match;
+    listRewind( orig, &iter );
+    while ( ( node = listNext( &iter ) ) != NULL ) {
+        void *data;
 
-                new_node = listAddNodeTail(copy);
-                if (new_node == NULL) {
-                        listFree(copy);
-                        return NULL;
-                }
-
-                if (copy->dup) {
-                        // preset to avoid listFree to free the wrong address.
-                        new_node->v.data = NULL;
-                        data             = copy->dup(node->v.data);
-                        if (data == NULL) {
-                                listFree(copy);
-                                return NULL;
-                        }
-                        new_node->v.data = data;
-                } else {
-                        // struct copy.
-                        new_node->v = node->v;
-                }
+        new_node = listAddNodeTail( copy );
+        if ( new_node == NULL ) {
+            listFree( copy );
+            return NULL;
         }
-        return copy;
+
+        if ( copy->dup ) {
+            // preset to avoid listFree to free the wrong address.
+            new_node->v.data = NULL;
+            data             = copy->dup( node->v.data );
+            if ( data == NULL ) {
+                listFree( copy );
+                return NULL;
+            }
+            new_node->v.data = data;
+        } else {
+            // struct copy.
+            new_node->v = node->v;
+        }
+    }
+    return copy;
 }
 
 /* Search the list for a node matching a given key.
@@ -277,24 +277,24 @@ listDup(struct list *orig)
  * (search starts from head). If no matching node exists
  * NULL is returned. */
 struct list_node *
-listSearchKey(struct list *list, void *key)
+listSearchKey( struct list *list, void *key )
 {
-        struct list_iter iter;
-        struct list_node *node;
+    struct list_iter  iter;
+    struct list_node *node;
 
-        listRewind(list, &iter);
-        while ((node = listNext(&iter)) != NULL) {
-                if (list->match) {
-                        if (list->match(node->v.data, key)) {
-                                return node;
-                        }
-                } else {
-                        if (key == node->v.data) {
-                                return node;
-                        }
-                }
+    listRewind( list, &iter );
+    while ( ( node = listNext( &iter ) ) != NULL ) {
+        if ( list->match ) {
+            if ( list->match( node->v.data, key ) ) {
+                return node;
+            }
+        } else {
+            if ( key == node->v.data ) {
+                return node;
+            }
         }
-        return NULL;
+    }
+    return NULL;
 }
 
 /* Return the element at the specified zero-based index
@@ -303,73 +303,73 @@ listSearchKey(struct list *list, void *key)
  * from the tail, -1 is the last element, -2 the penultimate
  * and so on. If the index is out of range NULL is returned. */
 struct list_node *
-listIndex(struct list *list, long index)
+listIndex( struct list *list, long index )
 {
-        struct list_node *n;
+    struct list_node *n;
 
-        if (index < 0) {
-                index = (-index) - 1;
-                n     = list->tail;
-                while (index-- && n) n = n->prev;
-        } else {
-                n = list->head;
-                while (index-- && n) n = n->next;
-        }
-        return n;
+    if ( index < 0 ) {
+        index = ( -index ) - 1;
+        n     = list->tail;
+        while ( index-- && n ) n = n->prev;
+    } else {
+        n = list->head;
+        while ( index-- && n ) n = n->next;
+    }
+    return n;
 }
 
 /* Rotate the list removing the tail node and inserting it to the head. */
 void
-listRotateTailToHead(struct list *list)
+listRotateTailToHead( struct list *list )
 {
-        if (listLen(list) <= 1) return;
+    if ( listLen( list ) <= 1 ) return;
 
-        /* Detach current tail */
-        struct list_node *tail = list->tail;
-        list->tail             = tail->prev;
-        list->tail->next       = NULL;
-        /* Move it as head */
-        list->head->prev = tail;
-        tail->prev       = NULL;
-        tail->next       = list->head;
-        list->head       = tail;
+    /* Detach current tail */
+    struct list_node *tail = list->tail;
+    list->tail             = tail->prev;
+    list->tail->next       = NULL;
+    /* Move it as head */
+    list->head->prev = tail;
+    tail->prev       = NULL;
+    tail->next       = list->head;
+    list->head       = tail;
 }
 
 /* Rotate the list removing the head node and inserting it to the tail. */
 void
-listRotateHeadToTail(struct list *list)
+listRotateHeadToTail( struct list *list )
 {
-        if (listLen(list) <= 1) return;
+    if ( listLen( list ) <= 1 ) return;
 
-        struct list_node *head = list->head;
-        /* Detach current head */
-        list->head       = head->next;
-        list->head->prev = NULL;
-        /* Move it as tail */
-        list->tail->next = head;
-        head->next       = NULL;
-        head->prev       = list->tail;
-        list->tail       = head;
+    struct list_node *head = list->head;
+    /* Detach current head */
+    list->head       = head->next;
+    list->head->prev = NULL;
+    /* Move it as tail */
+    list->tail->next = head;
+    head->next       = NULL;
+    head->prev       = list->tail;
+    list->tail       = head;
 }
 
 /* Add all the elements of the list 'o' at the end of the
  * list 'l'. The list 'o' remains empty but otherwise valid. */
 void
-listJoin(struct list *l, struct list *o)
+listJoin( struct list *l, struct list *o )
 {
-        if (o->len == 0) return;
+    if ( o->len == 0 ) return;
 
-        o->head->prev = l->tail;
+    o->head->prev = l->tail;
 
-        if (l->tail)
-                l->tail->next = o->head;
-        else
-                l->head = o->head;
+    if ( l->tail )
+        l->tail->next = o->head;
+    else
+        l->head = o->head;
 
-        l->tail = o->tail;
-        l->len += o->len;
+    l->tail = o->tail;
+    l->len += o->len;
 
-        /* Setup other as an empty list. */
-        o->head = o->tail = NULL;
-        o->len            = 0;
+    /* Setup other as an empty list. */
+    o->head = o->tail = NULL;
+    o->len            = 0;
 }

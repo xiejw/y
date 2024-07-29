@@ -53,13 +53,13 @@
 //
 // In-Place:
 //   - all operand handles can be used as destination.
-VM_OP(ADD)
-VM_OP(MUL)
-VM_OP(MINUS)
-VM_OP(DIVIDE)
-VM_OP(MAX)
-VM_OP(EQ)
-VM_OP(CMPL)  // Compare Larger.
+VM_OP( ADD )
+VM_OP( MUL )
+VM_OP( MINUS )
+VM_OP( DIVIDE )
+VM_OP( MAX )
+VM_OP( EQ )
+VM_OP( CMPL )  // Compare Larger.
 
 // --------------------------------------------------------------------
 // Matmul
@@ -84,7 +84,7 @@ VM_OP(CMPL)  // Compare Larger.
 //
 // In-Place:
 //   - dst must be unique.
-VM_OP(MATMUL)
+VM_OP( MATMUL )
 
 // --------------------------------------------------------------------
 // Arg
@@ -104,7 +104,7 @@ VM_OP(MATMUL)
 //
 // In-Place:
 //   - No. dst is rank 1.
-VM_OP(ARGMAX)
+VM_OP( ARGMAX )
 
 // --------------------------------------------------------------------
 // Inverse Sqrt
@@ -129,7 +129,7 @@ VM_OP(ARGMAX)
 //
 // In-Place:
 //   - dst is allowed to be t1.
-VM_OP(ISQRT)
+VM_OP( ISQRT )
 
 // --------------------------------------------------------------------
 // Reduction
@@ -157,7 +157,7 @@ VM_OP(ISQRT)
 //
 // In-Place:
 //   - not allowed.
-VM_OP(REDUCE)
+VM_OP( REDUCE )
 
 // --------------------------------------------------------------------
 // Rng.
@@ -183,7 +183,7 @@ VM_OP(REDUCE)
 //
 // In-Place:
 //   - In-place anyway.
-VM_OP(RNG)
+VM_OP( RNG )
 
 // --------------------------------------------------------------------
 // Fill.
@@ -204,7 +204,7 @@ VM_OP(RNG)
 //
 // In-Place:
 //   - In-place anyway.
-VM_OP(FILL)
+VM_OP( FILL )
 
 // --------------------------------------------------------------------
 // Softmax crossentropy with logits loss
@@ -227,4 +227,4 @@ VM_OP(FILL)
 //
 // In-Place:
 //   - Not allowed.
-VM_OP(LS_SCEL)
+VM_OP( LS_SCEL )

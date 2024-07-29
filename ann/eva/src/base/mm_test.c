@@ -7,90 +7,90 @@
 //-----------------------------------------------------------------------------
 
 static char *
-test_stk_empty()
+test_stk_empty( )
 {
-        struct arr *arr = arrStackNew(sizeof(int), 2, 4);
-        ASSERT_TRUE("slot size", arr->slot_byte_size == sizeof(int));
-        ASSERT_TRUE("slots/line", arr->slots_per_line == 2);
-        ASSERT_TRUE("num_line", vecSize(arr->lines) == 2);
-        ASSERT_TRUE("cap", arr->cap == 4);
-        ASSERT_TRUE("sbits", arr->sbits == 1);
-        ASSERT_TRUE("mask", arr->mask == 1);
-        arrFree(arr);
-        return NULL;
+    struct arr *arr = arrStackNew( sizeof( int ), 2, 4 );
+    ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
+    ASSERT_TRUE( "slots/line", arr->slots_per_line == 2 );
+    ASSERT_TRUE( "num_line", vecSize( arr->lines ) == 2 );
+    ASSERT_TRUE( "cap", arr->cap == 4 );
+    ASSERT_TRUE( "sbits", arr->sbits == 1 );
+    ASSERT_TRUE( "mask", arr->mask == 1 );
+    arrFree( arr );
+    return NULL;
 }
 
 static char *
-test_stk_alloc()
+test_stk_alloc( )
 {
-        struct arr *arr = arrStackNew(sizeof(int), 3, 7);
-        ASSERT_TRUE("slot size", arr->slot_byte_size == sizeof(int));
-        ASSERT_TRUE("slots/line", arr->slots_per_line == 4);
-        ASSERT_TRUE("num_line", vecSize(arr->lines) == 2);
-        ASSERT_TRUE("cap", arr->cap == 8);
-        ASSERT_TRUE("sbits", arr->sbits == 2);
-        ASSERT_TRUE("mask", arr->mask == 3);
-        arrFree(arr);
-        return NULL;
+    struct arr *arr = arrStackNew( sizeof( int ), 3, 7 );
+    ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
+    ASSERT_TRUE( "slots/line", arr->slots_per_line == 4 );
+    ASSERT_TRUE( "num_line", vecSize( arr->lines ) == 2 );
+    ASSERT_TRUE( "cap", arr->cap == 8 );
+    ASSERT_TRUE( "sbits", arr->sbits == 2 );
+    ASSERT_TRUE( "mask", arr->mask == 3 );
+    arrFree( arr );
+    return NULL;
 }
 
 static char *
-test_stk_push_pop()
+test_stk_push_pop( )
 {
-        struct arr *arr = arrStackNew(sizeof(int), 4, 16);
-        ASSERT_TRUE("slot size", arr->slot_byte_size == sizeof(int));
-        ASSERT_TRUE("slots/line", arr->slots_per_line == 4);
-        ASSERT_TRUE("num_line", vecSize(arr->lines) == 4);
-        ASSERT_TRUE("cap", arr->cap == 16);
-        ASSERT_TRUE("sbits", arr->sbits == 2);
-        ASSERT_TRUE("mask", arr->mask == 3);
+    struct arr *arr = arrStackNew( sizeof( int ), 4, 16 );
+    ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
+    ASSERT_TRUE( "slots/line", arr->slots_per_line == 4 );
+    ASSERT_TRUE( "num_line", vecSize( arr->lines ) == 4 );
+    ASSERT_TRUE( "cap", arr->cap == 16 );
+    ASSERT_TRUE( "sbits", arr->sbits == 2 );
+    ASSERT_TRUE( "mask", arr->mask == 3 );
 
-        for (int i = 0; i < 16; i++) {
-                *(int *)(arrPush(arr)) = i;
-        }
-        for (int i = 15; i >= 0; i--) {
-                ASSERT_TRUE("pop", *(int *)(arrPop(arr)) == i);
-        }
+    for ( int i = 0; i < 16; i++ ) {
+        *(int *)( arrPush( arr ) ) = i;
+    }
+    for ( int i = 15; i >= 0; i-- ) {
+        ASSERT_TRUE( "pop", *(int *)( arrPop( arr ) ) == i );
+    }
 
-        ASSERT_TRUE("pop empty", arrPop(arr) == NULL);
-        arrFree(arr);
-        return NULL;
+    ASSERT_TRUE( "pop empty", arrPop( arr ) == NULL );
+    arrFree( arr );
+    return NULL;
 }
 
 static char *
-test_stk_grow_cap()
+test_stk_grow_cap( )
 {
-        struct arr *arr = arrStackNew(sizeof(int), 2, 4);
-        ASSERT_TRUE("slot size", arr->slot_byte_size == sizeof(int));
-        ASSERT_TRUE("slots/line", arr->slots_per_line == 2);
-        ASSERT_TRUE("num_line", vecSize(arr->lines) == 2);
-        ASSERT_TRUE("cap", arr->cap == 4);
-        ASSERT_TRUE("sbits", arr->sbits == 1);
-        ASSERT_TRUE("mask", arr->mask == 1);
+    struct arr *arr = arrStackNew( sizeof( int ), 2, 4 );
+    ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
+    ASSERT_TRUE( "slots/line", arr->slots_per_line == 2 );
+    ASSERT_TRUE( "num_line", vecSize( arr->lines ) == 2 );
+    ASSERT_TRUE( "cap", arr->cap == 4 );
+    ASSERT_TRUE( "sbits", arr->sbits == 1 );
+    ASSERT_TRUE( "mask", arr->mask == 1 );
 
-        for (int i = 0; i < 16; i++) {
-                *(int *)(arrPush(arr)) = i;
-        }
-        for (int i = 15; i >= 0; i--) {
-                ASSERT_TRUE("pop", *(int *)(arrPop(arr)) == i);
-        }
+    for ( int i = 0; i < 16; i++ ) {
+        *(int *)( arrPush( arr ) ) = i;
+    }
+    for ( int i = 15; i >= 0; i-- ) {
+        ASSERT_TRUE( "pop", *(int *)( arrPop( arr ) ) == i );
+    }
 
-        ASSERT_TRUE("pop empty", arrPop(arr) == NULL);
+    ASSERT_TRUE( "pop empty", arrPop( arr ) == NULL );
 
-        // check properties again after growing
-        //
-        // no change
-        ASSERT_TRUE("slot size", arr->slot_byte_size == sizeof(int));
-        ASSERT_TRUE("slots/line", arr->slots_per_line == 2);
-        ASSERT_TRUE("sbits", arr->sbits == 1);
-        ASSERT_TRUE("mask", arr->mask == 1);
+    // check properties again after growing
+    //
+    // no change
+    ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
+    ASSERT_TRUE( "slots/line", arr->slots_per_line == 2 );
+    ASSERT_TRUE( "sbits", arr->sbits == 1 );
+    ASSERT_TRUE( "mask", arr->mask == 1 );
 
-        // change
-        ASSERT_TRUE("num_line", vecSize(arr->lines) == 8);
-        ASSERT_TRUE("cap", arr->cap == 16);
+    // change
+    ASSERT_TRUE( "num_line", vecSize( arr->lines ) == 8 );
+    ASSERT_TRUE( "cap", arr->cap == 16 );
 
-        arrFree(arr);
-        return NULL;
+    arrFree( arr );
+    return NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -98,46 +98,46 @@ test_stk_grow_cap()
 //-----------------------------------------------------------------------------
 
 static char *
-test_stk_int()
+test_stk_int( )
 {
-        struct arr *arr = ARR_STACK_NEW(int);
-        ARR_PUSH(arr, 3);
-        ASSERT_TRUE("empty", 0 == arrIsEmpty(arr));
+    struct arr *arr = ARR_STACK_NEW( int );
+    ARR_PUSH( arr, 3 );
+    ASSERT_TRUE( "empty", 0 == arrIsEmpty( arr ) );
 
-        int v;
-        ARR_POP(v, arr);
+    int v;
+    ARR_POP( v, arr );
 
-        ASSERT_TRUE("v", 3 == v);
-        ASSERT_TRUE("empty", 1 == arrIsEmpty(arr));
-        arrFree(arr);
-        return NULL;
+    ASSERT_TRUE( "v", 3 == v );
+    ASSERT_TRUE( "empty", 1 == arrIsEmpty( arr ) );
+    arrFree( arr );
+    return NULL;
 }
 
 static char *
-test_stk_int_ptr()
+test_stk_int_ptr( )
 {
-        struct arr *arr = ARR_STACK_NEW(int *);
-        int x           = 3;
-        ARR_PUSH(arr, &x);
-        ASSERT_TRUE("empty", 0 == arrIsEmpty(arr));
+    struct arr *arr = ARR_STACK_NEW( int * );
+    int         x   = 3;
+    ARR_PUSH( arr, &x );
+    ASSERT_TRUE( "empty", 0 == arrIsEmpty( arr ) );
 
-        int *v;
-        ARR_POP(v, arr);
+    int *v;
+    ARR_POP( v, arr );
 
-        ASSERT_TRUE("v", 3 == *v);
-        ASSERT_TRUE("empty", 1 == arrIsEmpty(arr));
-        arrFree(arr);
-        return NULL;
+    ASSERT_TRUE( "v", 3 == *v );
+    ASSERT_TRUE( "empty", 1 == arrIsEmpty( arr ) );
+    arrFree( arr );
+    return NULL;
 }
 
-DECLARE_TEST_SUITE(base_mm)
+DECLARE_TEST_SUITE( base_mm )
 {
-        RUN_TEST(test_stk_empty);
-        RUN_TEST(test_stk_alloc);
-        RUN_TEST(test_stk_push_pop);
-        RUN_TEST(test_stk_grow_cap);
+    RUN_TEST( test_stk_empty );
+    RUN_TEST( test_stk_alloc );
+    RUN_TEST( test_stk_push_pop );
+    RUN_TEST( test_stk_grow_cap );
 
-        RUN_TEST(test_stk_int);
-        RUN_TEST(test_stk_int_ptr);
-        return NULL;
+    RUN_TEST( test_stk_int );
+    RUN_TEST( test_stk_int_ptr );
+    return NULL;
 }

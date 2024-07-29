@@ -15,16 +15,16 @@
 //
 // error:
 //     -1 for not found
-long bitOpsNextZero(const unsigned long *p, unsigned long num_longs);
+long bitOpsNextZero( const unsigned long *p, unsigned long num_longs );
 
 // return the bit value (0/1) for current value (before mutation)
 //
 // note:
 //     The memory addressed by p with offset_bits shifted should be valid.
 //     All apis will not check for this validness.
-long bitOpsSetBit(unsigned long *p, unsigned long offset_bits);
-long bitOpsClrBit(unsigned long *p, unsigned long offset_bits);
-long bitOpsGetBit(const unsigned long *p, unsigned long offset_bits);
+long bitOpsSetBit( unsigned long *p, unsigned long offset_bits );
+long bitOpsClrBit( unsigned long *p, unsigned long offset_bits );
+long bitOpsGetBit( const unsigned long *p, unsigned long offset_bits );
 
 // return the next 2 power value not smaller than v and the num_bits shift to
 // get it.
@@ -36,6 +36,6 @@ long bitOpsGetBit(const unsigned long *p, unsigned long offset_bits);
 // error:
 //     If unsigned long is 64 bits and v is > 1<<63, this api will set
 //     num_bits as -1 and return 0.
-unsigned long bitOpsNext2Power(const unsigned long v, _out_ long *num_bits);
+unsigned long bitOpsNext2Power( const unsigned long v, _out_ long *num_bits );
 
 #endif  // EVA_BITOPS_H_

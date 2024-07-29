@@ -44,8 +44,8 @@
 typedef char *sds_t;
 
 struct sds_head {
-        size_t len;
-        size_t alloc;
+    size_t len;
+    size_t alloc;
 };
 
 // allocator and free fns.
@@ -54,82 +54,86 @@ struct sds_head {
 // - sdsEmpty         is basically sdsNew("");
 // - sdsEmptyWithCap  good for creating a sds with known cap.
 // - sdsDup           dups a sds.
-sds_t sdsNew(const char *init);
-sds_t sdsEmpty(void);
-sds_t sdsEmptyWithCap(size_t cap);
-sds_t sdsDup(const sds_t s);
-void sdsFree(sds_t s);
+sds_t sdsNew( const char *init );
+sds_t sdsEmpty( void );
+sds_t sdsEmptyWithCap( size_t cap );
+sds_t sdsDup( const sds_t s );
+void  sdsFree( sds_t s );
 
-#define sdsClear(s)       _sdsClear(s)  // clear to 0-len str
-#define sdsLen(s)         _sdsLen(s)
-#define sdsCap(s)         _sdsCap(s)
-#define sdsAvail(s)       _sdsAvail(s)
-#define sdsSetLen(s, l)   _sdsSetLen((s), (l))    // caller checks invariance
-#define sdsSetCap(s, l)   _sdsSetCap((s), (l))    // caller checks invariance
-#define sdsIncLen(s, inc) _sdsIncLen((s), (inc))  // caller checks invariance
+#define sdsClear( s ) _sdsClear( s )  // clear to 0-len str
+#define sdsLen( s )   _sdsLen( s )
+#define sdsCap( s )   _sdsCap( s )
+#define sdsAvail( s ) _sdsAvail( s )
+#define sdsSetLen( s, l ) \
+    _sdsSetLen( ( s ), ( l ) )  // caller checks invariance
+#define sdsSetCap( s, l ) \
+    _sdsSetCap( ( s ), ( l ) )  // caller checks invariance
+#define sdsIncLen( s, inc ) \
+    _sdsIncLen( ( s ), ( inc ) )  // caller checks invariance
 
 // allocte enough space (typically larger) for the new_len.
-void sdsReserve(_mut_ sds_t *s, size_t new_len);
+void sdsReserve( _mut_ sds_t *s, size_t new_len );
 
 // concatenate at the end of sds.
-void sdsCat(_mut_ sds_t *s, const char *t);
-void sdsCatSds(_mut_ sds_t *s, const sds_t t);
-void sdsCatLen(_mut_ sds_t *s, const void *t, size_t len);
-void sdsCatVprintf(_mut_ sds_t *s, const char *fmt, va_list ap);
-void sdsCatPrintf(_mut_ sds_t *s, const char *fmt, ...);
+void sdsCat( _mut_ sds_t *s, const char *t );
+void sdsCatSds( _mut_ sds_t *s, const sds_t t );
+void sdsCatLen( _mut_ sds_t *s, const void *t, size_t len );
+void sdsCatVprintf( _mut_ sds_t *s, const char *fmt, va_list ap );
+void sdsCatPrintf( _mut_ sds_t *s, const char *fmt, ... );
 
 // copy t to sds (overwriting existing content).
-void sdsCpyLen(_mut_ sds_t *s, const char *t, size_t len);
-void sdsCpy(_mut_ sds_t *s, const char *t);
+void sdsCpyLen( _mut_ sds_t *s, const char *t, size_t len );
+void sdsCpy( _mut_ sds_t *s, const char *t );
 
-int sdsCmp(const sds_t s1, const sds_t s2);
+int sdsCmp( const sds_t s1, const sds_t s2 );
 
 // -----------------------------------------------------------------------------
 // impl of static inline fns.
 // -----------------------------------------------------------------------------
 
-#define SDS_HEAD(s) ((struct sds_head *)((s) - (sizeof(struct sds_head))))
+#define SDS_HEAD( s ) \
+    ( (struct sds_head *)( ( s ) - ( sizeof( struct sds_head ) ) ) )
 static inline size_t
-_sdsLen(const sds_t s)
+_sdsLen( const sds_t s )
 {
-        return s == NULL ? 0 : SDS_HEAD(s)->len;
-}
-static inline size_t
-_sdsCap(const sds_t s)
-{
-        return s == NULL ? 0 : SDS_HEAD(s)->alloc;
+    return s == NULL ? 0 : SDS_HEAD( s )->len;
 }
 static inline size_t
-_sdsAvail(const sds_t s)
+_sdsCap( const sds_t s )
 {
-        if (s == NULL) return 0;
-        struct sds_head *p = SDS_HEAD(s);
-        return p->alloc - p->len;
+    return s == NULL ? 0 : SDS_HEAD( s )->alloc;
+}
+static inline size_t
+_sdsAvail( const sds_t s )
+{
+    if ( s == NULL ) return 0;
+    struct sds_head *p = SDS_HEAD( s );
+    return p->alloc - p->len;
 }
 static inline void
-_sdsSetLen(const sds_t s, size_t newlen)
+_sdsSetLen( const sds_t s, size_t newlen )
 {
-        assert(s != NULL);
-        SDS_HEAD(s)->len = newlen;
+    assert( s != NULL );
+    SDS_HEAD( s )->len = newlen;
 }
 static inline void
-_sdsIncLen(const sds_t s, size_t inc)
+_sdsIncLen( const sds_t s, size_t inc )
 {
-        assert(s != NULL);
-        SDS_HEAD(s)->len += inc;
+    assert( s != NULL );
+    SDS_HEAD( s )->len += inc;
 }
 static inline void
-_sdsSetCap(const sds_t s, size_t newcap)
+_sdsSetCap( const sds_t s, size_t newcap )
 {
-        assert(s != NULL);
-        SDS_HEAD(s)->alloc = newcap;
+    assert( s != NULL );
+    SDS_HEAD( s )->alloc = newcap;
 }
 static inline void
-_sdsClear(sds_t s)
+_sdsClear( sds_t s )
 {
-        assert(s != NULL);
-        sdsSetLen(s, 0);
-        s[0] = '\0';
+    assert( s != NULL );
+    sdsSetLen( s, 0 );
+    s[0] = '\0';
 }
 
 #endif  // EVA_SDS_H_

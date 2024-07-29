@@ -22,7 +22,8 @@
 // - If flag == FORK_JOIN_ADDR_PTR_TO_PTR
 //     arg_ptr == *(args + nbytes * i) for i = 0, 1, .., parallelism-1.
 //
-extern error_t fork_join_launch(size_t parallelism, void *(*fn_to_run)(void *),
-                                void *args, size_t nbytes, int flag);
+extern error_t fork_join_launch( size_t parallelism,
+                                 void *( *fn_to_run )(void *), void *args,
+                                 size_t nbytes, int flag );
 
 #endif  // EVA_FORK_JOIN_H_

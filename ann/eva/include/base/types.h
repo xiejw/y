@@ -11,11 +11,11 @@
 // reconcile int types
 // also see https://github.com/torvalds/linux/blob/master/include/linux/types.h
 typedef uint64_t u64_t;
-typedef int64_t i64_t;
+typedef int64_t  i64_t;
 typedef uint32_t u32_t;
-typedef int32_t i32_t;
-typedef float f32_t;
-typedef double f64_t;
+typedef int32_t  i32_t;
+typedef float    f32_t;
+typedef double   f64_t;
 
 // func parameter annotation
 #define _mut_       // the field might be mutated if new address is allocated
@@ -24,4 +24,4 @@ typedef double f64_t;
 #define _moved_in_  // the ownership is moved into the method
 #define _null_      // nullable
 
-#endif              // EVA_BASE_TYPES_
+#endif  // EVA_BASE_TYPES_

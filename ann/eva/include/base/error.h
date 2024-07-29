@@ -63,33 +63,35 @@ typedef int error_t;
 // apis for error handling
 // -----------------------------------------------------------------------------
 
-extern error_t errNew(const char *fmt, ...);
-extern error_t errNewWithNote(error_t err, const char *fmt, ...);
-extern error_t errEmitNote(const char *fmt, ...);
-extern void errFree(void);
+extern error_t errNew( const char *fmt, ... );
+extern error_t errNewWithNote( error_t err, const char *fmt, ... );
+extern error_t errEmitNote( const char *fmt, ... );
+extern void    errFree( void );
 
-extern error_t errNum(void);      // error must be set already
-extern error_t errNumOrOK(void);  // ret OK if no error
-extern void errDump(const char *, ...);
-extern void errDumpSds(void *sds, const char *, ...);  // _mut_ sds_t * for sds
+extern error_t errNum( void );      // error must be set already
+extern error_t errNumOrOK( void );  // ret OK if no error
+extern void    errDump( const char *, ... );
+extern void    errDumpSds( void *sds, const char *,
+                           ... );  // _mut_ sds_t * for sds
 
-#define errFatalAndExit(fmt, ...) \
-        errFatalAndExit_(__FILE__, __LINE__, fmt, __VA_ARGS__)
-#define errFatalAndExit1(fmt) errFatalAndExit_(__FILE__, __LINE__, fmt)
+#define errFatalAndExit( fmt, ... ) \
+    errFatalAndExit_( __FILE__, __LINE__, fmt, __VA_ARGS__ )
+#define errFatalAndExit1( fmt ) errFatalAndExit_( __FILE__, __LINE__, fmt )
 
 // alias
-#define errPanic(...) errFatalAndExit_(__FILE__, __LINE__, __VA_ARGS__)
+#define errPanic( ... ) errFatalAndExit_( __FILE__, __LINE__, __VA_ARGS__ )
 
 // -----------------------------------------------------------------------------
 // helper macro.
 // -----------------------------------------------------------------------------
-#define errMalloc()                                                        \
-        errNewWithNote(EMALLOC, "malloc err. file: %s, loc: %d", __FILE__, \
-                       __LINE__)
+#define errMalloc( )                                                    \
+    errNewWithNote( EMALLOC, "malloc err. file: %s, loc: %d", __FILE__, \
+                    __LINE__ )
 
 // -----------------------------------------------------------------------------
 // private prototype.
 // -----------------------------------------------------------------------------
-extern error_t errFatalAndExit_(char *file, int line_no, const char *fmt, ...);
+extern error_t errFatalAndExit_( char *file, int line_no, const char *fmt,
+                                 ... );
 
 #endif  // EVA_ERROR_H_

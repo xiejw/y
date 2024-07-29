@@ -70,54 +70,54 @@
 
 extern int tests_run;  // see "test_main.h"
 
-#define RUN_TEST(test) _RUN_TEST_IMPL(test, #test)
+#define RUN_TEST( test ) _RUN_TEST_IMPL( test, #test )
 
-#define _RUN_TEST_IMPL(test, name)              \
-        do {                                    \
-                char *msg;                      \
-                printf("  Running: %s", name);  \
-                msg = (test)();                 \
-                tests_run++;                    \
-                if (msg != NULL) {              \
-                        printf("...Failed.\n"); \
-                        return msg;             \
-                } else {                        \
-                        printf(".\n");          \
-                }                               \
-        } while (0)
+#define _RUN_TEST_IMPL( test, name )     \
+    do {                                 \
+        char *msg;                       \
+        printf( "  Running: %s", name ); \
+        msg = (test)( );                 \
+        tests_run++;                     \
+        if ( msg != NULL ) {             \
+            printf( "...Failed.\n" );    \
+            return msg;                  \
+        } else {                         \
+            printf( ".\n" );             \
+        }                                \
+    } while ( 0 )
 
-#define RUN_SUITE(test)                      \
-        do {                                 \
-                char *msg = (test)();        \
-                if (msg != NULL) return msg; \
-        } while (0)
+#define RUN_SUITE( test )              \
+    do {                               \
+        char *msg = (test)( );         \
+        if ( msg != NULL ) return msg; \
+    } while ( 0 )
 
 // -----------------------------------------------------------------------------
 // declare suite
 // -----------------------------------------------------------------------------
 
-#define DECLARE_TEST_SUITE(suite_name)                                        \
-        _Pragma("clang diagnostic push")                                      \
-            _Pragma("clang diagnostic ignored \"-Wmissing-prototypes\"") char \
-                *run_##suite_name##_suite(void)                               \
-                    _Pragma("clang diagnostic pop")
+#define DECLARE_TEST_SUITE( suite_name )                                      \
+    _Pragma( "clang diagnostic push" )                                        \
+        _Pragma( "clang diagnostic ignored \"-Wmissing-prototypes\"" ) char * \
+            run_##suite_name##_suite( void ) _Pragma( "clang diagnostic pop" )
 
 // -----------------------------------------------------------------------------
 // assertion
 // -----------------------------------------------------------------------------
 
-#define ASSERT_TRUE(msg, test) _ASSERT_TRUE_IMPL(msg, test, __FILE__, __LINE__)
+#define ASSERT_TRUE( msg, test ) \
+    _ASSERT_TRUE_IMPL( msg, test, __FILE__, __LINE__ )
 
-#define _ASSERT_TRUE_IMPL(msg, test, file, lineno)       \
-        do {                                             \
-                if (!(test)) {                           \
-                        _ASSERT_PRINT_LOC(file, lineno); \
-                        return msg;                      \
-                }                                        \
-        } while (0)
+#define _ASSERT_TRUE_IMPL( msg, test, file, lineno ) \
+    do {                                             \
+        if ( !( test ) ) {                           \
+            _ASSERT_PRINT_LOC( file, lineno );       \
+            return msg;                              \
+        }                                            \
+    } while ( 0 )
 
 // print the location in two lines with yellow color
-#define _ASSERT_PRINT_LOC(file, lineno) \
-        printf("\n\033[1;33m-> File: %s\n-> Line %d\033[0m\n", file, lineno)
+#define _ASSERT_PRINT_LOC( file, lineno ) \
+    printf( "\n\033[1;33m-> File: %s\n-> Line %d\033[0m\n", file, lineno )
 
 #endif  // EVA_TESTING_H_
