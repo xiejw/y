@@ -81,11 +81,11 @@ if [[ "$HOSTNAME" =~ dt ]]; then
   # for fd-find
   export PATH=$PATH:/usr/lib/cargo/bin/
   # for bat
-  alias batcli=batcat
+  alias batcli=batcat --theme="Sublime Snazzy"
 elif [[ "$HOSTNAME" =~ u24 ]]; then
   export PATH=$PATH:/usr/lib/cargo/bin/
 else
-  alias batcli=bat
+  alias batcli=bat --theme="Sublime Snazzy"
 fi
 
 # ------------------------------------------------------------------------------
@@ -145,7 +145,6 @@ alias ta3='tmux attach -t 3 -d'
 # docker
 alias d='docker'
 alias dr='docker run --rm -ti'
-alias drv='docker run --rm -ti -v `pwd`:/workdir'
 
 # make
 alias m='make'
@@ -161,7 +160,10 @@ alias vf='vim `fzf`'
 alias vv='vim -c ":call fns#LoadPendingFiles()"'
 
 # bat
-alias less='batcli --theme="Sublime Snazzy"'
+#
+# NOTE: 2024-07-31: bat is not a drop-in replacement. This breaks several
+# workflows.
+# alias less='batcli --theme="Sublime Snazzy"'
 
 # fd
 alias fd='fd -c always'
@@ -179,7 +181,6 @@ fi
 eval "$(zoxide init bash)"
 alias w='z'
 
-#
 # ==============================================================================
 # builds
 # ==============================================================================
