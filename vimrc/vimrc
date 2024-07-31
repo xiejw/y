@@ -31,6 +31,8 @@ set foldlevel=1         " folds with a higher level will be closed
 set foldcolumn=0        " >0, show a col in the specified width indicating fold
 set nospell             " disable spell. spelllang=en_us
 set nowrapscan          " disable searches wrapping around the end of the file
+set list                " the next two lines shows the tab as special symbols
+set listchars=tab:>-
 
 set wildmenu            " possible matches are shown just above the command line
 set wildmode=longest:full " emacs-style filename matching
