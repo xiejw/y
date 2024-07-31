@@ -13,14 +13,6 @@
 #     make fmt
 #     make clean
 #     make test
-#
-# If you are building eva, run
-#
-#     make libeva_release
-#     make eva             # alias
-#
-#     make libeve_release
-#     make eve             # alias
 
 # ------------------------------------------------------------------------------
 # Color Configurations
@@ -32,8 +24,6 @@ C_REST = \033[0m
 CC    ?= clang
 MK     = make --no-print-directory
 
-TEST_TITLE = '!!!! run tests for all components (/tmp/y_<project_name>.txt)'
-
 ifdef V
 STDOUT_ROUTE = | tee
 else
@@ -41,47 +31,34 @@ STDOUT_ROUTE = >
 endif
 
 .PHONY: install test fmt clean
-.PHONY: eva libeva_release  libeve_release
 
 # ------------------------------------------------------------------------------
 # Maintaince actions
 
 fmt:
-	@$(call FMT_DIR, dotfiles)
-	@$(call FMT_DIR, tools)
-	@$(call FMT_DIR, ann/eva)
-	@$(call FMT_DIR, ann/eve)
-	@$(call FMT_DIR, ann/luna)
-	@$(call FMT_DIR, ann/taocp/v4-dancing-link)
-	@$(call FMT_DIR, ann/taocp/v4-horn-clause)
-	@$(call FMT_DIR, ann/tlpi/chp62_term)
+	@echo -n ""                                   && \
+	$(call FMT_DIR, dotfiles)                     && \
+	$(call FMT_DIR, tools)                        && \
+	$(call FMT_DIR, ann/eva)                      && \
+	$(call FMT_DIR, ann/eve)                      && \
+	$(call FMT_DIR, ann/luna)                     && \
+	$(call FMT_DIR, ann/taocp/v4-dancing-link)    && \
+	$(call FMT_DIR, ann/taocp/v4-horn-clause)     && \
+	$(call FMT_DIR, ann/tlpi/chp62_term)          && \
+	echo "we are done!!!"
+
+test:
+	@echo -n ""                                   && \
+	$(call TEST_DIR, ann/eva)                     && \
+	$(call TEST_DIR, ann/eve)                     && \
+	$(call TEST_DIR, ann/luna)                    && \
+	$(call TEST_DIR, ann/taocp/v4-dancing-link)   && \
+	$(call TEST_DIR, ann/taocp/v4-horn-clause)    && \
+	$(call TEST_DIR, ann/tlpi/chp62_term)         && \
+	echo "we are good!!!"
 
 clean:
 	go run tools/delete_unused_dirs.go
-
-test:
-	@echo "${C_ALRT}${TEST_TITLE}${C_REST}"                && \
-		$(call TEST_DIR,ann/eva)                       && \
-		$(call TEST_DIR,ann/eve)                       && \
-		$(call TEST_DIR,ann/luna)                      && \
-		$(call TEST_DIR, ann/taocp/v4-dancing-link)    && \
-		$(call TEST_DIR, ann/taocp/v4-horn-clause)     && \
-		$(call TEST_DIR, ann/tlpi/chp62_term)          && \
-		echo "${C_ALRT}DONE${C_REST}"
-
-# ------------------------------------------------------------------------------
-# Lib eva/eva related
-#
-
-eva: libeva_release
-
-libeva_release:
-	make -C ann/eva release
-
-eve: libeve_release
-
-libeve_release:
-	make -C ann/eve release
 
 # ------------------------------------------------------------------------------
 # Install
@@ -112,7 +89,6 @@ install:
 	@echo "##################################"
 
 
-
 # ==============================================================================
 # Templates
 #
@@ -121,7 +97,7 @@ install:
 # Usage:
 #     $(call FMT_DIR,dir_name)
 define FMT_DIR
-	@echo "${C_INFO}fmt $(1)${C_REST}"
+	echo "${C_INFO}fmt $(1)${C_REST}"
 	${MK} -C $(1) fmt
 endef
 

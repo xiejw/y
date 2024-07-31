@@ -2,9 +2,6 @@
 
 FMT_FOLDERS     = cmd c
 
-CLANG_EXTS      = -iname *.h -o -iname *.c
-CLANG_FMT       = clang-format -i --style=file
-
 CFLAGS         +=-std=c99 -O2 -Wall -Werror -pedantic -Wno-c11-extensions
 
 # -------
@@ -25,7 +22,7 @@ nginxfmt:
 # maintenance
 #
 fmt:
-	find ${FMT_FOLDERS} ${CLANG_EXTS} | xargs ${CLANG_FMT}
+	~/Workspace/y/tools/clang_format_all.sh ${FMT_FOLDERS}
 
 clean:
 	rm -rf bin
