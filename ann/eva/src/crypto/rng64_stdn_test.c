@@ -8,7 +8,7 @@
 #define SIZE 4
 
 static char *
-test_normal_f64( )
+test_normal_f64( void )
 {
     struct rng64 *rng = rng64New( 456L );
 
@@ -23,7 +23,7 @@ test_normal_f64( )
 }
 
 static char *
-test_normal_f32( )
+test_normal_f32( void )
 {
     struct rng64 *rng = rng64New( 456L );
 

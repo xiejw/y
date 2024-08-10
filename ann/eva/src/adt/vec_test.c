@@ -3,7 +3,7 @@
 #include "adt/vec.h"
 
 static char *
-test_init( )
+test_init( void )
 {
     vec_t( int ) v = vecNew( );
     ASSERT_TRUE( "size is 0", vecSize( v ) == 0 );
@@ -14,7 +14,7 @@ test_init( )
 }
 
 static char *
-test_push_back( )
+test_push_back( void )
 {
     vec_t( int ) v = vecNew( );
     ASSERT_TRUE( "no err", OK == vecPushBack( &v, 123 ) );
@@ -26,7 +26,7 @@ test_push_back( )
 }
 
 static char *
-test_pop_back( )
+test_pop_back( void )
 {
     vec_t( int ) v = vecNew( );
     ASSERT_TRUE( "no err", OK == vecPushBack( &v, 123 ) );
@@ -40,7 +40,7 @@ test_pop_back( )
 }
 
 static char *
-test_extend( )
+test_extend( void )
 {
     vec_t( int ) v1 = vecNew( );
     vec_t( int ) v2 = vecNew( );
@@ -62,7 +62,7 @@ test_extend( )
 }
 
 static char *
-test_extend_null( )
+test_extend_null( void )
 {
     vec_t( int ) v1 = vecNew( );
     vec_t( int ) v2 = vecNew( );
@@ -82,7 +82,7 @@ test_extend_null( )
 }
 
 static char *
-test_reserve( )
+test_reserve( void )
 {
     vec_t( int ) v = vecNew( );
     vecReserve( &v, 100 );
@@ -93,7 +93,7 @@ test_reserve( )
 }
 
 static char *
-test_set_size( )
+test_set_size( void )
 {
     vec_t( size_t ) v = vecNew( );
     vecReserve( &v, 100 );
@@ -109,7 +109,7 @@ test_set_size( )
 }
 
 static char *
-test_grow( )
+test_grow( void )
 {
     vec_t( int ) v = vecNew( );
     ASSERT_TRUE( "no err", OK == vecReserve( &v, 2 ) );

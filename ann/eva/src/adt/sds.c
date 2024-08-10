@@ -38,7 +38,7 @@ sdsNew( const char *init )
 }
 
 sds_t
-sdsEmpty( )
+sdsEmpty( void )
 {
     return sdsNew( "" );
 }

@@ -75,14 +75,14 @@ errNew( const char *fmt, ... )
 
 // current error code.
 error_t
-errNum( )
+errNum( void )
 {
     assert( err_msg_header != NULL );
     return err_msg_header->err;
 }
 
 error_t
-errNumOrOK( )
+errNumOrOK( void )
 {
     if ( err_msg_header != NULL ) return err_msg_header->err;
     return OK;
@@ -90,7 +90,7 @@ errNumOrOK( )
 
 // clears all allocated objs for error messages. no-op if no error.
 void
-errFree( )
+errFree( void )
 {
     if ( err_msg_header == NULL ) return;
 

@@ -3,7 +3,7 @@
 #include "algos/regex.h"
 
 static char *
-test_head( )
+test_head( void )
 {
     int r = regex_match( "bc", "abc" );
     ASSERT_TRUE( "match", r == 1 );
@@ -17,7 +17,7 @@ test_head( )
 }
 
 static char *
-test_tail( )
+test_tail( void )
 {
     int r = regex_match( "b", "abc" );
     ASSERT_TRUE( "match", r == 1 );
@@ -31,7 +31,7 @@ test_tail( )
 }
 
 static char *
-test_dot( )
+test_dot( void )
 {
     int r = regex_match( "b.", "abc" );
     ASSERT_TRUE( "match", r == 1 );
@@ -45,7 +45,7 @@ test_dot( )
 }
 
 static char *
-test_dot_star( )
+test_dot_star( void )
 {
     int r = regex_match( "b.*c", "abc" );
     ASSERT_TRUE( "match", r == 1 );
@@ -62,7 +62,7 @@ test_dot_star( )
 }
 
 static char *
-test_star( )
+test_star( void )
 {
     int r = regex_match( "abcd*", "abc" );
     ASSERT_TRUE( "match", r == 1 );

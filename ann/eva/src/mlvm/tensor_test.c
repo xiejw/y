@@ -5,7 +5,7 @@
 #include <mlvm/vm.h>
 
 static char *
-test_tensor_new( )
+test_tensor_new( void )
 {
     struct vm *vm = vmNew( );
 
@@ -22,7 +22,7 @@ test_tensor_new( )
 }
 
 static char *
-test_tensor_info( )
+test_tensor_info( void )
 {
     struct vm *vm = vmNew( );
 
@@ -49,7 +49,7 @@ test_tensor_info( )
 }
 
 static char *
-test_tensor_data( )
+test_tensor_data( void )
 {
     struct vm *vm = vmNew( );
 
@@ -79,7 +79,7 @@ test_tensor_data( )
 }
 
 static char *
-test_tensor_swap( )
+test_tensor_swap( void )
 {
     struct vm *vm = vmNew( );
 

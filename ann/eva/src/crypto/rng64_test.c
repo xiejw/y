@@ -14,7 +14,7 @@ static char *assertArrayEqual( u64_t *expected, u64_t *got, size_t size );
 // unit tests
 // -----------------------------------------------------------------------------
 static char *
-test_u64( )
+test_u64( void )
 {
     struct rng64 *rng = rng64New( 456L );
     ASSERT_TRUE( "uint64", 1843008821991917904 == rng64U64( rng ) );
@@ -23,7 +23,7 @@ test_u64( )
 }
 
 static char *
-test_split( )
+test_split( void )
 {
     struct rng64 *r1 = rng64New( 456L );
     struct rng64 *r2 = rng64Split( r1 );
@@ -59,7 +59,7 @@ test_split( )
 }
 
 static char *
-test_to_and_from( )
+test_to_and_from( void )
 {
     // split r and store the new rng into r
 #define SPLIT_AND_DISCARD( r )             \

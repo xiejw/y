@@ -7,7 +7,7 @@
 #include <adt/sds.h>
 
 static char *
-test_non_zero( )
+test_non_zero( void )
 {
     error_t err = errNewWithNote( -123, "test error" );
     ASSERT_TRUE( "err  code", -123 == err );
@@ -17,7 +17,7 @@ test_non_zero( )
 }
 
 static char *
-test_dump_sds( )
+test_dump_sds( void )
 {
     error_t err = errNewWithNote( -123, "test error" );
     ASSERT_TRUE( "err  code", -123 == err );
@@ -46,7 +46,7 @@ test_fn_for_pthread( void *unused )
 }
 
 static char *
-test_pthreads( )
+test_pthreads( void )
 {
     error_t   err = errNewWithNote( -456, "test error" );
     pthread_t p;

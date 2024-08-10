@@ -8,7 +8,7 @@
 #define BITS_PER_LONG ( sizeof( unsigned long ) * BITS_PER_BYTE )
 
 static char *
-test_empty( )
+test_empty( void )
 {
     unsigned long *p = NULL;
     long           r = bitOpsNextZero( p, 0 );
@@ -17,7 +17,7 @@ test_empty( )
 }
 
 static char *
-test_no_zeros( )
+test_no_zeros( void )
 {
     unsigned long p = ULONG_MAX;
     long          r = bitOpsNextZero( &p, 1 );
@@ -26,7 +26,7 @@ test_no_zeros( )
 }
 
 static char *
-test_long( )
+test_long( void )
 {
     for ( size_t i = 0; i < sizeof( unsigned long ) * 8; i++ ) {
         unsigned long p = 0;
@@ -41,7 +41,7 @@ test_long( )
 }
 
 static char *
-test_longs( )
+test_longs( void )
 {
     unsigned long longs[3];
     longs[0] = ULONG_MAX;
@@ -60,7 +60,7 @@ test_longs( )
 }
 
 static char *
-test_get_bits( )
+test_get_bits( void )
 {
     unsigned long bit_for_zero = 11;
     unsigned long longs[3];
@@ -87,7 +87,7 @@ test_get_bits( )
 }
 
 static char *
-test_set_bits( )
+test_set_bits( void )
 {
     unsigned long longs[2];
     unsigned long p = 0;
@@ -113,7 +113,7 @@ test_set_bits( )
 }
 
 static char *
-test_clr_bits( )
+test_clr_bits( void )
 {
     unsigned long longs[2];
     unsigned long p = 0;
@@ -139,7 +139,7 @@ test_clr_bits( )
 }
 
 static char *
-test_next_2_power( )
+test_next_2_power( void )
 {
     long          bits = 7L;  // any random value
     unsigned long r;
@@ -168,7 +168,7 @@ test_next_2_power( )
 }
 
 static char *
-test_next_2_power_overflow( )
+test_next_2_power_overflow( void )
 {
     const unsigned long max_ulong_supported = 1UL << ( BITS_PER_LONG - 1 );
     unsigned long       r;

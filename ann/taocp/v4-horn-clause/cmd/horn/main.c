@@ -4,7 +4,7 @@
 #include <algos/horn.h>
 
 int
-main( )
+main( void )
 {
     printf( "horn clause satisfiability\n\n" );
     printf( "    clause: a_2\n" );

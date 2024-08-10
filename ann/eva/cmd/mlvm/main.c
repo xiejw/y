@@ -49,7 +49,7 @@
 #define DEFAULT_ITERATION_COUNT 10
 
 int
-main( )
+main( void )
 {
     error_t err = OK;
 

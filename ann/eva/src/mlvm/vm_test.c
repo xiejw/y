@@ -5,7 +5,7 @@
 #include <string.h>
 
 static char *
-test_vm_new( )
+test_vm_new( void )
 {
     struct vm *vm = vmNew( );
     ASSERT_TRUE( "vm", vm != NULL );
@@ -14,7 +14,7 @@ test_vm_new( )
 }
 
 static char *
-test_vm_exec( )
+test_vm_exec( void )
 {
     struct vm *vm = vmNew( );
 
@@ -57,7 +57,7 @@ test_vm_exec( )
 }
 
 static char *
-test_vm_batch( )
+test_vm_batch( void )
 {
     struct vm *vm = vmNew( );
 

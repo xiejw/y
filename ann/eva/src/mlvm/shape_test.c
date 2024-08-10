@@ -3,7 +3,7 @@
 #include <mlvm/vm.h>
 
 static char *
-test_shape_init( )
+test_shape_init( void )
 {
     struct vm_sp *s = spNew( 2, (int[]){ 3, 4 } );
     ASSERT_TRUE( "rank", s->rank == 2 );
@@ -15,7 +15,7 @@ test_shape_init( )
 }
 
 static char *
-test_shape_ref( )
+test_shape_ref( void )
 {
     struct vm_sp *s = spNew( 2, (int[]){ 3, 4 } );
     ASSERT_TRUE( "ref", s->ref_count == 1 );
@@ -28,7 +28,7 @@ test_shape_ref( )
 }
 
 static char *
-test_shape_rank0( )
+test_shape_rank0( void )
 {
     int           some_p[1] = { 2 };
     struct vm_sp *s         = spNew( 0, some_p );

@@ -1,7 +1,7 @@
 #include <testing/test_main.h>
 
 int
-main( )
+main( void )
 {
     // ---------------------------------------------------------------------------
     // Adds all suites.

@@ -11,7 +11,7 @@
 // impl for vm apis
 // -----------------------------------------------------------------------------
 struct vm *
-vmNew( )
+vmNew( void )
 {
     return calloc( 1, sizeof( struct vm ) );
 }

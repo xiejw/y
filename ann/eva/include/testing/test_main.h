@@ -27,7 +27,7 @@ static size_t        test_suite_count = 0;
 
 // Runs all suites and releases `test_suites`.
 static int
-run_all_suites( )
+run_all_suites( void )
 {
     // Runs all suites.
     int suites_failed = 0;

@@ -6,7 +6,7 @@
 #include <string.h>
 
 static char *
-test_join_empty( )
+test_join_empty( void )
 {
     sds_t e = sdsNew( "" );
     sds_t r = fpJoinSds( e, e );
@@ -19,7 +19,7 @@ test_join_empty( )
 }
 
 static char *
-test_join_e1_empty( )
+test_join_e1_empty( void )
 {
     sds_t e1 = sdsNew( "" );
     sds_t e2 = sdsNew( "a/b" );
@@ -34,7 +34,7 @@ test_join_e1_empty( )
 }
 
 static char *
-test_join_e1_empty_e2_with_suffix_slash( )
+test_join_e1_empty_e2_with_suffix_slash( void )
 {
     sds_t e1 = sdsNew( "" );
     sds_t e2 = sdsNew( "a/b/" );
@@ -50,7 +50,7 @@ test_join_e1_empty_e2_with_suffix_slash( )
 }
 
 static char *
-test_join_e2_empty( )
+test_join_e2_empty( void )
 {
     sds_t e1 = sdsNew( "a/b" );
     sds_t e2 = sdsNew( "" );
@@ -65,7 +65,7 @@ test_join_e2_empty( )
 }
 
 static char *
-test_join_e2_empty_e1_with_suffix_slash( )
+test_join_e2_empty_e1_with_suffix_slash( void )
 {
     sds_t e1 = sdsNew( "a/b/" );
     sds_t e2 = sdsNew( "" );
@@ -81,7 +81,7 @@ test_join_e2_empty_e1_with_suffix_slash( )
 }
 
 static char *
-test_join_common_case( )
+test_join_common_case( void )
 {
     sds_t e1       = sdsNew( "a" );
     sds_t e2       = sdsNew( "b" );
@@ -98,7 +98,7 @@ test_join_common_case( )
 }
 
 static char *
-test_join_e1_slash( )
+test_join_e1_slash( void )
 {
     sds_t e1       = sdsNew( "a/" );
     sds_t e2       = sdsNew( "b" );
@@ -115,7 +115,7 @@ test_join_e1_slash( )
 }
 
 static char *
-test_join_e2_slash( )
+test_join_e2_slash( void )
 {
     sds_t e1       = sdsNew( "a" );
     sds_t e2       = sdsNew( "b/" );
@@ -132,7 +132,7 @@ test_join_e2_slash( )
 }
 
 static char *
-test_join_both_slashes( )
+test_join_both_slashes( void )
 {
     sds_t e1       = sdsNew( "a/" );
     sds_t e2       = sdsNew( "b/" );
@@ -149,7 +149,7 @@ test_join_both_slashes( )
 }
 
 static char *
-test_split_ab( )
+test_split_ab( void )
 {
     sds_t e1 = sdsNew( "" );
     sds_t e2 = sdsNew( "" );
@@ -164,7 +164,7 @@ test_split_ab( )
 }
 
 static char *
-test_split_a( )
+test_split_a( void )
 {
     sds_t e1 = sdsNew( "" );
     sds_t e2 = sdsNew( "" );
@@ -179,7 +179,7 @@ test_split_a( )
 }
 
 static char *
-test_split_b( )
+test_split_b( void )
 {
     sds_t e1 = sdsNew( "" );
     sds_t e2 = sdsNew( "" );
@@ -194,7 +194,7 @@ test_split_b( )
 }
 
 static char *
-test_split_empty( )
+test_split_empty( void )
 {
     sds_t e1 = sdsNew( "" );
     sds_t e2 = sdsNew( "" );
@@ -209,7 +209,7 @@ test_split_empty( )
 }
 
 static char *
-test_exist( )
+test_exist( void )
 {
     char *filename      = "include/base/fpath.h";
     char *filename_fake = "include/base/fpath.h_fake";

@@ -6,7 +6,7 @@
 #include <string.h>
 
 static char *
-test_empty_str( )
+test_empty_str( void )
 {
     sds_t sds = sha256DigestStr( "" );
     ASSERT_TRUE( "digest", 0 == strcmp( "e3b0c44298fc1c149afbf4c8996fb92427ae"
@@ -18,7 +18,7 @@ test_empty_str( )
 }
 
 static char *
-test_str( )
+test_str( void )
 {
     sds_t sds = sha256DigestStr( "grape" );
     ASSERT_TRUE( "digest", 0 == strcmp( "0f78fcc486f5315418fbf095e71c0675ee07"
@@ -30,7 +30,7 @@ test_str( )
 }
 
 static char *
-test_sds( )
+test_sds( void )
 {
     sds_t msg = sdsNew( "grape" );
     sds_t sds = sha256DigestSds( msg );
@@ -44,7 +44,7 @@ test_sds( )
 }
 
 static char *
-test_str_padding_one_more( )
+test_str_padding_one_more( void )
 {
     // prepare a message with size as 64-9 < size < 64. so we need to pad
     // one more chunk (see sha256Finalize).
@@ -64,7 +64,7 @@ test_str_padding_one_more( )
 }
 
 static char *
-test_long_str( )
+test_long_str( void )
 {
     sds_t sds = sha256DigestStr(
         "Vanilla Policy Gradient is the most basic, entry-level algorithm "
@@ -90,7 +90,7 @@ test_long_str( )
 }
 
 static char *
-test_stream( )
+test_stream( void )
 {
     const char *msg = "grape";
 
@@ -109,7 +109,7 @@ test_stream( )
 }
 
 static char *
-test_file( )
+test_file( void )
 {
     sds_t   sds;
     error_t err = sha256DigestFile( "./doc/eva/license", &sds );

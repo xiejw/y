@@ -38,7 +38,7 @@ error_t expect_dump( struct vm *vm, int td, const char *expected );
 // -----------------------------------------------------------------------------
 
 static char *
-test_ele_ops( )
+test_ele_ops( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 1, 3 } );
@@ -73,7 +73,7 @@ test_ele_ops( )
 }
 
 static char *
-test_ele_ops_unequal_size( )
+test_ele_ops_unequal_size( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s1 = vmSpNew( vm, 2, (int[]){ 1, 4 } );
@@ -109,7 +109,7 @@ test_ele_ops_unequal_size( )
 }
 
 static char *
-test_ele_ops_scalar_operand( )
+test_ele_ops_scalar_operand( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 1, 3 } );
@@ -145,7 +145,7 @@ test_ele_ops_scalar_operand( )
 }
 
 static char *
-test_ele_ops_f_bit( )
+test_ele_ops_f_bit( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 1, 3 } );
@@ -178,7 +178,7 @@ test_ele_ops_f_bit( )
 }
 
 static char *
-test_matmul( )
+test_matmul( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 2, 2 } );
@@ -214,7 +214,7 @@ test_matmul( )
 }
 
 static char *
-test_argmax( )
+test_argmax( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s1 = vmSpNew( vm, 2, (int[]){ 2, 2 } );
@@ -235,7 +235,7 @@ test_argmax( )
 }
 
 static char *
-test_isqrt( )
+test_isqrt( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 2, 2 } );
@@ -267,7 +267,7 @@ test_isqrt( )
 }
 
 static char *
-test_reduce( )
+test_reduce( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 2, 3 } );
@@ -307,7 +307,7 @@ test_reduce( )
 }
 
 static char *
-test_rng( )
+test_rng( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 2, 3 } );
@@ -330,7 +330,7 @@ test_rng( )
 }
 
 static char *
-test_fill( )
+test_fill( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 2, 2 } );
@@ -357,7 +357,7 @@ test_fill( )
 }
 
 static char *
-test_ls_scel( )
+test_ls_scel( void )
 {
     struct vm    *vm = vmNew( );
     struct vm_sp *s  = vmSpNew( vm, 2, (int[]){ 2, 3 } );

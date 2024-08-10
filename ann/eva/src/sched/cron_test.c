@@ -8,7 +8,7 @@
 #define ASSERT_NO_ERR( expr ) ASSERT_TRUE( "no error.", 0 == ( expr ) )
 
 static char *
-test_minute( )
+test_minute( void )
 {
     // Wednesday, March 27, 2019 11:31:58 AM GMT-07:00 DST
     time_t           current_time = 1553711518;
@@ -23,7 +23,7 @@ test_minute( )
 }
 
 static char *
-test_hour( )
+test_hour( void )
 {
     // Wednesday, March 27, 2019 11:31:58 AM GMT-07:00 DST
     time_t           current_time = 1553711518;
@@ -38,7 +38,7 @@ test_hour( )
 }
 
 static char *
-test_hour_in_next_day( )
+test_hour_in_next_day( void )
 {
     // Wednesday, March 27, 2019 11:31:58 AM GMT-07:00 DST
     time_t           current_time = 1553711518;
@@ -53,7 +53,7 @@ test_hour_in_next_day( )
 }
 
 static char *
-test_end_to_end( )
+test_end_to_end( void )
 {
     // Wednesday, March 27, 2019 11:31:58 AM GMT-07:00 DST
     time_t           current_time = 1553711518;

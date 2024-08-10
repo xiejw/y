@@ -4,7 +4,7 @@
 #include <algos/horn.h>
 
 static char *
-test_new( )
+test_new( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
     hornFree( h );
@@ -12,7 +12,7 @@ test_new( )
 }
 
 static char *
-test_new_clause( )
+test_new_clause( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
 
@@ -45,7 +45,7 @@ test_new_clause( )
 }
 
 static char *
-test_core_no_progress( )
+test_core_no_progress( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
 
@@ -71,7 +71,7 @@ test_core_no_progress( )
 }
 
 static char *
-test_core_simple( )
+test_core_simple( void )
 {
     struct horn *h = hornNew( /*num_props=*/5 );
 
@@ -102,7 +102,7 @@ test_core_simple( )
 }
 
 static char *
-test_core_multiple( )
+test_core_multiple( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
 
@@ -127,7 +127,7 @@ test_core_multiple( )
 }
 
 static char *
-test_solve_easy( )
+test_solve_easy( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
 
@@ -148,7 +148,7 @@ test_solve_easy( )
 }
 
 static char *
-test_solve_no_solu( )
+test_solve_no_solu( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
 
@@ -173,7 +173,7 @@ test_solve_no_solu( )
 }
 
 static char *
-test_solve_simple( )
+test_solve_simple( void )
 {
     struct horn *h = hornNew( /*num_props=*/5 );
 
@@ -197,7 +197,7 @@ test_solve_simple( )
 }
 
 static char *
-test_solve_simple_not_indef( )
+test_solve_simple_not_indef( void )
 {
     struct horn *h = hornNew( /*num_props=*/5 );
 
@@ -221,7 +221,7 @@ test_solve_simple_not_indef( )
 }
 
 static char *
-test_solve_multiple( )
+test_solve_multiple( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
 
@@ -241,7 +241,7 @@ test_solve_multiple( )
 }
 
 static char *
-test_solve_multiple_no_solu( )
+test_solve_multiple_no_solu( void )
 {
     struct horn *h = hornNew( /*num_props=*/3 );
 

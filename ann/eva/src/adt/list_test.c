@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 static char *
-test_new( )
+test_new( void )
 {
     struct list *l = listNew( );
 
@@ -18,7 +18,7 @@ test_new( )
 }
 
 static char *
-test_free( )
+test_free( void )
 {
     struct list *l = listNew( );
     listSetFreeFn( l, free );
@@ -38,7 +38,7 @@ test_free( )
 }
 
 static char *
-test_iter( )
+test_iter( void )
 {
     struct list *l  = listNew( );
     char        *p1 = "str1";

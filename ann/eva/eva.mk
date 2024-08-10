@@ -2,7 +2,6 @@
 # Global Knobs
 #
 
-# NO_CLANG_FLAGS disable customized clang flags
 # NO_CLANG_ASAN  disable asan mode
 
 # ------------------------------------------------------------------------------
@@ -62,43 +61,6 @@ FMT             = ~/Workspace/y/tools/clang_format_all.sh
 CFLAGS          += -std=c11 -Wall -Werror -pedantic -Wfatal-errors
 CFLAGS          += -Wconversion -Wshadow
 CFLAGS          += -I${EVA_PATH}/include
-
-# --------------------------------
-# all flags I am testing with clang.
-# --------------------------------
-#
-# Use NO_CLANG_FLAGS=1 to skip.
-ifndef NO_CLANG_FLAGS
-
-CFLAGS          += -Wimplicit-int-conversion -Wimplicit-fallthrough
-CFLAGS          += -Wimplicit-float-conversion -Wimplicit-int-float-conversion
-CFLAGS          += -Wconversion -Waddress -Wcovered-switch-default
-CFLAGS          += -Wextra-semi-stmt -Wcstring-format-directive
-CFLAGS          += -Wno-unused-parameter -Wmissing-field-initializers
-CFLAGS          += -Wmisleading-indentation -Wno-unused-parameter
-CFLAGS          += -Wfloat-equal -Wcast-qual -Wshadow -Wsign-compare
-CFLAGS          += -Wmissing-prototypes -Wswitch-enum -Wunused-macros
-CFLAGS          += -Wmissing-variable-declarations -Wunreachable-code-return
-
-# Flags I want to try, namely "-Weverything", which is super restricitve.
-#
-# Here, I am testing it now with explicit flags turned off by manual checking
-# whether they make sense to my code.
-CFLAGS          += -Weverything
-CFLAGS          += -Wno-reserved-macro-identifier -Wno-reserved-identifier
-CFLAGS          += -Wno-declaration-after-statement -Wno-cast-align
-CFLAGS          += -Wno-format-nonliteral -Wno-padded
-CFLAGS          += -Wno-bad-function-cast -Wno-strict-prototypes
-CFLAGS          += -Wno-unsafe-buffer-usage
-CFLAGS          += -Wno-covered-switch-default
-CFLAGS          += -Wno-pre-c11-compat
-
-else
-
-# This is too restrict.
-CFLAGS          += -Wno-strict-prototypes
-
-endif  # NO_CLANG_FLAGS
 
 # --------------------------------
 # Error out asan if NO_CLANG_ASAN.

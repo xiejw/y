@@ -7,7 +7,7 @@
 //-----------------------------------------------------------------------------
 
 static char *
-test_stk_empty( )
+test_stk_empty( void )
 {
     struct arr *arr = arrStackNew( sizeof( int ), 2, 4 );
     ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
@@ -21,7 +21,7 @@ test_stk_empty( )
 }
 
 static char *
-test_stk_alloc( )
+test_stk_alloc( void )
 {
     struct arr *arr = arrStackNew( sizeof( int ), 3, 7 );
     ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
@@ -35,7 +35,7 @@ test_stk_alloc( )
 }
 
 static char *
-test_stk_push_pop( )
+test_stk_push_pop( void )
 {
     struct arr *arr = arrStackNew( sizeof( int ), 4, 16 );
     ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
@@ -58,7 +58,7 @@ test_stk_push_pop( )
 }
 
 static char *
-test_stk_grow_cap( )
+test_stk_grow_cap( void )
 {
     struct arr *arr = arrStackNew( sizeof( int ), 2, 4 );
     ASSERT_TRUE( "slot size", arr->slot_byte_size == sizeof( int ) );
@@ -98,7 +98,7 @@ test_stk_grow_cap( )
 //-----------------------------------------------------------------------------
 
 static char *
-test_stk_int( )
+test_stk_int( void )
 {
     struct arr *arr = ARR_STACK_NEW( int );
     ARR_PUSH( arr, 3 );
@@ -114,7 +114,7 @@ test_stk_int( )
 }
 
 static char *
-test_stk_int_ptr( )
+test_stk_int_ptr( void )
 {
     struct arr *arr = ARR_STACK_NEW( int * );
     int         x   = 3;

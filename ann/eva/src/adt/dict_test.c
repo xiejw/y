@@ -14,7 +14,7 @@
 // -----------------------------------------------------------------------------
 
 static char *
-test_high_level_str_no_dup_free_fn( )
+test_high_level_str_no_dup_free_fn( void )
 {
     struct dict t;
     dictStrInit( &t, NULL, NULL, NULL );
@@ -36,7 +36,7 @@ test_high_level_str_no_dup_free_fn( )
 }
 
 static char *
-test_high_level_str_dup_free_fn( )
+test_high_level_str_dup_free_fn( void )
 {
     struct dict t;
     dictStrInit( &t, NULL, dupFnStr, freeFnStr );
@@ -68,7 +68,7 @@ test_high_level_str_dup_free_fn( )
 }
 
 static char *
-test_high_level_ptr_no_dup_free_fn( )
+test_high_level_ptr_no_dup_free_fn( void )
 {
     struct dict t;
     dictPtrInit( &t, NULL, NULL, NULL );
@@ -92,7 +92,7 @@ test_high_level_ptr_no_dup_free_fn( )
 }
 
 static char *
-test_high_level_ptr_dup_free_fn( )
+test_high_level_ptr_dup_free_fn( void )
 {
     struct dict t;
     dictPtrInit( &t, NULL, dupFnStr, freeFnStr );
@@ -121,7 +121,7 @@ test_high_level_ptr_dup_free_fn( )
 }
 
 static char *
-test_high_level_i64_no_dup_free_fn( )
+test_high_level_i64_no_dup_free_fn( void )
 {
     struct dict t;
     dictI64Init( &t, NULL, NULL, NULL );
@@ -143,7 +143,7 @@ test_high_level_i64_no_dup_free_fn( )
 }
 
 static char *
-test_high_level_i64_dup_free_fn( )
+test_high_level_i64_dup_free_fn( void )
 {
     struct dict t;
     dictI64Init( &t, NULL, dupFnStr, freeFnStr );
@@ -182,7 +182,7 @@ static struct dict_type ty_str = {
 };
 
 static char *
-test_new( )
+test_new( void )
 {
     struct dict *t = dictNew( &ty_str, NULL );
     dictFree( t );
@@ -190,7 +190,7 @@ test_new( )
 }
 
 static char *
-test_init( )
+test_init( void )
 {
     struct dict t;
     dictInit( &t, &ty_str, NULL );
@@ -199,7 +199,7 @@ test_init( )
 }
 
 static char *
-test_add_and_find( )
+test_add_and_find( void )
 {
     struct dict *t = dictNew( &ty_str, NULL );
 
@@ -214,7 +214,7 @@ test_add_and_find( )
 }
 
 static char *
-test_delete( )
+test_delete( void )
 {
     struct dict *t = dictNew( &ty_str, NULL );
 
@@ -230,7 +230,7 @@ test_delete( )
 }
 
 static char *
-test_add_and_find_existed( )
+test_add_and_find_existed( void )
 {
     int          existed;
     struct dict *t = dictNew( &ty_str, NULL );
@@ -249,7 +249,7 @@ test_add_and_find_existed( )
 }
 
 static char *
-test_expand( )
+test_expand( void )
 {
     struct dict *t = dictNew( &ty_str, NULL );
 
@@ -281,7 +281,7 @@ static struct dict_type ty_i64 = {
 };
 
 static char *
-test_add_and_find_existed_i64( )
+test_add_and_find_existed_i64( void )
 {
     int          existed;
     struct dict *t = dictNew( &ty_i64, NULL );
@@ -319,7 +319,7 @@ static struct dict_type ty_sds_str = {
 };
 
 static char *
-test_sds_key_str_val( )
+test_sds_key_str_val( void )
 {
     struct dict *t = dictNew( &ty_sds_str, NULL );
 
