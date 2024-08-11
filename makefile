@@ -15,9 +15,9 @@
 #     make test
 
 
-WE_ARE_GOOD = echo "\n>>> We are good!!! <<<\n"
+WE_ARE_GOOD = echo -e "\n\e[32m>>> We are good!!! <<<\e[0m\n"
 
-.PHONY: install test fmt clean
+.PHONY: fmt test clean install
 
 # ------------------------------------------------------------------------------
 # Maintaince actions
