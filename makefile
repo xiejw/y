@@ -15,7 +15,7 @@
 #     make test
 
 
-WE_ARE_GOOD = echo -e "\n\e[32m>>> We are good!!! <<<\e[0m\n"
+WE_ARE_GOOD = printf "\n\e[1;32m>>> We are good!!! <<<\e[0m\n"
 
 .PHONY: fmt test clean install
 
