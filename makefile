@@ -11,8 +11,8 @@
 # If you are sanity checking (daily run), run
 #
 #     make fmt
-#     make clean
 #     make test
+#     make clean
 
 
 WE_ARE_GOOD = printf "\n\e[1;32m>>> We are good!!! <<<\e[0m\n"
@@ -33,13 +33,16 @@ fmt:
 	make -C ann/tlpi/chp62_term       fmt         && \
 	${WE_ARE_GOOD}
 
+# NOTE: keep eva and eve at the end to avoid re-compilation.
+# WHY:  The release eva/eve builds, required by other projects, clean the
+#       compilation cache. This makes the second `make test` run recompiles.
 test:
-	make -C ann/eva                   test        && \
-	make -C ann/eve                   test        && \
 	make -C ann/luna                  test        && \
 	make -C ann/taocp/v4-dancing-link test        && \
 	make -C ann/taocp/v4-horn-clause  test        && \
 	make -C ann/tlpi/chp62_term       test        && \
+	make -C ann/eva                   test        && \
+	make -C ann/eve                   test        && \
 	${WE_ARE_GOOD}
 
 clean:
