@@ -2,11 +2,11 @@
 #
 # Makefile for project y
 #
-# === HOW ===
-#
-# If you are bootstrap a machine, run
+# === BOOTSTRAP ===
 #
 #     make install
+#
+# === HOW ===
 #
 # If you are sanity checking (daily run), run
 #
@@ -14,21 +14,8 @@
 #     make clean
 #     make test
 
-# ------------------------------------------------------------------------------
-# Color Configurations
-#
-C_ALRT = \033[0;33m
-C_INFO = \033[0;32m
-C_REST = \033[0m
 
-CC    ?= clang
-MK     = make --no-print-directory
-
-ifdef V
-STDOUT_ROUTE = | tee
-else
-STDOUT_ROUTE = >
-endif
+WE_ARE_GOOD = echo "\n>>> We are good!!! <<<\n"
 
 .PHONY: install test fmt clean
 
@@ -36,26 +23,24 @@ endif
 # Maintaince actions
 
 fmt:
-	@echo -n ""                                   && \
-	$(call FMT_DIR, dotfiles)                     && \
-	$(call FMT_DIR, tools)                        && \
-	$(call FMT_DIR, ann/eva)                      && \
-	$(call FMT_DIR, ann/eve)                      && \
-	$(call FMT_DIR, ann/luna)                     && \
-	$(call FMT_DIR, ann/taocp/v4-dancing-link)    && \
-	$(call FMT_DIR, ann/taocp/v4-horn-clause)     && \
-	$(call FMT_DIR, ann/tlpi/chp62_term)          && \
-	echo "we are done!!!"
+	make -C dotfiles                  fmt         && \
+	make -C tools                     fmt         && \
+	make -C ann/eva                   fmt         && \
+	make -C ann/eve                   fmt         && \
+	make -C ann/luna                  fmt         && \
+	make -C ann/taocp/v4-dancing-link fmt         && \
+	make -C ann/taocp/v4-horn-clause  fmt         && \
+	make -C ann/tlpi/chp62_term       fmt         && \
+	${WE_ARE_GOOD}
 
 test:
-	@echo -n ""                                   && \
-	$(call TEST_DIR, ann/eva)                     && \
-	$(call TEST_DIR, ann/eve)                     && \
-	$(call TEST_DIR, ann/luna)                    && \
-	$(call TEST_DIR, ann/taocp/v4-dancing-link)   && \
-	$(call TEST_DIR, ann/taocp/v4-horn-clause)    && \
-	$(call TEST_DIR, ann/tlpi/chp62_term)         && \
-	echo "we are good!!!"
+	make -C ann/eva                   test        && \
+	make -C ann/eve                   test        && \
+	make -C ann/luna                  test        && \
+	make -C ann/taocp/v4-dancing-link test        && \
+	make -C ann/taocp/v4-horn-clause  test        && \
+	make -C ann/tlpi/chp62_term       test        && \
+	${WE_ARE_GOOD}
 
 clean:
 	go run tools/delete_unused_dirs.go
@@ -89,21 +74,3 @@ install:
 	@echo "##################################"
 
 
-# ==============================================================================
-# Templates
-#
-
-# Define a FMT_DIR func
-# Usage:
-#     $(call FMT_DIR,dir_name)
-define FMT_DIR
-	echo "${C_INFO}fmt $(1)${C_REST}"
-	${MK} -C $(1) fmt
-endef
-
-# Define a TEST_DIR func
-# Usage:
-#     $(call TEST_DIR,dir_name)
-define TEST_DIR
-        echo "${C_INFO}<==> `printf "%-10s" $(1)` ${C_REST}" && make -C $(1) test ${STDOUT_ROUTE} /tmp/y_`basename $(1)`.txt
-endef

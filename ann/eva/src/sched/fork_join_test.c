@@ -16,7 +16,7 @@ test_fn( void *arg )
 }
 
 static char *
-test_struct(void )
+test_struct( void )
 {
     struct test_data a[2] = {
         {.index = 10, .v = 0},
@@ -36,7 +36,7 @@ test_struct(void )
 }
 
 static char *
-test_struct_ptr(void )
+test_struct_ptr( void )
 {
     struct test_data *p1   = malloc( sizeof( *p1 ) );
     p1->index              = 10;
