@@ -32,7 +32,7 @@ BUILD_OBJ         = ${BUILD}/objs
 
 CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra -Wfatal-errors
 CXXFLAGS         += -Wconversion -Wshadow
-CXXFLAGS         += -I${EVE_PATH}include
+CXXFLAGS         += -I${EVE_PATH}/include
 
 FMT               = ~/Workspace/y/tools/clang_format_all.sh
 AR                = ar -cr

@@ -19,7 +19,7 @@ TEST_MODULES     += ${BUILD_OBJ}/testing_testing.o
 
 release:
 	@echo 'compile release libeve'
-	make -B -j RELEASE=1 libeve || exit 1
+	${MK} -B -j RELEASE=1 libeve || exit 1
 
 libeve: compile ${BUILD}/libeve.a
 
