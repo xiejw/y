@@ -8,12 +8,12 @@ LDFLAGS            += ${EVE_LIB}
 
 .DEFAULT_GOAL       = compile
 
-compile: ${BUILD}/main
+compile: ${BUILD}/main ${EVE_LIB}
 
-${BUILD}/main: ${SRCS} | ${BUILD}
+${BUILD}/main: ${SRCS} | ${BUILD} ${EVE_LIB}
 	${CXX} ${CXXFLAGS} -o $@ $^ ${LDFLAGS}
 
-run: compile
+run: ${BUILD}/main compile
 	${BUILD}/main
 
 test: compile
