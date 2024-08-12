@@ -9,9 +9,10 @@ namespace eve::tty {
 
 // -----------------------------------------------------------------------------
 // The Run sets terminal state correct for the cbreak mode (non-canonical)
-// and calls the CallbackFn for each key event..
+// and calls the CallbackFn for each key event.
 //
-// Upon return, it will always restore the terminal state.
+// Upon return, it will always restore the terminal state. Run never returns
+// OK.
 //
 // Protocol for the CallbackFn:
 //

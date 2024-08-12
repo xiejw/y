@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <cstring>
 
+#include <eve/base/log.h>
+
 #include "base.h"
 #include "tty.h"
 
@@ -13,51 +15,51 @@ auto GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t;
 auto
 main( ) -> int
 {
-    error_t err        = OK;
+    error_t Err        = OK;
     int     QuitSignal = 0;
 
     while ( 1 ) {
-        printf( "Your Choice? [Left or Right arrow to select]: \n" );
-        fflush( stdout );
+        logInfo( "Your Choice? [Left or Right arrow to select]:" );
 
-        err = Run( [&]( auto *info ) -> error_t {
+        Err = Run( [&]( auto *info ) -> error_t {
             return GetUserInput( QuitSignal, info );
         } );
-        if ( err == EEOF && QuitSignal == 1 ) {
-            printf( "Bye.\n" );
-            err = OK;
-            break;
-        }
-        if ( err == EEOF && QuitSignal == 0 ) {
-            continue;
+
+        // Handle the cases whether we should quite or continue.
+        if ( Err == ERR_EOF ) {
+            if ( QuitSignal == 1 ) {
+                logInfo( "Bye." );
+                Err = OK;
+                break;
+            }
+
+            continue;  // Next iteration.
         }
 
-        if ( err != OK ) {  // Now it is totally unexpected.
-            printf( "Unexpected error. Quit.\n" );
+        if ( Err != OK ) {  // Now it is totally unexpected.
+            logFatal( "Unexpected error. Quit." );
             break;
         }
     }
 
-    return err;
+    return Err;
 }
 
 auto
 GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t
 {
-    static int  answer      = 0;
-    static int  EscapeCount = 0;
-    const char *input       = Info->Str;
+    static int Answer      = 0;
+    static int EscapeCount = 0;
 
     if ( Info->Kind == KeyKind::Esc ) {
         if ( EscapeCount == 1 ) {
             QuitSignal = 1;
-            printf( "[Quit]\n" );
-            return EEOF;
+            logInfo( "[Quit]" );
+            return ERR_EOF;
         }
 
         EscapeCount++;
-        printf( "[Escape] One more time to quit.\n" );
-        fflush( stdout );
+        logInfo( "[Escape] One more time to quit." );
         return OK;
     }
 
@@ -65,28 +67,25 @@ GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t
 
     switch ( Info->Kind ) {
     case KeyKind::Enter:
-        printf( "[Enter] Choice %d\n", answer );
-        fflush( stdout );
+        logInfo( "[Enter] Choice %d", Answer );
         QuitSignal = 0;
-        return EEOF;
+        return ERR_EOF;
 
     case KeyKind::ArrowLeft:
-        answer--;
-        printf( "Choice %d\n", answer );
-        fflush( stdout );
+        Answer--;
+        logInfo( "Choice %d", Answer );
         return OK;
 
     case KeyKind::ArrowRight:
-        answer++;
-        printf( "Choice %d\n", answer );
-        fflush( stdout );
+        Answer++;
+        logInfo( "Choice %d", Answer );
         return OK;
 
     default:
-        if ( *input == '\x1b' ) {
+        const char *InputStr = Info->Str;
+        if ( *InputStr == '\x1b' ) {
             // Debugging Purpose.
-            printf( "[RAW %lu] ESC %s\n", strlen( input ), input + 1 );
-            fflush( stdout );
+            logInfo( "[RAW %lu] ESC %s", strlen( InputStr ), InputStr + 1 );
             return OK;
         }
         return OK;

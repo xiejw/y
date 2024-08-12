@@ -45,7 +45,7 @@ Reset( int fd, struct termios *prevTermios ) -> error_t
 //
 
 using KeyMapping = std::unordered_map<std::string_view, KeyKind>;
-std::unique_ptr<KeyMapping> Mapping{ };
+std::unique_ptr<KeyMapping> Mapping{ };  // Guarded by MappingOnceFlag.
 std::once_flag              MappingOnceFlag;
 
 auto
@@ -76,15 +76,16 @@ LookupMapping( const char *Str ) -> KeyKind
 auto
 Run( CallbackFn fn ) -> error_t
 {
-    error_t         err{ };
-    struct termios  save;          // Will be set later.
-    struct termios *psave = NULL;  // Upon save is set, point to save.
+    error_t         Err{ };
+    struct termios  SavedTerm;  // Will be set later.
+    struct termios *PtrToSavedTerm =
+        NULL;  // Upon SavedTerm is set, point to SavedTerm.
 
-    err = SetCbreak( 0, &save );
-    if ( err != OK ) {
+    Err = SetCbreak( 0, &SavedTerm );
+    if ( Err != OK ) {
         goto cleanup;
     }
-    psave = &save;  // Goto `cleanup` will handle restoring.
+    PtrToSavedTerm = &SavedTerm;  // Goto `cleanup` will handle restoring.
 
     // Init the work.
     InitMapping( );
@@ -92,32 +93,32 @@ Run( CallbackFn fn ) -> error_t
 
     // Loop until returning non-OK;
     for ( ;; ) {
-        ssize_t n = read( 0, Buf, MAX_BUF_LIMIT );
+        ssize_t NumRead = read( 0, Buf, MAX_BUF_LIMIT );
 
-        if ( n == -1 ) {  // This should really not happen for stdin.
-            err = ERR;
+        if ( NumRead == -1 ) {  // This should really not happen for stdin.
+            Err = ERR_IO;
             goto cleanup;
         }
 
-        if ( n == MAX_BUF_LIMIT ) {  // Should not happen though.
-            err = ELIMIT;
+        if ( NumRead == MAX_BUF_LIMIT ) {  // Should not happen though.
+            Err = ERR_LIMIT;
             goto cleanup;
         }
 
-        Buf[n] = 0;
+        Buf[NumRead] = 0;
 
         // Prepare the Info
         auto    Kind = LookupMapping( Buf );
         KeyInfo Info = { Kind, Buf };
 
-        err = fn( &Info );
-        if ( err != OK ) goto cleanup;
+        Err = fn( &Info );
+        if ( Err != OK ) goto cleanup;
     }
 
 cleanup:
-    if ( psave != NULL ) {
-        Reset( 0, psave );
+    if ( PtrToSavedTerm != NULL ) {
+        Reset( 0, PtrToSavedTerm );
     }
-    return err;
+    return Err;
 }
 }  // namespace eve::tty
