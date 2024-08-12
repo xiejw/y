@@ -8,7 +8,7 @@ include ${EVE_PATH}/eve.mk
 compile: ${BUILD}/main
 
 ${BUILD}/main: | ${BUILD}
-	${CXX} ${CXXFLAGS} -o ${BUILD}/main tty.cc main.cc ${LDFLAGS}
+	${CXX} ${CXXFLAGS} -o $@ tty.cc main.cc ${LDFLAGS}
 
 run: compile
 	${BUILD}/main
@@ -16,4 +16,4 @@ run: compile
 test: compile
 
 release:
-	make RELEASE=1 test
+	${MK} RELEASE=1 compile

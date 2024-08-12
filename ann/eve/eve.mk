@@ -32,10 +32,11 @@ BUILD_OBJ         = ${BUILD}/objs
 
 CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra -Wfatal-errors
 CXXFLAGS         += -Wconversion -Wshadow
-CXXFLAGS         += -Iinclude
+CXXFLAGS         += -I${EVE_PATH}include
 
 FMT               = ~/Workspace/y/tools/clang_format_all.sh
 AR                = ar -cr
+MK                = make --no-print-directory
 
 EVE_LIB           = ${EVE_PATH}/.build_release/libeve.a
 
@@ -69,7 +70,7 @@ fmt:
 	${FMT} ${EVE_FMT_FOLDERS}
 
 clean:
-	rm -rf ${BUILD} ${BUILD_OBJ}
+	rm -rf ${BUILD_BASE}*
 
 release: clean
 
