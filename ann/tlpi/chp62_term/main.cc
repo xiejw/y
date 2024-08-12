@@ -1,5 +1,15 @@
+// This is a demo program to let user guess a number between -10 and 10 (both
+// included).
+//
+// - User can use left and right arrow to select the guessed number.
+// - User can use Enter to test (check) the number.
+// - User can type ESC (twice) to quit.
+//
 #include <cstdio>
 #include <cstring>
+
+#include <stdlib.h>
+#include <time.h>
 
 #include <eve/base/log.h>
 
@@ -10,19 +20,24 @@ using eve::tty::KeyInfo;
 using eve::tty::KeyKind;
 using eve::tty::Run;
 
-auto GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t;
+auto GenerateRngValue( ) -> int;
+auto GetUserInput( int NumberToGuess, int &QuitSignal,
+                   const KeyInfo *Info ) -> error_t;
 
 auto
 main( ) -> int
 {
-    error_t Err        = OK;
-    int     QuitSignal = 0;
+    error_t Err           = OK;
+    int     NumberToGuess = GenerateRngValue( );
+    int     QuitSignal    = 0;
 
     while ( 1 ) {
-        logInfo( "Your Choice? [Left or Right arrow to select]:" );
+        logInfo(
+            "Your Choice between -10 (inc) to 10 (inc) ? [Left or Right arrow "
+            "to select]:" );
 
         Err = Run( [&]( auto *info ) -> error_t {
-            return GetUserInput( QuitSignal, info );
+            return GetUserInput( NumberToGuess, QuitSignal, info );
         } );
 
         // Handle the cases whether we should quite or continue.
@@ -46,7 +61,15 @@ main( ) -> int
 }
 
 auto
-GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t
+GenerateRngValue( ) -> int
+{
+    srand( (unsigned)time( NULL ) );
+    return ( (int)rand( ) % 21 ) - 10;
+}
+
+auto
+GetUserInput( int NumberToGuess, int &QuitSignal,
+              const KeyInfo *Info ) -> error_t
 {
     static int Answer      = 0;
     static int EscapeCount = 0;
@@ -67,18 +90,25 @@ GetUserInput( int &QuitSignal, const KeyInfo *Info ) -> error_t
 
     switch ( Info->Kind ) {
     case KeyKind::Enter:
-        logInfo( "[Enter] Choice %d", Answer );
-        QuitSignal = 0;
+        if ( Answer == NumberToGuess ) {
+            logInfo( "[Enter] Choice %d. Bingo! ", Answer );
+            QuitSignal = 1;
+        } else {
+            logInfo( "[Enter] Choice %d. %s ", Answer,
+                     Answer > NumberToGuess ? "Too big" : "Too small" );
+            QuitSignal = 0;
+        }
+
         return ERR_EOF;
 
     case KeyKind::ArrowLeft:
         Answer--;
-        logInfo( "Choice %d", Answer );
+        logInfo( "Choice %d [Press Enter to test]", Answer );
         return OK;
 
     case KeyKind::ArrowRight:
         Answer++;
-        logInfo( "Choice %d", Answer );
+        logInfo( "Choice %d [Press Enter to test]", Answer );
         return OK;
 
     default:

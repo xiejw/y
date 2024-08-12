@@ -44,13 +44,14 @@ auto Run( CallbackFn fn ) -> error_t;
 
 ```
 
+Code Example [main.cc](main.cc).
+
 ### Two Problems to Solve
 - How to set the terminal state (no echo, read without line buffering) with
   interruption (`Ctrl-C`) still present.
 - How to get the control sequence? Is that unique to xterm? Is that ANSI control
   seq?
 
-Code Example `https://github.com/xiejw/y/tree/main/ann/tlpi/chp62_term`
 
 ```
 Further question is TERM=linux make a difference for ctrl-arrow?
