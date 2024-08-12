@@ -21,7 +21,7 @@ MODULES          = ${BUILD_OBJ}/algos_dal.o
 .DEFAULT_GOAL   = compile
 
 # incrementally compile all libraries.
-compile: ${MODULES}
+compile: ${MODULES} ${EVE_LIB}
 
 run: compile
 	${BUILD}/sudoku_main
@@ -43,7 +43,7 @@ ${BUILD_OBJ}/algos_%.o: ${SRC}/algos/%.cc ${INC}/algos/*.h | ${BUILD_OBJ}
 #
 compile: ${BUILD}/sudoku_main
 
-${BUILD}/sudoku_main: ${BUILD}/sudoku_main.o ${MODULES} ${EVE_LIB} | ${BUILD}
+${BUILD}/sudoku_main: ${BUILD}/sudoku_main.o ${MODULES} | ${BUILD} ${EVE_LIB}
 	${CXX} -o $@ $^ ${LDFLAGS}
 
 ${BUILD}/%_main.o: cmd/%/main.cc | ${BUILD}
