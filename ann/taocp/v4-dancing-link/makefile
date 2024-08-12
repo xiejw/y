@@ -6,7 +6,7 @@ EVE_FMT_FOLDERS  = ${CMD} ${SRC} ${INC}
 EVE_PATH         = ../../eve
 include ${EVE_PATH}/eve.mk
 
-CXXFLAGS        += -I${EVE_PATH}/include
+CXXFLAGS        += -Iinclude
 LDFLAGS         += ${EVE_LIB}
 
 # ------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ run: compile
 
 release:
 	@echo compile with RELEASE mode
-	make RELEASE=1 compile || exit 1
+	${MK} RELEASE=1 compile || exit 1
 
 test: compile run
 
