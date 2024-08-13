@@ -322,3 +322,35 @@
   - https://github.com/pytorch/pytorch/blob/master/docs/libtorch.rst
   - https://github.com/mlverse/libtorch-mac-m1
 </details>
+
+## Musl
+
+<details>
+  <summary>Click me</summary>
+
+  Download the source file and put under `~/Workspace/build/musl`.
+  - https://musl.libc.org/
+
+  After decompress, set up the srce folder as usual
+
+  ```
+  ln -sf musl-<...> src
+  ```
+
+  #### Compile and Install
+
+  ```
+  cd src
+  ./configure --prefix=`pwd`/../install --disable-shared --enable-wrapper=all
+  make
+  make install
+  ```
+
+  ### Test
+  ```
+  CC=~/Workspace/build/musl/install/bin/musl-gcc
+  $CC -static main.c
+  ./a.out
+  ```
+
+</details>
