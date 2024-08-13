@@ -80,5 +80,9 @@ ${BUILD}:
 ${BUILD_OBJ}:
 	mkdir -p ${BUILD_OBJ}
 
+# For most projects, EVE_LIB should be set so they can use it as a dependency.
+# For the EVE itself (EVE_ROOT defined), this is not overriden
+ifndef EVE_ROOT
 ${EVE_LIB}:
 	make -C ${EVE_PATH} release
+endif

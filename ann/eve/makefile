@@ -1,3 +1,4 @@
+EVE_ROOT          = yes
 EVE_PATH          = .
 EVE_FMT_FOLDERS   = cmd include src
 include eve.mk

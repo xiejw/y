@@ -3,18 +3,23 @@ EVE_FMT_FOLDERS     = .
 
 include ${EVE_PATH}/eve.mk
 
-SRCS                = tty.cc main.cc
 LDFLAGS            += ${EVE_LIB}
+
+SRCS                = tty.cc main.cc
+BINS                = ${BUILD}/main
+DEPS                = ${BUILD} ${EVE_LIB}
+
+.PHONY: compile run test release
 
 .DEFAULT_GOAL       = compile
 
-compile: ${BUILD}/main ${EVE_LIB}
+compile: ${BINS} ${EVE_LIB}
 
-${BUILD}/main: ${SRCS} | ${BUILD} ${EVE_LIB}
+${BUILD}/main: ${SRCS} | ${DEPS}
 	${CXX} ${CXXFLAGS} -o $@ $^ ${LDFLAGS}
 
-run: ${BUILD}/main compile
-	${BUILD}/main
+run: ${BUILD}/main
+	$<
 
 test: compile
 
