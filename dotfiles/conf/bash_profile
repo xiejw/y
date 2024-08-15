@@ -243,7 +243,11 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # set up the default command for fzf (used by fzf and fzf-vim)
 #
-export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.*" -not -path "./bin/*" -not -path ".build*/*" -not -path "./node_modules*/*"'
+# Legacy FZF cmd with find
+# - export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.*" -not -path "./bin/*" -not -path ".build*/*" -not -path "./node_modules*/*"'
+#
+# New cmd is based on fd https://github.com/sharkdp/fd
+export FZF_DEFAULT_COMMAND='fd -t f --exclude ./bin'
 
 ed_fzf() {
   fzf --version > /dev/null 2>&1 || export PATH=$HOME/.fzf/bin:$PATH
