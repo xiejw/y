@@ -56,6 +56,9 @@ fi
 # Finally, exports the prompt_command
 export PROMPT_COMMAND=prompt_command
 
+# ------------------------------------------------------------------------------
+# git set up
+#
 # a function to switch the PROMPT_COMMAND to lite one.
 function ed_lite_prompt {
   export LITE_PROMPT=1
@@ -72,10 +75,6 @@ export EDITOR=vim
 if [[ "$HOSTNAME" =~ dt ]]; then
   # for fd-find
   export PATH=$PATH:/usr/lib/cargo/bin/
-  # for bat
-  alias batcli=batcat --theme="Sublime Snazzy"
-else
-  alias batcli=bat --theme="Sublime Snazzy"
 fi
 
 # ------------------------------------------------------------------------------
@@ -83,7 +82,7 @@ fi
 # ------------------------------------------------------------------------------
 
 # alias
-alias less='less -i'
+alias less='less -i -R'
 alias rm='rm -i'
 alias mv='mv -i'
 alias cp='cp -i'
@@ -93,8 +92,6 @@ alias ll2='eza --header --long --color=always --tree --level=2'
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   alias ls='ls --color'
-elif [[ "$OSTYPE" == "freebsd"* ]]; then
-  alias ls='ls -G'
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   alias ls='ls -G'
 fi
@@ -110,17 +107,6 @@ alias gdn='git diff --name-only'
 alias gm='git commit -a'
 alias gp='git pull --no-rebase'
 alias gg='git log --graph --oneline --all'
-
-# shortcut jarvis with
-function jv {
-  ed_rs
-
-  if [[ $# -eq 1 ]]; then
-    ~/Workspace/.bin/jarvis $1
-  else
-    ~/Workspace/.bin/jarvis house-keeping
-  fi
-}
 
 # shortcut for email
 alias email='~/Workspace/y/tools/email.sh'
@@ -149,14 +135,21 @@ alias v='vim'
 alias vf='vim `fzf`'
 alias vv='vim -c ":call fns#LoadPendingFiles()"'
 
-# bat
-#
-# NOTE: 2024-07-31: bat is not a drop-in replacement. This breaks several
-# workflows.
-# alias less='batcli --theme="Sublime Snazzy"'
-
 # fd
 alias fd='fd -c always'
+
+# ------------------------------------------------------------------------------
+# jarvis (jv)
+#
+function jv {
+  ed_rs
+
+  if [[ $# -eq 1 ]]; then
+    ~/Workspace/.bin/jarvis $1
+  else
+    ~/Workspace/.bin/jarvis house-keeping
+  fi
+}
 
 # ------------------------------------------------------------------------------
 # brew
@@ -173,7 +166,6 @@ alias w='z'
 
 # ==============================================================================
 # builds
-# ==============================================================================
 #
 
 BUILD_HOME=$HOME/Workspace/build
@@ -208,7 +200,7 @@ ed_llvm() {
   fi
 }
 
-# goto llvm easier
+# Goto llvm easier
 function llvm {
   cd ~/Workspace/build/llvm/
   ed_lite_prompt && echo "lite prompt mode is enabled"
@@ -216,14 +208,14 @@ function llvm {
 
 # ------------------------------------------------------------------------------
 # rust
-# ------------------------------------------------------------------------------
+#
 ed_rs() {
   rustc --version > /dev/null 2>&1 || source "$HOME/.cargo/env"
 }
 
 # ------------------------------------------------------------------------------
 # python with python venv
-# ------------------------------------------------------------------------------
+#
 ed_py() {
   source "${BUILD_HOME}/pyenv/bin/activate"
   echo "python3 now is `which python3`"
@@ -234,7 +226,7 @@ ed_py() {
 
 # ------------------------------------------------------------------------------
 # macOS
-# ------------------------------------------------------------------------------
+#
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # ------------------------------------------------------------------------------
