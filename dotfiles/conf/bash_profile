@@ -30,22 +30,14 @@ function prompt_command {
 # makes the color different for different hosts.
 
 # -----------------------------------------------
-# vm category
-if [[ "$HOSTNAME" =~ .*vm.* ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2022-11
-elif [[ "$HOSTNAME" =~ .*arm.* ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2022-11
-elif [[ "$HOSTNAME" =~ debian-12 ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2023-06
-elif [[ "$HOSTNAME" =~ dt ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2024-05
-elif [[ "$HOSTNAME" =~ u24 ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2024-05
+# xieqi vpc category
+if [[ "$HOSTNAME" =~ .*xieqi.* ]]; then
+  export PROMPT_COMMAND_COLOR=32 # green 2022-11
 
 # -----------------------------------------------
-# xieqi vpc category
-elif [[ "$HOSTNAME" =~ .*xieqi.* ]]; then
-  export PROMPT_COMMAND_COLOR=32 # green 2022-11
+# vm category
+elif [[ "$HOSTNAME" =~ dt.* ]]; then
+  export PROMPT_COMMAND_COLOR=33 # yellow 2024-08
 
 # -----------------------------------------------
 # personal hosts
@@ -60,8 +52,8 @@ else
   export PROMPT_COMMAND_COLOR=36 # cyan
 fi
 
-
-# exports the prompt_command
+# -----------------------------------------------
+# Finally, exports the prompt_command
 export PROMPT_COMMAND=prompt_command
 
 # a function to switch the PROMPT_COMMAND to lite one.
@@ -82,8 +74,6 @@ if [[ "$HOSTNAME" =~ dt ]]; then
   export PATH=$PATH:/usr/lib/cargo/bin/
   # for bat
   alias batcli=batcat --theme="Sublime Snazzy"
-elif [[ "$HOSTNAME" =~ u24 ]]; then
-  export PATH=$PATH:/usr/lib/cargo/bin/
 else
   alias batcli=bat --theme="Sublime Snazzy"
 fi
@@ -220,8 +210,8 @@ ed_llvm() {
 
 # goto llvm easier
 function llvm {
-  cd ~/Workspace/build/llvm/src
-  ed_lite_prompt
+  cd ~/Workspace/build/llvm/
+  ed_lite_prompt && echo "lite prompt mode is enabled"
 }
 
 # ------------------------------------------------------------------------------
