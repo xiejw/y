@@ -1,7 +1,7 @@
 # vim: ft=bash
 
 # ==============================================================================
-# system configurations
+# System configurations
 #
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
@@ -19,7 +19,7 @@ export LANG='en_US.UTF-8'
 export TERM='xterm-256color'
 
 # ------------------------------------------------------------------------------
-# ps1 and prompt
+# Ps1 and Prompt
 #
 
 # a normal one, trying to display the git branch name.
@@ -65,7 +65,7 @@ fi
 export PROMPT_COMMAND=prompt_command
 
 # ------------------------------------------------------------------------------
-# git set up
+# Git set up
 #
 # a function to switch the PROMPT_COMMAND to lite one.
 function ed_lite_prompt {
@@ -73,12 +73,12 @@ function ed_lite_prompt {
 }
 
 # ------------------------------------------------------------------------------
-# editor env
+# Editor env
 #
 export EDITOR=vim
 
 # ------------------------------------------------------------------------------
-# global path and alias fix
+# Global path fix
 #
 if [[ "$_DISTRO" =~ debian ]]; then
   # for fd-find
@@ -86,10 +86,25 @@ if [[ "$_DISTRO" =~ debian ]]; then
 fi
 
 # ------------------------------------------------------------------------------
-# shortcuts
-# ------------------------------------------------------------------------------
+# Brew
+#
+if [[ "$_OS" == 'darwin' ]]; then
+  export PATH=/opt/homebrew/bin:$PATH
+fi
 
-# alias
+# ------------------------------------------------------------------------------
+# macOS
+#
+if [[ "$_OS" == 'darwin' ]]; then
+  export BASH_SILENCE_DEPRECATION_WARNING=1
+fi
+
+# ==============================================================================
+# Shortcuts
+#
+
+# Alias for system clis
+#
 alias less='less -i -R'
 alias rm='rm -i'
 alias mv='mv -i'
@@ -104,7 +119,8 @@ elif [[ "$_OS" == "darwin" ]]; then
   alias ls='ls -G'
 fi
 
-# git
+# Alias for git
+#
 alias g='git'
 alias ga='git add . && git status -s'
 alias gs='git status -s'
@@ -116,21 +132,25 @@ alias gm='git commit -a'
 alias gp='git pull --no-rebase'
 alias gg='git log --graph --oneline --all'
 
-# shortcut for email
+# Alias for email
+#
 alias email='~/Workspace/y/tools/email.sh'
 
-# tmux
+# Alias for tmux
+#
 alias tmux="tmux -2"
 alias tad='tmux attach -t 0 -d'
 alias ta1='tmux attach -t 1 -d'
 alias ta2='tmux attach -t 2 -d'
 alias ta3='tmux attach -t 3 -d'
 
-# docker
+# Alias for docker
+#
 alias d='docker'
 alias dr='docker run --rm -ti'
 
-# make
+# Alias for make
+#
 alias m='make'
 alias mc='make compile'
 alias mf='make fmt'
@@ -138,16 +158,18 @@ alias mt='make test'
 alias mta='make ASAN=1 test'
 alias mtv='make VERBOSE=1 test'
 
-# vim
+# Alias for vim
+#
 alias v='vim'
 alias vf='vim `fzf`'
 alias vv='vim -c ":call fns#LoadPendingFiles()"'
 
-# fd
+# Alias for fd
+#
 alias fd='fd -c always'
 
 # ------------------------------------------------------------------------------
-# jarvis (jv)
+# Jarvis (jv)
 #
 function jv {
   ed_rs
@@ -160,27 +182,20 @@ function jv {
 }
 
 # ------------------------------------------------------------------------------
-# brew
-#
-if [[ "$_OS" == 'darwin' ]]; then
-  export PATH=/opt/homebrew/bin:$PATH
-fi
-
-# ------------------------------------------------------------------------------
-# zoxide (must be after brew)
+# Zoxide (must be after brew)
 #
 eval "$(zoxide init bash)"
 alias w='z'
 
 # ==============================================================================
-# builds
+# Builds and Toolchains
 #
 
 BUILD_HOME=$HOME/Workspace/build
 
 # ------------------------------------------------------------------------------
-# golang
-# ------------------------------------------------------------------------------
+# Golang
+#
 # At go 1.11, GOPATH is used for mod cache and go install
 export GOPATH=~/.cache/go-mod
 export GO=go
@@ -190,8 +205,8 @@ ed_go() {
 }
 
 # ------------------------------------------------------------------------------
-# clang
-# ------------------------------------------------------------------------------
+# Clang
+#
 export CC=clang
 export CXX=clang++
 
@@ -208,6 +223,9 @@ ed_llvm() {
   fi
 }
 
+# ------------------------------------------------------------------------------
+# LLVM
+#
 # Goto llvm easier
 function llvm {
   cd ~/Workspace/build/llvm/
@@ -232,16 +250,11 @@ ed_py() {
   alias py=python3
 }
 
-# ------------------------------------------------------------------------------
-# macOS
-#
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
-# ------------------------------------------------------------------------------
-# fzf
+# ==============================================================================
+# FZF
 #
 
-# set up the default command for fzf (used by fzf and fzf-vim)
+# Set up the default command for fzf (used by fzf and fzf-vim)
 #
 # Legacy FZF cmd with find
 # - export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.*" -not -path "./bin/*" -not -path ".build*/*" -not -path "./node_modules*/*"'
@@ -277,6 +290,6 @@ __fzf_history__() {
 #
 bind -m emacs-standard -x '"\C-r": __fzf_history__'
 
-# ------------------------------------------------------------------------------
+# ==============================================================================
 # END
 #
