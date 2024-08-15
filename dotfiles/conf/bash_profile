@@ -2,17 +2,25 @@
 
 # ==============================================================================
 # system configurations
-# ==============================================================================
+#
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  _OS=linux
+  _DISTRO=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  _OS=darwin
+  _DISTRO=macos
+fi
 
 # ------------------------------------------------------------------------------
 # locale and color
-# ------------------------------------------------------------------------------
+#
 export LANG='en_US.UTF-8'
 export TERM='xterm-256color'
 
 # ------------------------------------------------------------------------------
 # ps1 and prompt
-# ------------------------------------------------------------------------------
+#
 
 # a normal one, trying to display the git branch name.
 #
@@ -72,7 +80,7 @@ export EDITOR=vim
 # ------------------------------------------------------------------------------
 # global path and alias fix
 #
-if [[ "$HOSTNAME" =~ dt ]]; then
+if [[ "$_DISTRO" =~ debian ]]; then
   # for fd-find
   export PATH=$PATH:/usr/lib/cargo/bin/
 fi
@@ -90,9 +98,9 @@ alias ll='eza --header --long --color=always'
 alias llg='eza --git --header --long --color=always'
 alias ll2='eza --header --long --color=always --tree --level=2'
 
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
+if [[ "$_OS" == "linux" ]]; then
   alias ls='ls --color'
-elif [[ "$OSTYPE" == "darwin"* ]]; then
+elif [[ "$_OS" == "darwin" ]]; then
   alias ls='ls -G'
 fi
 
@@ -154,7 +162,7 @@ function jv {
 # ------------------------------------------------------------------------------
 # brew
 #
-if [[ "$(uname)" == 'Darwin' ]]; then
+if [[ "$_OS" == 'darwin' ]]; then
   export PATH=/opt/homebrew/bin:$PATH
 fi
 
@@ -191,7 +199,7 @@ ed_llvm() {
   if [[ "$PATH" != *"$BUILD_HOME/llvm/install/bin"* ]]; then
     export PATH=$BUILD_HOME/llvm/install/bin:$PATH
   fi
-  if [[ "$OSTYPE" == "darwin"* ]]; then
+  if [[ "$_OS" == "darwin" ]]; then
     # for clang compiled from source, SDKROOT is needed to provide sdk path for
     # include. man xcrun and search for SDKROOT.
     #
@@ -207,14 +215,14 @@ function llvm {
 }
 
 # ------------------------------------------------------------------------------
-# rust
+# Rust
 #
 ed_rs() {
   rustc --version > /dev/null 2>&1 || source "$HOME/.cargo/env"
 }
 
 # ------------------------------------------------------------------------------
-# python with python venv
+# Python venv
 #
 ed_py() {
   source "${BUILD_HOME}/pyenv/bin/activate"
@@ -231,14 +239,10 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # ------------------------------------------------------------------------------
 # fzf
-# ------------------------------------------------------------------------------
+#
 
 # set up the default command for fzf (used by fzf and fzf-vim)
 #
-# 1. no `target` folder (rust).
-# 2. no hidden file.
-# 3. no bin folder
-# 4. no build folder
 export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/\.*" -not -path "./bin/*" -not -path ".build*/*" -not -path "./node_modules*/*"'
 
 ed_fzf() {
@@ -247,8 +251,11 @@ ed_fzf() {
 
 ed_fzf
 
+# ------------------------------------------------------------------------------
 # Bash completion with fzf
+#
 
+# Helper Method
 __fzf_history__() {
      output=`
        builtin fc -lnr -2147483648 |
@@ -259,12 +266,13 @@ __fzf_history__() {
 
      READLINE_LINE=${output}
      READLINE_POINT=${#READLINE_LINE}
-     # echo "$READLINE_LINE"
 }
 
-
-  # CTRL-R - Paste the selected command from history into the command line
+# Bash Bindinds
+# - CTRL-R: Paste the selected command from history into the command line
+#
 bind -m emacs-standard -x '"\C-r": __fzf_history__'
 
+# ------------------------------------------------------------------------------
 # END
-
+#
