@@ -53,27 +53,22 @@ clean:
 #
 
 install:
-	@echo "=>" install vimrc
-	@echo "==>" delink sym links if any
+	@echo "=>" Install vimrc
+	@echo "==>" Delink sym links if any
 	rm -f ~/.vim
 	rm -f ~/.vimrc
-	@echo "==>" link sym links
+	@echo "==>" Link sym links
 	ln -sf ~/Workspace/y/vimrc       ~/.vim
 	ln -sf ~/Workspace/y/vimrc/vimrc ~/.vimrc
-	@echo "==>" install plugins in vim
+	@echo "==>" Install plugins in vim
 	vim -c ":PlugInstall" -c ":sleep 3" -c ":qa"
 	@echo ""
-	@echo "=>" install dotfiles
-	@echo "==>" compile cmds
+	@echo "=>" Install dotfiles
+	@echo "==>" Compile cmds
 	make -C dotfiles
-	@echo "==>" link sym links for tmux
+	@echo "==>" Link sym links for tmux
 	rm -f ~/.tmux.conf
 	ln -sf ~/Workspace/y/dotfiles/conf/tmux.conf ~/.tmux.conf
-	@echo "==>" install the following lines into ~/.profile
-	@echo "##################################"
-	@echo "# xiejw/y/dotfiles"
-	@echo "export DOTFILES=~/Workspace/y/dotfiles"
-	@echo "source ~/Workspace/y/dotfiles/conf/bash_profile"
-	@echo "##################################"
-
+	@echo "==>" Patch ~/.profile
+	python3 ~/Workspace/y/tools/patch_profile_for_y.py
 
