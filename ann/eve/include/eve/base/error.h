@@ -23,7 +23,6 @@
 #include <iostream>
 #include <list>
 
-
 namespace eve::base {
 
 struct [[nodiscard]] Error {
