@@ -1,25 +1,28 @@
 // vim: ft=cpp
 #pragma once
 
-// panic( fmt, ... )
-// unimplemented( fmt, ... )
-// err.emitNote()
-// err.isOk()
-// err.getMsg()
-// err.dump()
-// err.dumpAndPanic()
+// Error provides facilities to define, propagate and dump errors.
+//
+// A default constructed Error represents no error (isOk()==true). Once any
+// diagnosis error is emitted, its state switches to error state
+// (isOk()==false). The newError() factory method can create an Error with
+// error message.
+//
+// - To propagate an error, return the Error and optionally emit another note
+//   via emitNote().
+// - To get the error message, call getMsg().
+// - To dump the error message, call dump() or dumpAndPanic().
+//
+// Two macros provide to improve readability.
+//   - panic( fmt, ... )
+//   - unimplemented( fmt, ... )
 
 #include <eve/adt/sds.h>
+#include <eve/base/base.h>
 
 #include <iostream>
 #include <list>
 
-#define panic( fmt, ... )                                \
-    eve::base::panic_impl_( "panic", __FILE__, __LINE__, \
-                            fmt __VA_OPT__(, ) __VA_ARGS__ )
-#define unimplemented( fmt, ... )                                \
-    eve::base::panic_impl_( "unimplemented", __FILE__, __LINE__, \
-                            fmt __VA_OPT__(, ) __VA_ARGS__ )
 
 namespace eve::base {
 
@@ -74,10 +77,8 @@ struct [[nodiscard]] Error {
     Error( ) = default;
     ~Error( ) { delete mHolder; }
 
-    Error( Error const & )            = delete;
-    Error &operator=( Error const & ) = delete;
-    Error( Error && );
-    Error &operator=( Error && );
+    EVE_DISALBE_COPY_COSTRUCTOR( Error );
+    EVE_DECLARE_MOVE_COSTRUCTOR( Error );
 
     template <typename... Args>
     Error( const char *fmt, Args &&...args )
@@ -86,16 +87,22 @@ struct [[nodiscard]] Error {
         mHolder->emitNote( fmt, std::forward<Args>( args )... );
     }
 
-  public:
-    bool          isOk( ) const noexcept { return mHolder == nullptr; }
-    bool          isError( ) const noexcept { return !isOk( ); }
-    eve::adt::Sds getMsg( ) const noexcept { return mHolder->getMsg( ); };
-    ErrorKind     getKind( ) const noexcept { return mHolder->getKind( ); };
+  private:
+    using Sds = eve::adt::Sds;
 
-    inline void unwrap( )
+  public:
+    auto isOk( ) const noexcept -> bool { return mHolder == nullptr; }
+    auto isError( ) const noexcept -> bool { return !isOk( ); }
+    auto getKind( ) const noexcept -> ErrorKind { return mHolder->getKind( ); };
+    auto getMsg( ) const noexcept -> Sds { return mHolder->getMsg( ); };
+    auto unwrap( ) -> void { isError( ) ? dumpAndPanic( ) : void( 0 ); }
+    auto dump( ) const noexcept { std::cerr << mHolder->getMsg( ); };
+
+    void dumpAndPanic( ) const noexcept
     {
-        if ( isError( ) ) dumpAndPanic( );
-    }
+        std::cerr << "panic error:\n" << mHolder->getMsg( ) << std::flush;
+        std::exit( 1 );
+    };
 
     template <typename... Args>
     Error &emitNote( const char *fmt, Args &&...args )
@@ -103,13 +110,6 @@ struct [[nodiscard]] Error {
         mHolder->emitNote( fmt, std::forward<Args>( args )... );
         return *this;
     }
-
-    void dump( ) const noexcept { std::cerr << mHolder->getMsg( ); };
-    void dumpAndPanic( ) const noexcept
-    {
-        std::cerr << "panic error:\n" << mHolder->getMsg( ) << std::flush;
-        std::exit( 1 );
-    };
 };
 
 void panic_impl_( const char *msg, const char *file, int line_no,
@@ -117,10 +117,20 @@ void panic_impl_( const char *msg, const char *file, int line_no,
 }  // namespace eve::base
 
 namespace eve {
+
+using Error = eve::base::Error;
+
 template <typename... Args>
-eve::base::Error
-NewError( const char *fmt, Args &&...args )
+auto
+newError( const char *fmt, Args &&...args ) -> Error
 {
     return eve::base::Error{ fmt, std::forward<Args>( args )... };
 }
+
+#define panic( fmt, ... )                                \
+    eve::base::panic_impl_( "panic", __FILE__, __LINE__, \
+                            fmt __VA_OPT__(, ) __VA_ARGS__ )
+#define unimplemented( fmt, ... )                                \
+    eve::base::panic_impl_( "unimplemented", __FILE__, __LINE__, \
+                            fmt __VA_OPT__(, ) __VA_ARGS__ )
 }  // namespace eve
