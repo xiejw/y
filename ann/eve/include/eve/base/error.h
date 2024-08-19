@@ -76,8 +76,8 @@ struct [[nodiscard]] Error {
     Error( ) = default;
     ~Error( ) { delete mHolder; }
 
-    EVE_DISALBE_COPY_COSTRUCTOR( Error );
-    EVE_DECLARE_MOVE_COSTRUCTOR( Error );
+    EVE_DISABLE_COPY_CONSTRUCTOR( Error );
+    EVE_DECLARE_MOVE_CONSTRUCTOR( Error );
 
     template <typename... Args>
     Error( const char *fmt, Args &&...args )

@@ -1,10 +1,14 @@
 // vim: ft=cpp
+//
+// Sds provides the string like holder which allows catPrintf() in-place.
 #pragma once
 
 #include <cstdarg>  // va_list
 #include <memory>
 #include <ostream>
 #include <string_view>
+
+#include <eve/base/base.h>
 
 namespace eve::adt {
 
@@ -20,10 +24,8 @@ struct Sds {
     Sds( ) { Init( nullptr, 0, 0 ); };
     Sds( std::size_t cap ) { Init( nullptr, 0, cap ); };
 
-    Sds( Sds const & )            = delete;
-    Sds &operator=( Sds const & ) = delete;
-    Sds( Sds && )                 = default;
-    Sds &operator=( Sds && )      = default;
+    EVE_DISABLE_COPY_CONSTRUCTOR( Sds );
+    EVE_DEFAULT_MOVE_CONSTRUCTOR( Sds );
 
     char       *getData( ) const { return (char *)( m_ptr.get( ) ); };
     std::size_t getCap( ) const { return m_cap; };
@@ -56,3 +58,9 @@ Sds operator""_sds( const char *s, std::size_t );
 }
 
 }  // namespace eve::adt
+
+namespace eve {
+
+using Sds = eve::adt::Sds;
+
+}  // namespace eve
