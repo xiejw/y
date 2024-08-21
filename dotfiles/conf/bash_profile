@@ -228,8 +228,10 @@ ed_llvm() {
 #
 # Goto llvm easier
 function llvm {
-  cd ~/Workspace/build/llvm/
-  ed_lite_prompt && echo "lite prompt mode is enabled"
+  cd ~/Workspace/build/llvm/ && echo "cd into llvm build folder"
+  ed_lite_prompt && echo ">> git lite prompt mode is enabled"
+  echo -n ">> curret build: " && \
+      (ls -d build* 2> /dev/null || echo "(not found)")
 }
 
 # ------------------------------------------------------------------------------
