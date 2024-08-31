@@ -23,6 +23,15 @@ find_existing_version() {
   echo "Find local  Go version ${GO_VERSION}"
 }
 
+find_arch() {
+  ARCH=arm64
+  PROC=`uname -p`
+  if [ "${PROC}" == "i386" ]; then
+    ARCH=amd64
+  fi
+  echo "Find Arch: ${ARCH}"
+}
+
 find_latest
 find_existing_version
 
@@ -31,11 +40,7 @@ if [ "${VERSION}" == "${GO_VERSION}" ]; then
   exit 0
 fi
 
-ARCH=arm64
-PROC=`uname -p`
-if [ "${PROC}" == "i386" ]; then
-  ARCH=amd64
-fi
+find_arch
 
 URL="https://go.dev/dl/go${VERSION}.darwin-${ARCH}.pkg"
 wget --show-progress -O /tmp/go.pkg "${URL}"
