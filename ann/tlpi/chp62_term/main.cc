@@ -21,8 +21,8 @@ using eve::tty::KeyKind;
 using eve::tty::Run;
 
 auto GenerateRngValue( ) -> int;
-auto GetUserInput( int NumberToGuess, int &QuitSignal,
-                   const KeyInfo *Info ) -> error_t;
+auto GetUserInput( int NumberToGuess, int &QuitSignal, const KeyInfo *Info )
+    -> error_t;
 
 auto
 main( ) -> int
@@ -68,8 +68,8 @@ GenerateRngValue( ) -> int
 }
 
 auto
-GetUserInput( int NumberToGuess, int &QuitSignal,
-              const KeyInfo *Info ) -> error_t
+GetUserInput( int NumberToGuess, int &QuitSignal, const KeyInfo *Info )
+    -> error_t
 {
     static int Answer      = 0;
     static int EscapeCount = 0;

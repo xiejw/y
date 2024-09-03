@@ -22,14 +22,14 @@ struct sha256 {
     int           finalized;  // once marked, must be reset for next usage.
 };
 
-extern void    sha256Reset( struct sha256    *);
+extern void    sha256Reset( struct sha256 * );
 extern error_t sha256Update( struct sha256 *, const unsigned char *, uint64_t );
-extern sds_t   sha256Digest( struct sha256   *);
+extern sds_t   sha256Digest( struct sha256 * );
 
 // -----------------------------------------------------------------------------
 // helper methods to generate digest for string.
 // -----------------------------------------------------------------------------
-extern sds_t   sha256DigestStr( const char   *);
+extern sds_t   sha256DigestStr( const char * );
 extern sds_t   sha256DigestSds( sds_t );
 extern error_t sha256DigestFile( const char *, _out_ sds_t * );
 

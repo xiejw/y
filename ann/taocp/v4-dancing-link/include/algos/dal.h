@@ -52,8 +52,8 @@ struct Table {
     // horizantal list of this group.
     //
     // The `priv_data` is not owned by this table.
-    auto AppendOption( std::span<std::size_t> col_ids,
-                       void                  *priv_data ) -> void;
+    auto AppendOption( std::span<std::size_t> col_ids, void *priv_data )
+        -> void;
 
     auto GetNodeData( std::size_t Id ) -> void *
     {

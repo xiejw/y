@@ -57,7 +57,7 @@ enum vm_opcode {
 // -----------------------------------------------------------------------------
 
 struct vm *vmNew( void );
-void       vmFree( struct vm       *);
+void       vmFree( struct vm * );
 
 error_t vmExec( struct vm *, enum vm_opcode, const struct vm_opopt *, int d,
                 int l, int r );
@@ -75,7 +75,7 @@ struct vm_oparg {
 };
 
 extern void    vmOpsToSds( _mut_ sds_t *psds, size_t size,
-                           const struct vm_oparg    *);
+                           const struct vm_oparg * );
 extern error_t vmBatch( struct vm *vm, size_t arg_size,
                         const struct vm_oparg * );
 
@@ -86,7 +86,7 @@ extern error_t vmBatch( struct vm *vm, size_t arg_size,
 // vmTensorNew returns tensor handle (non-neg int) upon succeeded.
 //
 // On failure, returns neg number. call site should clean error stack.
-int     vmTensorNew( struct vm *, enum vm_dtype, struct vm_sp     *);
+int     vmTensorNew( struct vm *, enum vm_dtype, struct vm_sp * );
 error_t vmTensorFree( struct vm *, int t );
 
 error_t vmTensorInfo( struct vm *, int t, _null_ _out_ enum vm_dtype *,

@@ -43,8 +43,7 @@
         }                                                          \
     } while ( 0 )
 
-#define DEFAULT_SHAPE \
-    2, ( int[] ) { 4096, 4096 }
+#define DEFAULT_SHAPE 2, (int[]){ 4096, 4096 }
 
 #define DEFAULT_ITERATION_COUNT 10
 

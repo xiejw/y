@@ -62,8 +62,8 @@ struct Option {
 };
 
 static auto PrintProblem( const int *problem ) -> void;
-static auto SearchOptions( const int           *problem,
-                           std::vector<Option> &options ) -> size_t;
+static auto SearchOptions( const int *problem, std::vector<Option> &options )
+    -> size_t;
 static auto GetColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c,
                           size_t *b ) -> void;
 //
@@ -261,8 +261,8 @@ SearchOptions( const int *problem, std::vector<Option> &options ) -> size_t
 // - c{j,k} // col with digit
 // - b{x,k} // box with digit where x = 3 * floor(i/3) + floor(j/3).
 auto
-GetColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c,
-              size_t *b ) -> void
+GetColHeadId( int i, int j, int k, size_t *p, size_t *r, size_t *c, size_t *b )
+    -> void
 {
     int x      = 3 * ( i / 3 ) + ( j / 3 );
     int offset = 0;

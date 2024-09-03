@@ -548,7 +548,7 @@ _dictExpand( struct dict *d, unsigned long size )
     /* Allocate the new hash table and initialize all pointers to NULL */
     n.size     = realsize;
     n.sizemask = realsize - 1;
-    n.table    = calloc( realsize, sizeof( struct dict_entry    *) );
+    n.table    = calloc( realsize, sizeof( struct dict_entry * ) );
     n.used     = 0;
 
     /* Is this the first initialization? If so it's not really a rehashing

@@ -28,10 +28,7 @@ struct state {
     char indent[MAX_INDENT_SIZE];
 };
 
-#define INIT_STATE  \
-    {               \
-        0, 0, { 0 } \
-    }
+#define INIT_STATE { 0, 0, { 0 } }
 
 // Process one more line and advance internal state `state`.
 error_t advanceOneLine( struct state *state, char *line );

@@ -60,7 +60,7 @@ struct arr {
 //-----------------------------------------------------------------------------
 // common low level apis
 //-----------------------------------------------------------------------------
-extern void  arrFree( struct arr  *);
+extern void  arrFree( struct arr * );
 extern void *arrGet( struct arr *, size_t index );  // NULL if index is invalid
 
 //-----------------------------------------------------------------------------
@@ -80,7 +80,7 @@ extern struct arr *arrStackNew( size_t slot_byte_size,
 
 //-------------
 // stack apis
-extern int  arrIsEmpty( struct arr  *);
+extern int  arrIsEmpty( struct arr * );
 extern void arrShrink( struct arr * );  // unimpled yet.
 
 // Push returns the address for the new slot.

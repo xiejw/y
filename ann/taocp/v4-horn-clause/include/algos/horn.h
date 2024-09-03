@@ -14,7 +14,7 @@
 struct horn;
 
 extern struct horn *hornNew( int num_propositions );
-extern void         hornFree( struct horn         *);
+extern void         hornFree( struct horn * );
 
 // append a clause with hypotheses and conclusion (-1 if no conclusion)
 extern void hornAddClause( struct horn *, int conclusion, int num_hypotheses,
