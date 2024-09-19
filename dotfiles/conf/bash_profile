@@ -153,6 +153,7 @@ alias dr='docker run --rm -ti'
 #
 alias m='make'
 alias mc='make compile'
+alias mr='make run'
 alias mf='make fmt'
 alias mt='make test'
 alias mta='make ASAN=1 test'
