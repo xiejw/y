@@ -30,7 +30,7 @@ BUILD_BASE        = .build
 BUILD             = ${BUILD_BASE}
 BUILD_OBJ         = ${BUILD}/objs
 
-CXXFLAGS         += -std=c++20 -Wall -pedantic -Wextra -Wfatal-errors
+CXXFLAGS         += -std=c++23 -Wall -pedantic -Wextra -Wfatal-errors
 CXXFLAGS         += -Wconversion -Wshadow
 CXXFLAGS         += -I${EVE_PATH}/include
 
