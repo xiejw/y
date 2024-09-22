@@ -232,7 +232,7 @@ function llvm {
   echo ">> cd into llvm build folder" && cd ~/Workspace/build/llvm/
   echo ">> git lite prompt mode is enabled" && ed_lite_prompt
   echo -n ">> curret build: " && \
-      (ls -d build* 2> /dev/null || echo "(not found)")
+      (ls -d *build* 2> /dev/null || echo "(not found)")
 }
 
 # ------------------------------------------------------------------------------
