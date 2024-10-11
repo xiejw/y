@@ -46,7 +46,7 @@ test:
 	${WE_ARE_GOOD}
 
 clean:
-	go run tools/delete_unused_dirs.go --skip_dir eve
+	go run tools/delete_unused_dirs.go
 
 # ------------------------------------------------------------------------------
 # Install
