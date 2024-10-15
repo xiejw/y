@@ -1,6 +1,7 @@
 package crypo
 
 import (
+	"math/rand/v2"
 	"testing"
 )
 
@@ -21,6 +22,39 @@ func TestU64(t *testing.T) {
 	}
 	assertArrayEqual(t, expected, values)
 }
+
+func BenchmarkRngU64(b *testing.B) {
+	r := NewRng64(456)
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		r.U64()
+	}
+}
+
+func BenchmarkRandV2U64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		rand.Uint64()
+	}
+}
+
+func BenchmarkRandV2Pcg(b *testing.B) {
+	r := rand.NewPCG(1, 2)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		r.Uint64()
+	}
+}
+
+func BenchmarkRandV2ChaCha8(b *testing.B) {
+	r := rand.NewChaCha8(chacha8seed)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		r.Uint64()
+	}
+}
+
+var chacha8seed = [32]byte([]byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ123456"))
 
 func TestU64Split(t *testing.T) {
 	r1 := NewRng64(456)
