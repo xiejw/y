@@ -35,4 +35,7 @@ type Rng interface {
 
 	To() [2]uint64
 	From([2]uint64)
+
+	// Conform math/rand/v2 interface
+	Uint64() uint64
 }

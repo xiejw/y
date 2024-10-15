@@ -69,6 +69,10 @@ func (srng *Rng64) U64() uint64 {
 	return rng64Mix64(srng.advanceSeed())
 }
 
+func (srng *Rng64) Uint64() uint64 {
+	return srng.U64()
+}
+
 func (srng *Rng64) F32() float32 {
 	return float32(srng.U64()>>11) * doubleUlp
 }

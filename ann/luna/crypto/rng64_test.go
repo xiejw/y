@@ -23,6 +23,25 @@ func TestU64(t *testing.T) {
 	assertArrayEqual(t, expected, values)
 }
 
+func TestU64FromRandV2(t *testing.T) {
+	source := NewRng64(456)
+	r := rand.New(source)
+
+	size := 4
+	values := make([]uint64, size)
+	for i := 0; i < size; i++ {
+		values[i] = r.Uint64()
+	}
+
+	expected := []uint64{
+		1843008821991917904,
+		15828912964246028322,
+		5426006831109020538,
+		1221103108877787995,
+	}
+	assertArrayEqual(t, expected, values)
+}
+
 func BenchmarkRngU64(b *testing.B) {
 	r := NewRng64(456)
 	b.ResetTimer()
