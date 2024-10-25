@@ -36,7 +36,11 @@ runs:
     - name: Install LLVM and Clang
       if: ${{ inputs.require_clang == 'true' }}
       shell: bash
-      run: sudo apt-get install -y --no-install-recommends clang-${{ inputs.clang_version }} lld-${{ inputs.clang_version }} libclang-rt-${{ inputs.clang_version }}-dev
+      run: |
+        sudo apt-get install -y --no-install-recommends \
+            clang-${{ inputs.clang_version }} \
+            lld-${{ inputs.clang_version }} \
+            libclang-${{ inputs.clang_version }}-dev
     - name: Display Clang version
       if: ${{ inputs.require_clang == 'true' }}
       shell: bash
