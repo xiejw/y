@@ -18,7 +18,7 @@ inputs:
   require_go:
     default: false
   go_version:
-    default: 1.22
+    default: 1.23
 runs:
   using: "composite"
   steps:
