@@ -9,8 +9,10 @@ inputs:
     default: false
   require_clang:
     default: false
+  # To check all versions, use the following URL
+  # - https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
   clang_version:
-    default: 19
+    default: 18
   require_gcc:
     default: false
   gcc_version:
