@@ -4,8 +4,6 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-24.04
-    env:
-      SKIP_WERROR: 1
     steps:
       - uses: actions/checkout@v4
         with:
