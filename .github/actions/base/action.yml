@@ -10,7 +10,7 @@ inputs:
   require_clang:
     default: false
   clang_version:
-    default: 15
+    default: 19
   require_gcc:
     default: false
   gcc_version:
