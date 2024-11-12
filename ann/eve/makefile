@@ -10,6 +10,7 @@ MODULES          += ${BUILD_OBJ}/base_log.o
 TEST_MODULES     += ${BUILD_OBJ}/adt_sds_test.o
 TEST_MODULES     += ${BUILD_OBJ}/base_error_test.o
 TEST_MODULES     += ${BUILD_OBJ}/base_result_test.o
+TEST_MODULES     += ${BUILD_OBJ}/flags_flags_test.o
 TEST_MODULES     += ${BUILD_OBJ}/testing_testing_test.o
 TEST_MODULES     += ${BUILD_OBJ}/testing_testing.o
 
@@ -61,6 +62,9 @@ ${BUILD_OBJ}/adt_%.o: src/adt/%.cc include/eve/adt/*.h | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $<
 
 ${BUILD_OBJ}/base_%.o: src/base/%.cc include/eve/base/*.h | ${BUILD_OBJ}
+	${CXX} ${CXXFLAGS} -o $@ -c $<
+
+${BUILD_OBJ}/flags_%.o: src/flags/%.cc include/eve/flags/*.h | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $<
 
 ${BUILD_OBJ}/testing_%.o: src/testing/%.cc | ${BUILD_OBJ}
