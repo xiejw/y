@@ -82,27 +82,28 @@ c_flags_load_unsigned_tp( CFlag *flag, bool is_flag_long, char *value )
     return 0;
 }
 
-#define C_FLAG_LOAD_FLOATING_VALUE( flag, is_flag_long, ptr_type, value,     \
-                                    strtox_fun )                             \
-    {                                                                        \
-        char *end_ptr;                                                       \
-        errno = 0;                                                           \
-                                                                             \
-        ptr_type number = strtox_fun( value, &end_ptr );                     \
-        bool     value_fully_parsed =                                        \
-            (size_t)( end_ptr - ( value ) ) == strlen( value );              \
-                                                                             \
-        if ( errno != 0 || !value_fully_parsed ) {                           \
-            printf( "ERROR: invalid value %s for " #ptr_type " flag %s%s\n", \
-                    ( value ), ( is_flag_long ) ? "--" : "-",                \
-                    ( is_flag_long ) ? ( flag )->long_name                   \
-                                     : ( flag )->short_name );               \
-            return -1;                                                       \
-        }                                                                    \
-                                                                             \
-        *C_FLAG_DATA_AS_PTR( flag, ptr_type ) = number;                      \
-        return 0;                                                            \
+template <class T>
+[[nodiscard]] static int
+c_flags_load_ft( CFlag *flag, bool is_flag_long, char *value,
+                 T ( *strtox_fun )( const char *str, char **endptr ) )
+{
+    char *end_ptr;
+    errno = 0;
+
+    T    number = strtox_fun( value, &end_ptr );
+    bool value_fully_parsed =
+        (size_t)( end_ptr - ( value ) ) == strlen( value );
+
+    if ( errno != 0 || !value_fully_parsed ) {
+        printf( "ERROR: invalid value %s for %s flag %s%s\n", ( value ),
+                c_flags_type_name_internal<T>( ), ( is_flag_long ) ? "--" : "-",
+                ( is_flag_long ) ? ( flag )->long_name : ( flag )->short_name );
+        return -1;
     }
+
+    *C_FLAG_DATA_AS_PTR( flag, T ) = number;
+    return 0;
+}
 
 }  // namespace
 
@@ -242,10 +243,12 @@ c_flags_parse_internal( int *argc_ptr, char ***argv_ptr )
             *C_FLAG_DATA_AS_PTR( flag, char * ) = value;
             break;
         case C_FLAG_FLOAT:
-            C_FLAG_LOAD_FLOATING_VALUE( flag, flag_long, float, value, strtof )
+            if ( c_flags_load_ft<float>( flag, flag_long, value, strtof ) )
+                goto error;
             break;
         case C_FLAG_DOUBLE:
-            C_FLAG_LOAD_FLOATING_VALUE( flag, flag_long, double, value, strtod )
+            if ( c_flags_load_ft<double>( flag, flag_long, value, strtod ) )
+                goto error;
             break;
         default:
             assert( false && "not all flag types implements c_flags_parse()" );
