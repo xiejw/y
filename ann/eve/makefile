@@ -67,6 +67,8 @@ ${BUILD_OBJ}/base_%.o: src/base/%.cc include/eve/base/*.h | ${BUILD_OBJ}
 ${BUILD_OBJ}/flags_%.o: src/flags/%.cc include/eve/flags/*.h | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $<
 
+${BUILD_OBJ}/flags_%.o: private CXXFLAGS += -fno-strict-aliasing
+
 ${BUILD_OBJ}/testing_%.o: src/testing/%.cc | ${BUILD_OBJ}
 	${CXX} ${CXXFLAGS} -o $@ -c $^
 
