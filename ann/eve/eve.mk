@@ -56,10 +56,14 @@ $(error release mode does not support ASAN)
 endif  # ASAN
 endif  # RELEASE
 
+ifndef RELEASE
+CXXFLAGS         += -g
+endif  # RELEASE
+
 ifdef ASAN
 # Ref: https://clang.llvm.org/docs/AddressSanitizer.html
-CXXFLAGS         += -fsanitize=address -g
-LDFLAGS          += -fsanitize=address -g
+CXXFLAGS         += -fsanitize=address
+LDFLAGS          += -fsanitize=address
 BUILD             = ${BUILD_BASE}_asan
 endif  # ASAN
 

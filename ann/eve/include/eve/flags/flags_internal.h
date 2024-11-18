@@ -2,35 +2,33 @@
 #pragma once
 #include "flags_string_view.h"
 
+#include <variant>
+
 #ifndef C_FLAGS_CAPACITY
 #define C_FLAGS_CAPACITY 64
 #endif
 
+/* Declares all supported types in an enum. */
 typedef enum {
-    C_FLAG_INT,
-    C_FLAG_INT_8,
-    C_FLAG_INT_16,
-    C_FLAG_INT_32,
-    C_FLAG_INT_64,
-    C_FLAG_UNSIGNED,
-    C_FLAG_UINT_8,
-    C_FLAG_UINT_16,
-    C_FLAG_UINT_32,
-    C_FLAG_UINT_64,
-    C_FLAG_SIZE_T,
-    C_FLAG_BOOL,
-    C_FLAG_STRING,
-    C_FLAG_FLOAT,
-    C_FLAG_DOUBLE,
+#define C_FLAG_INCLUDE_TYPE( CFlagTypeEnum, tp, postfix ) CFlagTypeEnum,
+#include "flags_types.h"
+#undef C_FLAG_INCLUDE_TYPE
 } CFlagType;
 
+using CFlagDataType = std::variant<
+#define C_FLAG_INCLUDE_TYPE( CFlagTypeEnum, tp, postfix )      tp,
+#define C_FLAG_INCLUDE_TYPE_LAST( CFlagTypeEnum, tp, postfix ) tp
+#include "flags_types.h"
+#undef C_FLAG_INCLUDE_TYPE
+#undef C_FLAG_INCLUDE_TYPE_LAST
+    >;
+
 typedef struct {
-    CFlagType   type;
-    const char *long_name;
-    const char *short_name;
-    const char *desc;
-    uintmax_t   default_data;
-    uintmax_t   data;
+    const char   *long_name;
+    const char   *short_name;
+    const char   *desc;
+    CFlagDataType default_data;
+    CFlagDataType data;
 } CFlag;
 
 static CFlag  flags[C_FLAGS_CAPACITY] = { };
@@ -65,23 +63,15 @@ c_flags_names_unique_internal( const char *long_name, const char *short_name )
 
     return true;
 }
-
-#define C_FLAG_DATA_AS_PTR( flag, ptr_type ) \
-    ( (ptr_type *)( &( ( flag )->data ) ) )
-
-#define C_FLAG_DEFAULT_DATA_AS_PTR( flag, ptr_type ) \
-    ( (ptr_type *)( &( ( flag )->default_data ) ) )
-
-#define C_FLAG_FILL( flag, _type, _long_name, _short_name, _desc ) \
-    {                                                              \
-        ( flag )->type       = ( _type );                          \
-        ( flag )->long_name  = ( _long_name );                     \
-        ( flag )->short_name = ( _short_name );                    \
-        ( flag )->desc       = ( _desc );                          \
+#define C_FLAG_FILL( flag, _long_name, _short_name, _desc ) \
+    {                                                       \
+        ( flag )->long_name  = ( _long_name );              \
+        ( flag )->short_name = ( _short_name );             \
+        ( flag )->desc       = ( _desc );                   \
     }
 
-#define DECLARE_C_FLAG_IMPL( type, ptr_type, postfix )                         \
-    ptr_type *c_flag_##postfix( const char *long_name, const char *short_name, \
+#define DECLARE_C_FLAG_IMPL( CFlagTypeIndex, ptr_type, postfix )               \
+    ptr_type &c_flag_##postfix( const char *long_name, const char *short_name, \
                                 const char *desc, const ptr_type default_val ) \
     {                                                                          \
         assert( flags_size < C_FLAGS_CAPACITY &&                               \
@@ -94,29 +84,23 @@ c_flags_names_unique_internal( const char *long_name, const char *short_name )
                 "flag names must be unique" );                                 \
                                                                                \
         CFlag *flag = &flags[flags_size++];                                    \
+        new ( flag ) CFlag( );                                                 \
                                                                                \
-        C_FLAG_FILL( flag, type, long_name, short_name, desc )                 \
-        *C_FLAG_DEFAULT_DATA_AS_PTR( flag, ptr_type ) = (ptr_type)default_val; \
-        *C_FLAG_DATA_AS_PTR( flag, ptr_type )         = (ptr_type)default_val; \
+        C_FLAG_FILL( flag, long_name, short_name, desc )                       \
                                                                                \
-        return C_FLAG_DATA_AS_PTR( flag, ptr_type );                           \
+        flag->default_data = CFlagDataType{                                    \
+            std::in_place_index<CFlagTypeIndex>, (ptr_type)default_val };      \
+                                                                               \
+        flag->data = CFlagDataType{ std::in_place_index<CFlagTypeIndex>,       \
+                                    (ptr_type)default_val };                   \
+                                                                               \
+        return std::get<CFlagTypeIndex>( flag->data );                         \
     }
 
-DECLARE_C_FLAG_IMPL( C_FLAG_INT, int, int )
-DECLARE_C_FLAG_IMPL( C_FLAG_INT_8, int8_t, int8 )
-DECLARE_C_FLAG_IMPL( C_FLAG_INT_16, int16_t, int16 )
-DECLARE_C_FLAG_IMPL( C_FLAG_INT_32, int32_t, int32 )
-DECLARE_C_FLAG_IMPL( C_FLAG_INT_64, int64_t, int64 )
-DECLARE_C_FLAG_IMPL( C_FLAG_UNSIGNED, unsigned, unsigned )
-DECLARE_C_FLAG_IMPL( C_FLAG_UINT_8, uint8_t, uint8 )
-DECLARE_C_FLAG_IMPL( C_FLAG_UINT_16, uint16_t, uint16 )
-DECLARE_C_FLAG_IMPL( C_FLAG_UINT_32, uint32_t, uint32 )
-DECLARE_C_FLAG_IMPL( C_FLAG_UINT_64, uint64_t, uint64 )
-DECLARE_C_FLAG_IMPL( C_FLAG_SIZE_T, size_t, size_t )
-DECLARE_C_FLAG_IMPL( C_FLAG_BOOL, bool, bool )
-DECLARE_C_FLAG_IMPL( C_FLAG_STRING, char *, string )
-DECLARE_C_FLAG_IMPL( C_FLAG_FLOAT, float, float )
-DECLARE_C_FLAG_IMPL( C_FLAG_DOUBLE, double, double )
+#define C_FLAG_INCLUDE_TYPE( CFlagTypeEnum, tp, postfix ) \
+    DECLARE_C_FLAG_IMPL( CFlagTypeEnum, tp, postfix )
+#include "flags_types.h"
+#undef C_FLAG_INCLUDE_TYPE
 
 static inline void
 c_flags_set_application_name( const char *appname )
@@ -167,63 +151,32 @@ c_flag_default_to_str( const CFlag *flag )
 {
     static char buff[32] = { 0 };
 
-    switch ( flag->type ) {
-    case C_FLAG_INT:
-        snprintf( buff, sizeof( buff ), "%d",
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, int ) );
+    switch ( CFlagType( flag->data.index( ) ) ) {
+#define SPRINT_CFLAG_TYPE( EnumName, printf_str )             \
+    case EnumName:                                            \
+        snprintf( buff, sizeof( buff ), "%" printf_str,       \
+                  std::get<EnumName>( flag->default_data ) ); \
         return buff;
-    case C_FLAG_INT_8:
-        snprintf( buff, sizeof( buff ), "%" PRId8,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, int8_t ) );
-        return buff;
-    case C_FLAG_INT_16:
-        snprintf( buff, sizeof( buff ), "%" PRId16,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, int16_t ) );
-        return buff;
-    case C_FLAG_INT_32:
-        snprintf( buff, sizeof( buff ), "%" PRId32,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, int32_t ) );
-        return buff;
-    case C_FLAG_INT_64:
-        snprintf( buff, sizeof( buff ), "%" PRId64,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, int64_t ) );
-        return buff;
-    case C_FLAG_UNSIGNED:
-        snprintf( buff, sizeof( buff ), "%u",
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, unsigned ) );
-        return buff;
-    case C_FLAG_UINT_8:
-        snprintf( buff, sizeof( buff ), "%" PRIu8,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, uint8_t ) );
-        return buff;
-    case C_FLAG_UINT_16:
-        snprintf( buff, sizeof( buff ), "%" PRIu16,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, uint16_t ) );
-        return buff;
-    case C_FLAG_UINT_32:
-        snprintf( buff, sizeof( buff ), "%" PRIu32,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, uint32_t ) );
-        return buff;
-    case C_FLAG_UINT_64:
-        snprintf( buff, sizeof( buff ), "%" PRIu64,
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, uint64_t ) );
-        return buff;
-    case C_FLAG_SIZE_T:
-        snprintf( buff, sizeof( buff ), "%zu",
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, size_t ) );
-        return buff;
+
+        SPRINT_CFLAG_TYPE( C_FLAG_INT, "d" )
+        SPRINT_CFLAG_TYPE( C_FLAG_INT_8, PRId8 )
+        SPRINT_CFLAG_TYPE( C_FLAG_INT_16, PRId16 )
+        SPRINT_CFLAG_TYPE( C_FLAG_INT_32, PRId32 )
+        SPRINT_CFLAG_TYPE( C_FLAG_INT_64, PRId64 )
+        SPRINT_CFLAG_TYPE( C_FLAG_UNSIGNED, "u" )
+        SPRINT_CFLAG_TYPE( C_FLAG_UINT_8, PRIu8 )
+        SPRINT_CFLAG_TYPE( C_FLAG_UINT_16, PRIu16 )
+        SPRINT_CFLAG_TYPE( C_FLAG_UINT_32, PRIu32 )
+        SPRINT_CFLAG_TYPE( C_FLAG_UINT_64, PRIu64 )
+        SPRINT_CFLAG_TYPE( C_FLAG_SIZE_T, "zu" )
+        SPRINT_CFLAG_TYPE( C_FLAG_FLOAT, "f" )
+        SPRINT_CFLAG_TYPE( C_FLAG_DOUBLE, "lf" )
+#undef SPRINT_CFLAG_TYPE
+
     case C_FLAG_BOOL:
-        return *C_FLAG_DATA_AS_PTR( flag, bool ) ? "true" : "false";
+        return std::get<C_FLAG_BOOL>( flag->default_data ) ? "true" : "false";
     case C_FLAG_STRING:
-        return *C_FLAG_DATA_AS_PTR( flag, char * );
-    case C_FLAG_FLOAT:
-        snprintf( buff, sizeof( buff ), "%f",
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, float ) );
-        return buff;
-    case C_FLAG_DOUBLE:
-        snprintf( buff, sizeof( buff ), "%lf",
-                  *C_FLAG_DEFAULT_DATA_AS_PTR( flag, double ) );
-        return buff;
+        return std::get<C_FLAG_STRING>( flag->default_data );
     default:
         assert( false &&
                 "not all flag types implements c_flag_default_to_str()" );

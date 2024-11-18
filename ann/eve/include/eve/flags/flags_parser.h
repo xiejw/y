@@ -19,7 +19,7 @@ c_flags_type_name_internal<int>( )
 }  // namespace
 
 namespace {
-template <class T>
+template <class T, int CFlagTypeIndex>
 [[nodiscard]] static inline int
 c_flags_load_signed_tp( CFlag *flag, bool is_flag_long, char *value )
 {
@@ -48,11 +48,11 @@ c_flags_load_signed_tp( CFlag *flag, bool is_flag_long, char *value )
         return -1;
     }
 
-    *C_FLAG_DATA_AS_PTR( flag, T ) = (T)number;
+    std::get<CFlagTypeIndex>( flag->data ) = (T)number;
     return 0;
 }
 
-template <class T>
+template <class T, int CFlagTypeIndex>
 [[nodiscard]] static int
 c_flags_load_unsigned_tp( CFlag *flag, bool is_flag_long, char *value )
 {
@@ -78,7 +78,7 @@ c_flags_load_unsigned_tp( CFlag *flag, bool is_flag_long, char *value )
         return -1;
     }
 
-    *C_FLAG_DATA_AS_PTR( flag, T ) = (T)number;
+    std::get<CFlagTypeIndex>( flag->data ) = (T)number;
     return 0;
 }
 
@@ -101,7 +101,7 @@ c_flags_load_ft( CFlag *flag, bool is_flag_long, char *value,
         return -1;
     }
 
-    *C_FLAG_DATA_AS_PTR( flag, T ) = number;
+    std::get<T>( flag->data ) = (T)number;
     return 0;
 }
 
@@ -191,56 +191,67 @@ c_flags_parse_internal( int *argc_ptr, char ***argv_ptr )
 
         char *value = (char *)sv_value.data;
 
-        switch ( flag->type ) {
+        switch ( CFlagType( flag->data.index( ) ) ) {
         case C_FLAG_INT:
-            if ( c_flags_load_signed_tp<int>( flag, flag_long, value ) )
+            if ( c_flags_load_signed_tp<int, C_FLAG_INT>( flag, flag_long,
+                                                          value ) )
                 goto error;
             break;
         case C_FLAG_INT_8:
-            if ( c_flags_load_signed_tp<int8_t>( flag, flag_long, value ) )
+            if ( c_flags_load_signed_tp<int8_t, C_FLAG_INT_8>( flag, flag_long,
+                                                               value ) )
                 goto error;
             break;
         case C_FLAG_INT_16:
-            if ( c_flags_load_signed_tp<int16_t>( flag, flag_long, value ) )
+            if ( c_flags_load_signed_tp<int16_t, C_FLAG_INT_16>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_INT_32:
-            if ( c_flags_load_signed_tp<int32_t>( flag, flag_long, value ) )
+            if ( c_flags_load_signed_tp<int32_t, C_FLAG_INT_32>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_INT_64:
-            if ( c_flags_load_signed_tp<int64_t>( flag, flag_long, value ) )
+            if ( c_flags_load_signed_tp<int64_t, C_FLAG_INT_64>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_UNSIGNED:
-            if ( c_flags_load_unsigned_tp<unsigned>( flag, flag_long, value ) )
+            if ( c_flags_load_unsigned_tp<unsigned, C_FLAG_UNSIGNED>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_UINT_8:
-            if ( c_flags_load_unsigned_tp<uint8_t>( flag, flag_long, value ) )
+            if ( c_flags_load_unsigned_tp<uint8_t, C_FLAG_UINT_8>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_UINT_16:
-            if ( c_flags_load_unsigned_tp<uint16_t>( flag, flag_long, value ) )
+            if ( c_flags_load_unsigned_tp<uint16_t, C_FLAG_UINT_16>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_UINT_32:
-            if ( c_flags_load_unsigned_tp<uint32_t>( flag, flag_long, value ) )
+            if ( c_flags_load_unsigned_tp<uint32_t, C_FLAG_UINT_32>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_UINT_64:
-            if ( c_flags_load_unsigned_tp<uint64_t>( flag, flag_long, value ) )
+            if ( c_flags_load_unsigned_tp<uint64_t, C_FLAG_UINT_64>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_SIZE_T:
-            if ( c_flags_load_unsigned_tp<size_t>( flag, flag_long, value ) )
+            if ( c_flags_load_unsigned_tp<size_t, C_FLAG_SIZE_T>(
+                     flag, flag_long, value ) )
                 goto error;
             break;
         case C_FLAG_BOOL:
-            *C_FLAG_DATA_AS_PTR( flag, bool ) = true;
+            std::get<C_FLAG_BOOL>( flag->data ) = true;
             break;
         case C_FLAG_STRING:
-            *C_FLAG_DATA_AS_PTR( flag, char * ) = value;
+            std::get<C_FLAG_STRING>( flag->data ) = value;
             break;
         case C_FLAG_FLOAT:
             if ( c_flags_load_ft<float>( flag, flag_long, value, strtof ) )

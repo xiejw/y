@@ -43,24 +43,13 @@
  * @param postfix Function name postfix
  */
 #define DECLARE_C_FLAG_DEF( T, postfix )                                \
-    T *c_flag_##postfix( const char *long_name, const char *short_name, \
+    T &c_flag_##postfix( const char *long_name, const char *short_name, \
                          const char *desc, const T default_val );
 
-DECLARE_C_FLAG_DEF( int, int )
-DECLARE_C_FLAG_DEF( int8_t, int8 )
-DECLARE_C_FLAG_DEF( int16_t, int16 )
-DECLARE_C_FLAG_DEF( int32_t, int32 )
-DECLARE_C_FLAG_DEF( int64_t, int64 )
-DECLARE_C_FLAG_DEF( unsigned, unsigned )
-DECLARE_C_FLAG_DEF( uint8_t, uint8 )
-DECLARE_C_FLAG_DEF( uint16_t, uint16 )
-DECLARE_C_FLAG_DEF( uint32_t, uint32 )
-DECLARE_C_FLAG_DEF( uint64_t, uint64 )
-DECLARE_C_FLAG_DEF( size_t, size_t )
-DECLARE_C_FLAG_DEF( bool, bool )
-DECLARE_C_FLAG_DEF( char *, string )
-DECLARE_C_FLAG_DEF( float, float )
-DECLARE_C_FLAG_DEF( double, double )
+#define C_FLAG_INCLUDE_TYPE( CFlagTypeEnum, tp, postfix ) \
+    DECLARE_C_FLAG_DEF( tp, postfix )
+#include "flags_types.h"
+#undef C_FLAG_INCLUDE_TYPE
 
 /**
  * Customize usage block of help message.
