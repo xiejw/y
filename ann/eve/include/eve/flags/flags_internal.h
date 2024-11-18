@@ -41,7 +41,9 @@ static char *c_flags_description_message = NULL;
 static inline void
 c_flags_reset_internal( )
 {
-    memset( flags, 0, C_FLAGS_CAPACITY * sizeof( CFlag ) );
+    for ( size_t idx = 0; idx < flags_size; idx++ ) {
+        flags[idx].~CFlag( );
+    }
     flags_size                  = 0;
     c_flags_appname_message     = NULL;
     c_flags_pos_args_desc       = NULL;
