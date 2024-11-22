@@ -1,4 +1,7 @@
 // vim: ft=cpp
+//
+// Not intended for normal include. Use flags.h instead.
+//
 #pragma once
 #include "flags_string_view.h"
 

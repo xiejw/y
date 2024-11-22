@@ -1,5 +1,6 @@
 // vim: ft=cpp
-// not intended for normal include
+//
+// Not intended for normal include. Use flags.h instead.
 //
 #ifndef C_FLAG_INCLUDE_TYPE_LAST
 #define C_FLAG_INCLUDE_TYPE_LAST               C_FLAG_INCLUDE_TYPE

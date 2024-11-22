@@ -4,8 +4,9 @@
  * SPDX-FileCopyrightText: Copyright 2023 Denis Glazkov <glazzk.off@mail.ru>
  * SPDX-License-Identifier: MIT
  *
+ * *****************************************************************************
  * This is a header only c style header file. Modified a little so c++ compiler
- * can compile it.
+ * can compile it. Also uses std::variant to avoid type-unsafe changes.
  *
  * In general, it is expected only one compilation unit includes this,
  * typically the one with `main` function.
@@ -46,9 +47,11 @@
     T &c_flag_##postfix( const char *long_name, const char *short_name, \
                          const char *desc, const T default_val );
 
-#define C_FLAG_INCLUDE_TYPE( CFlagTypeEnum, tp, postfix ) \
-    DECLARE_C_FLAG_DEF( tp, postfix )
+/* Declare the function defitions for all types by using flags_types header. */
+#define C_FLAG_INCLUDE_TYPE( CFlagTypeEnum, T, postfix ) \
+    DECLARE_C_FLAG_DEF( T, postfix )
 #include "flags_types.h"
+
 #undef C_FLAG_INCLUDE_TYPE
 
 /**
@@ -92,7 +95,7 @@ static inline void c_flags_set_description( const char *description );
 /**
  * Parse command line arguments into declared arguments.
  * This function mutate `argc` and `argv` for comfortably positional arguments
- * parsing.
+ * parsing. Upon failure this function will panic.
  *
  * @param argc_ptr Pointer to program argc
  * @param argv_ptr Pointer to program argv
