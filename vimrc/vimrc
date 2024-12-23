@@ -366,6 +366,7 @@ autocmd FileType c :match cStorageClass /\<_mut_\|_out_\|_inout_\|_moved_in_\|_n
 " - added more int types and error_t as cType
 autocmd FileType c :syn keyword	cType	i64_t u64_t i32_t u32_t f32_t f64_t
 autocmd FileType c :syn keyword	cType	vec_t error_t sds_t
+autocmd FileType c :syn keyword	cType	rc_t sv_s str_s
 
 " - highlight function for c, check \ze in pattern
 autocmd FileType c :syn match cFunction "\<\k\+\ze("
