@@ -10,7 +10,6 @@ jobs:
           path: y
       - uses: ./y/.github/actions/base
         with:
-          compile_eve: true
           require_gcc: true
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ann/tlpi/chp62_term clean test
