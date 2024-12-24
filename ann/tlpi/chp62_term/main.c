@@ -5,78 +5,86 @@
 // - User can use Enter to test (check) the number.
 // - User can type ESC (twice) to quit.
 //
-#include <cstdio>
-#include <cstring>
-
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
-#include <eve/base/log.h>
+#include <base.h>
+#include <tty.h>
 
-#include "base.h"
-#include "tty.h"
+#define logInfo( fmt, ... ) printf( fmt "\n" __VA_OPT__(, ) __VA_ARGS__ )
+#define logFatal( fmt, ... )                           \
+    do {                                               \
+        printf( fmt "\n" __VA_OPT__(, ) __VA_ARGS__ ); \
+        exit( 1 );                                     \
+    } while ( 0 )
 
-using eve::tty::KeyInfo;
-using eve::tty::KeyKind;
-using eve::tty::Run;
+static int     gen_rng( );
+static error_t get_user_input( int numToGuess, int *quitSignal,
+                               const tty_key_info_s *Info );
 
-auto GenerateRngValue( ) -> int;
-auto GetUserInput( int NumberToGuess, int &QuitSignal, const KeyInfo *Info )
-    -> error_t;
+typedef struct {
+    int to_guess;
+    int quit;
+} guess_game_info_s;
 
-auto
-main( ) -> int
+static error_t
+guess_user_input( void *udp, const tty_key_info_s *info )
 {
-    error_t Err           = OK;
-    int     NumberToGuess = GenerateRngValue( );
-    int     QuitSignal    = 0;
+    guess_game_info_s *game = udp;
+    return get_user_input( game->to_guess, &game->quit, info );
+}
+
+int
+main( )
+{
+    error_t           err  = OK;
+    guess_game_info_s game = { .to_guess = gen_rng( ), .quit = 0 };
 
     while ( 1 ) {
         logInfo(
             "Your Choice between -10 (inc) to 10 (inc) ? [Left or Right arrow "
             "to select]:" );
 
-        Err = Run( [&]( auto *info ) -> error_t {
-            return GetUserInput( NumberToGuess, QuitSignal, info );
-        } );
+        err = tty_run( &game, guess_user_input );
 
         // Handle the cases whether we should quite or continue.
-        if ( Err == ERR_EOF ) {
-            if ( QuitSignal == 1 ) {
+        if ( err == ERR_EOF ) {
+            if ( game.quit == 1 ) {
                 logInfo( "Bye." );
-                Err = OK;
+                err = OK;
                 break;
             }
 
             continue;  // Next iteration.
         }
 
-        if ( Err != OK ) {  // Now it is totally unexpected.
+        if ( err != OK ) {  // Now it is totally unexpected.
             logFatal( "Unexpected error. Quit." );
             break;
         }
     }
 
-    return Err;
+    return err;
 }
 
-auto
-GenerateRngValue( ) -> int
+int
+gen_rng( )
 {
     srand( (unsigned)time( NULL ) );
     return ( (int)rand( ) % 21 ) - 10;
 }
 
-auto
-GetUserInput( int NumberToGuess, int &QuitSignal, const KeyInfo *Info )
-    -> error_t
+error_t
+get_user_input( int numToGuess, int *quitSignal, const tty_key_info_s *Info )
 {
     static int Answer      = 0;
     static int EscapeCount = 0;
 
-    if ( Info->Kind == KeyKind::Esc ) {
+    if ( Info->kind == Key_Esc ) {
         if ( EscapeCount == 1 ) {
-            QuitSignal = 1;
+            *quitSignal = 1;
             logInfo( "[Quit]" );
             return ERR_EOF;
         }
@@ -88,31 +96,31 @@ GetUserInput( int NumberToGuess, int &QuitSignal, const KeyInfo *Info )
 
     EscapeCount = 0;
 
-    switch ( Info->Kind ) {
-    case KeyKind::Enter:
-        if ( Answer == NumberToGuess ) {
+    switch ( Info->kind ) {
+    case Key_Enter:
+        if ( Answer == numToGuess ) {
             logInfo( "[Enter] Choice %d. Bingo! ", Answer );
-            QuitSignal = 1;
+            *quitSignal = 1;
         } else {
             logInfo( "[Enter] Choice %d. %s ", Answer,
-                     Answer > NumberToGuess ? "Too big" : "Too small" );
-            QuitSignal = 0;
+                     Answer > numToGuess ? "Too big" : "Too small" );
+            *quitSignal = 0;
         }
 
         return ERR_EOF;
 
-    case KeyKind::ArrowLeft:
+    case Key_ArrowLeft:
         Answer--;
         logInfo( "Choice %d [Press Enter to test]", Answer );
         return OK;
 
-    case KeyKind::ArrowRight:
+    case Key_ArrowRight:
         Answer++;
         logInfo( "Choice %d [Press Enter to test]", Answer );
         return OK;
 
     default:
-        const char *InputStr = Info->Str;
+        const char *InputStr = Info->str;
         if ( *InputStr == '\x1b' ) {
             // Debugging Purpose.
             logInfo( "[RAW %lu] ESC %s", strlen( InputStr ), InputStr + 1 );
