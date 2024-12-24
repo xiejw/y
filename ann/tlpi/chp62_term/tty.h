@@ -1,11 +1,7 @@
-// vim: ft=cpp
+// vim: ft=c
 #pragma once
 
-#include <functional>
-
-#include "base.h"
-
-namespace eve::tty {
+#include <base.h>
 
 // -----------------------------------------------------------------------------
 // The Run sets terminal state correct for the cbreak mode (non-canonical)
@@ -21,21 +17,19 @@ namespace eve::tty {
 //     special code to indicate the CallbackFn considers the processing is over
 //     rather than an error.
 //
-enum class KeyKind {
-    Na,
-    ArrowLeft,
-    ArrowRight,
-    Enter,
-    Esc,
-    Other,
-};
+typedef enum {
+    Key_Na,
+    Key_ArrowLeft,
+    Key_ArrowRight,
+    Key_Enter,
+    Key_Esc,
+    Key_Other,
+} tty_key_kind_e;
 
-struct KeyInfo {
-    KeyKind     Kind;  // The Kind.
-    const char *Str;   // Lifetime: Valid in CallbackFn invocation period.
-};
+typedef struct {
+    tty_key_kind_e kind;  // The Kind.
+    const char    *Str;   // Lifetime: Valid in CallbackFn invocation period.
+} tty_key_info_s;
 
-using CallbackFn = std::function<auto( const KeyInfo *Info )->error_t>;
-auto Run( CallbackFn fn ) -> error_t;
-
-}  // namespace eve::tty
+typedef error_t ( *tty_callback_fnt )( const tty_key_info_s );
+error_t tty_run( tty_callback_fnt fn );

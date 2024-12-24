@@ -1,12 +1,12 @@
-// vim: ft=cpp
+// vim: ft=c
 #pragma once
 
 // Global namespace for all programs.
 
-using error_t = int;
+typedef int error_t;
 
-const error_t OK        = 0;
-const error_t ERR       = -1;
-const error_t ERR_EOF   = -2;
-const error_t ERR_LIMIT = -3;
-const error_t ERR_IO    = -4;
+#define OK        0
+#define ERR       -1
+#define ERR_EOF   -2
+#define ERR_LIMIT -3
+#define ERR_IO    -4
