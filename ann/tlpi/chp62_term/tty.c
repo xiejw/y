@@ -46,52 +46,50 @@ tty_lookup_mapping( const char *str )
     return Key_Na;
 }
 
-// auto
-// Run( CallbackFn fn ) -> error_t
-//{
-//     error_t         Err{ };
-//     struct termios  SavedTerm;  // Will be set later.
-//     struct termios *PtrToSavedTerm =
-//         NULL;  // Upon SavedTerm is set, point to SavedTerm.
-//
-//     Err = tty_set_cbreak( 0, &SavedTerm );
-//     if ( Err != OK ) {
-//         goto cleanup;
-//     }
-//     PtrToSavedTerm = &SavedTerm;  // Goto `cleanup` will handle restoring.
-//
-//     // Init the work.
-//     InitMapping( );
-//     char Buf[MAX_BUF_LIMIT];
-//
-//     // Loop until returning non-OK;
-//     for ( ;; ) {
-//         ssize_t NumRead = read( 0, Buf, MAX_BUF_LIMIT );
-//
-//         if ( NumRead == -1 ) {  // This should really not happen for stdin.
-//             Err = ERR_IO;
-//             goto cleanup;
-//         }
-//
-//         if ( NumRead == MAX_BUF_LIMIT ) {  // Should not happen though.
-//             Err = ERR_LIMIT;
-//             goto cleanup;
-//         }
-//
-//         Buf[NumRead] = 0;
-//
-//         // Prepare the Info
-//         auto    Kind = LookupMapping( Buf );
-//         KeyInfo Info = { Kind, Buf };
-//
-//         Err = fn( &Info );
-//         if ( Err != OK ) goto cleanup;
-//     }
-//
-// cleanup:
-//     if ( PtrToSavedTerm != NULL ) {
-//         Reset( 0, PtrToSavedTerm );
-//     }
-//     return Err;
-// }
-// }  // namespace eve::tty
+error_t
+tty_run( void *udp, tty_callback_fnt fn )
+{
+    error_t         err = OK;
+    struct termios  SavedTerm;  // Will be set later.
+    struct termios *PtrToSavedTerm =
+        NULL;  // Upon SavedTerm is set, point to SavedTerm.
+
+    err = tty_set_cbreak( 0, &SavedTerm );
+    if ( err != OK ) {
+        goto cleanup;
+    }
+    PtrToSavedTerm = &SavedTerm;  // Goto `cleanup` will handle restoring.
+
+    // Init the work.
+    char buf[MAX_BUF_LIMIT];
+
+    // Loop until returning non-OK;
+    for ( ;; ) {
+        ssize_t count = read( 0, buf, MAX_BUF_LIMIT );
+
+        if ( count == -1 ) {  // This should really not happen for stdin.
+            err = ERR_IO;
+            goto cleanup;
+        }
+
+        if ( count == MAX_BUF_LIMIT ) {  // Should not happen though.
+            err = ERR_LIMIT;
+            goto cleanup;
+        }
+
+        buf[count] = 0;
+
+        // Prepare the Info
+        tty_key_kind_e kind = tty_lookup_mapping( buf );
+        tty_key_info_s info = { .kind = kind, .str = buf };
+
+        err = fn( udp, &info );
+        if ( err != OK ) goto cleanup;
+    }
+
+cleanup:
+    if ( PtrToSavedTerm != NULL ) {
+        tty_reset( 0, PtrToSavedTerm );
+    }
+    return err;
+}

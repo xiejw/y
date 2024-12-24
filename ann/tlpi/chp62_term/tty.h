@@ -28,8 +28,8 @@ typedef enum {
 
 typedef struct {
     tty_key_kind_e kind;  // The Kind.
-    const char    *Str;   // Lifetime: Valid in CallbackFn invocation period.
+    const char    *str;   // Lifetime: Valid in CallbackFn invocation period.
 } tty_key_info_s;
 
-typedef error_t ( *tty_callback_fnt )( const tty_key_info_s );
-error_t tty_run( tty_callback_fnt fn );
+typedef error_t ( *tty_callback_fnt )( void *udp, const tty_key_info_s * );
+error_t tty_run( void *udp, tty_callback_fnt fn );
