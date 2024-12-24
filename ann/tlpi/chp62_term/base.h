@@ -1,7 +1,7 @@
 // vim: ft=c
 #pragma once
 
-typedef int error_t;
+typedef int rc_t;
 
 #define OK        0
 #define ERR       -1
