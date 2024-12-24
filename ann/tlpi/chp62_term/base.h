@@ -1,8 +1,6 @@
 // vim: ft=c
 #pragma once
 
-// Global namespace for all programs.
-
 typedef int error_t;
 
 #define OK        0

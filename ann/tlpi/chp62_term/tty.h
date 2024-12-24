@@ -4,18 +4,18 @@
 #include <base.h>
 
 // -----------------------------------------------------------------------------
-// The Run sets terminal state correct for the cbreak mode (non-canonical)
-// and calls the CallbackFn for each key event.
+// The tty_run sets terminal state correct for the cbreak mode (non-canonical)
+// and calls the callback fn for each key event.
 //
-// Upon return, it will always restore the terminal state. Run never returns
-// OK.
+// Upon return, it will always restore the terminal state. tty_run never
+// returns OK.
 //
-// Protocol for the CallbackFn:
+// Protocol for the callback fn:
 //
-//   - Return OK, Run will wait and continue handling the next key event.
-//   - Return non-OK, Run will return immediately. Conventionally, EEOF is the
-//     special code to indicate the CallbackFn considers the processing is over
-//     rather than an error.
+//   - Return OK, tty_run will wait and continue handling the next key event.
+//   - Return non-OK, tty_run will return immediately. Conventionally, ERR_EOF
+//   is the special code to indicate the callback fn considers the processing is
+//   over rather than an error.
 //
 typedef enum {
     Key_Na,
@@ -28,7 +28,7 @@ typedef enum {
 
 typedef struct {
     tty_key_kind_e kind;  // The Kind.
-    const char    *str;   // Lifetime: Valid in CallbackFn invocation period.
+    const char    *str;   // Lifetime: Valid in callback fn invocation period.
 } tty_key_info_s;
 
 typedef error_t ( *tty_callback_fnt )( void *udp, const tty_key_info_s * );
