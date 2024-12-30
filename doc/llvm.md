@@ -9,7 +9,7 @@
 ### Best Practices for Clang Flags
 
 ```
-${CXX} -std=<PLACEHOLDER> -Wall -pedantic -Wextra -Wfatal-errors -Wconversion
+${CXX} -std=<PLACEHOLDER> -Wall -Werror -pedantic -Wextra -Wfatal-errors -Wconversion
 ```
 
 ### Clang on macOS
