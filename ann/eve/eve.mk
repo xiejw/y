@@ -28,7 +28,8 @@ endif  # EVE_FMT_FOLDERS
 #
 BUILD_BASE        = .build
 BUILD             = ${BUILD_BASE}
-BUILD_OBJ         = ${BUILD}/objs
+BUILD_OBJ_SUB_DIR = objs
+BUILD_OBJ         = ${BUILD}/${BUILD_OBJ_SUB_DIR}
 
 CXXFLAGS         += -std=c++23 -Wall -pedantic -Wextra -Wfatal-errors
 CXXFLAGS         += -Wconversion -Wshadow
@@ -39,6 +40,7 @@ AR                = ar -cr
 MK                = make --no-print-directory
 
 EVE_LIB           = ${EVE_PATH}/.build_release/libeve.a
+EVE_TEST_LIB      = ${EVE_PATH}/.build_release/${BUILD_OBJ_SUB_DIR}/testing_testing.o
 
 # ------------------------------------------------------------------------------
 # Knobs
