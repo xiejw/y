@@ -224,6 +224,15 @@ ed_llvm() {
   fi
 }
 
+ed_libcxx() {
+  # libcxx
+  if [[ "$LIBCXX_PATH" == "" ]]; then
+    export LIBCXX_PATH=~/Workspace/build/llvm/install-libcxx
+    export CXX="clang++ -nostdinc++ -nostdlib++ -isystem ${LIBCXX_PATH}/include/c++/v1 -L ${LIBCXX_PATH}/lib -Wl,-rpath,${LIBCXX_PATH}/lib -lc++"
+    export CXXFLAGS=-Wno-unused-command-line-argument
+  fi
+}
+
 # ------------------------------------------------------------------------------
 # LLVM
 #
