@@ -22,7 +22,7 @@ set -x
 set -e
 
 TODAY_STR=`date '+%Y-%m-%d'`
-LIBCXX_BUILD_DIR=libcxx-build-${TODAY_STR}
+LIBCXX_BUILD_DIR=build-libcxx-${TODAY_STR}
 
 mkdir ${LIBCXX_BUILD_DIR}
 cd ${LIBCXX_BUILD_DIR}
