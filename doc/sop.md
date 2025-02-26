@@ -40,7 +40,7 @@
   grep =m .config | wc
   time make [-j1]
   sudo make modules_install
-  sudo ~/Workspace/y/dotfiles/tools/kernel_install.sh
+  ~/Workspace/y/tools/kernel_install.sh
   ```
 
 </details>
@@ -62,7 +62,7 @@
             <*> 802.1d Ethernet Bridging
             [*] Network packet filtering framework (Netfilter)  --->
                 [*] Advanced netfilter configuration
-                [*]  Bridged IP/ARP packets filtering
+                [*] Bridged IP/ARP packets filtering
                     IP: Netfilter Configuration  --->
                       <*> IP tables support (required for filtering/masq/NAT)
                       <*>   Packet filtering
@@ -71,9 +71,13 @@
                     Core Netfilter Configuration  --->
                       <*> Netfilter connection tracking support
                       <*> Connection tracking netlink interface
+                      -*- Netfilter Xtables support (required for ip_tables)
+                      <*> set target and match support
                       *** Xtables matches ***
                       <*>   "addrtype" address type match support
                       <*>   "conntrack" connection tracking match support
+                [*]  IP set support
+                    <*> hash: net set support
     Device Drivers  --->
         [*] Multiple devices driver support (RAID and LVM)  --->
             <*>   Device mapper support
@@ -102,6 +106,19 @@
                             <*> Netfilter nf_tables nat support
                             <*> Netfilter x_tables over nf_tables module
   ```
+
+  If the docker is complaining ip6tables, added the following block
+  ```
+  /etc/docker/daemon.json
+  {
+    "ipv6": false,
+    "ip6tables": false
+  }
+  ```
+
+  History
+  1. 2025-02-26
+    - Docker 28 change  https://github.com/moby/moby/issues/49505#issuecomment-2671610413
 
   FAQ:
   1. Module sign
