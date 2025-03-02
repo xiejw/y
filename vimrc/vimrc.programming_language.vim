@@ -147,6 +147,7 @@ autocmd FileType bash :hi shFunctionKey ctermfg=Cyan
 autocmd FileType bash :hi shFunction ctermfg=DarkBlue
 
 " === --- html ------------------------------------------------------------- ===
-autocmd FileType html :iabbrev <buffer> aht <a href="" target="_blank">
+autocmd FileType html :iabbrev <buffer> aa <a href="" target="_blank">
 autocmd FileType html :iabbrev <buffer> cc <code>
+autocmd FileType html :iabbrev <buffer> pp <p>
 
