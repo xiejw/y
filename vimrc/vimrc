@@ -123,6 +123,15 @@ Plug 'preservim/vim-indent-guides', {'commit': 'a1e1390'} " 2023-11
 Plug 'andymass/vim-matchup', {'commit': '57d3a4b'} " 2024-10
 Plug 'alvan/vim-closetag', {'commit': 'd0a562f'} " 2024-10
 
+" ------------------------------------------------------------------------------
+" tagbar
+"
+" Shows a panel on right to show the high level structure of the current
+" source code file.
+"
+" See <leaders> section for shortcut.
+Plug 'preservim/tagbar', {'commit': '8de7694'} " 2024-12
+
 call plug#end()
 
 " ==============================================================================
@@ -353,7 +362,7 @@ autocmd FileType vim :setlocal foldlevel=2 foldmethod=marker
 "
 " autocmd BufRead,BufNewFile *.h setlocal filetype=c
 autocmd FileType c :setlocal shiftwidth=8 tabstop=8 softtabstop=8
-autocmd FileType c :setlocal nofoldenable foldmethod=syntax foldcolumn=1 foldlevel=0
+autocmd FileType c :setlocal nofoldenable
 autocmd BufRead,BufNewFile *.h setlocal filetype=c
 
 " customize syntax for c
