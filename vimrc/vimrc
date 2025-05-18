@@ -111,17 +111,7 @@ Plug 'preservim/vim-indent-guides', {'commit': 'a1e1390'} " 2023-11
 " - `%` to jump between html open/close tags.
 " - `[%` to jump to prev open tag.
 "
-" Plugin `closetag` allows the complete the tag in pairs.
-"
-" For exampl, with `<a`
-" - a single `>`, will close it as <a>_cursor_</a>
-" - one more `>`, will expand as multi-line
-"   <a>
-"     _cursor_
-"   </a>
-"
 Plug 'andymass/vim-matchup', {'commit': '57d3a4b'} " 2024-10
-Plug 'alvan/vim-closetag', {'commit': 'd0a562f'} " 2024-10
 
 " ------------------------------------------------------------------------------
 " tagbar

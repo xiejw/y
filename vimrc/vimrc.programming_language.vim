@@ -137,9 +137,7 @@ autocmd FileType plaintex :setlocal tw=80 nocindent
 autocmd FileType plaintex :setlocal autoindent
 autocmd FileType plaintex :setlocal formatoptions=tcq2
 
-" {{{2 bash
-" ------------------------------------------------------------------------------
-" --- bash
+" === --- bash ------------------------------------------------------------- ===
 "
 " customize the highlighting for function and its name. It was green, similar
 " to the comment's color.
@@ -147,7 +145,13 @@ autocmd FileType bash :hi shFunctionKey ctermfg=Cyan
 autocmd FileType bash :hi shFunction ctermfg=DarkBlue
 
 " === --- html ------------------------------------------------------------- ===
-autocmd FileType html :iabbrev <buffer> aa <a href="" target="_blank">
-autocmd FileType html :iabbrev <buffer> cc <code>
-autocmd FileType html :iabbrev <buffer> pp <p>
+"
+" To trigger abbrev without inserting space, use ctrl-] (see :help i_CTRL-]).
+"
+" aa stops at the href part
+" cc stops in the block
+" pp opens a new line and stops there
+autocmd FileType html :iabbrev <buffer> aa <a href="" target="_blank"></a><esc>bbbbbblli
+autocmd FileType html :iabbrev <buffer> cc <code></code><esc>bbli
+autocmd FileType html :iabbrev <buffer> pp <p></p><esc>bbli<enter><esc>ko
 
