@@ -116,7 +116,7 @@ bitOpsClrBit( unsigned long *p, unsigned long offset_bits )
     offset_bits = ( offset_bits % BITS_PER_LONG );  // adjust offset
 
     long old_v = ( *p >> offset_bits ) & 0x1;
-    *p &= ~( 1L << offset_bits );
+    *p &= ~( 1UL << offset_bits );
     return old_v;
 }
 
