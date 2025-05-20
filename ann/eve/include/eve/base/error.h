@@ -26,89 +26,94 @@
 namespace eve::base {
 
 struct [[nodiscard]] Error {
-    //
-    // nested private data structure
-    //
-  public:
-    enum ErrorKind {
-        ERROR     = -1,
-        EMALLOC   = -2,
-        ENOTEXIST = -3,
-        ENOTIMPL  = -4,
-    };
+        //
+        // nested private data structure
+        //
+      public:
+        enum ErrorKind {
+                ERROR     = -1,
+                EMALLOC   = -2,
+                ENOTEXIST = -3,
+                ENOTIMPL  = -4,
+        };
 
-    //
-    // nested private data structure
-    //
-  private:
-    // The invariant is mKind must be set and mMsg is not empty. Caller is
-    // responsible for this.
-    struct ErrorHolder {
+        //
+        // nested private data structure
+        //
       private:
-        ErrorKind                mKind{ ERROR };
-        std::list<eve::adt::Sds> mMsg{ };
+        // The invariant is mKind must be set and mMsg is not empty. Caller is
+        // responsible for this.
+        struct ErrorHolder {
+              private:
+                ErrorKind                mKind{ ERROR };
+                std::list<eve::adt::Sds> mMsg{ };
+
+              public:
+                ErrorKind     getKind( ) const noexcept { return this->mKind; }
+                eve::adt::Sds getMsg( ) const noexcept;
+
+                ErrorHolder &emitNote( eve::adt::Sds &&msg ) noexcept;
+
+                template <typename... Args>
+                ErrorHolder &emitNote( const char *fmt,
+                                       Args &&...args ) noexcept
+                {
+                        eve::adt::Sds sds{ };
+                        sds.catPrintf( fmt, std::forward<Args>( args )... );
+                        mMsg.push_back( std::move( sds ) );
+                        return *this;
+                }
+        };
+
+        //
+        // internal data structure
+        //
+        // should be as cheap as one pointer.
+        //
+      private:
+        ErrorHolder *mHolder{ nullptr };
 
       public:
-        ErrorKind     getKind( ) const noexcept { return this->mKind; }
-        eve::adt::Sds getMsg( ) const noexcept;
+        Error( ) = default;
+        ~Error( ) { delete mHolder; }
 
-        ErrorHolder &emitNote( eve::adt::Sds &&msg ) noexcept;
+        EVE_DISABLE_COPY_CONSTRUCTOR( Error );
+        EVE_DECLARE_MOVE_CONSTRUCTOR( Error );
 
         template <typename... Args>
-        ErrorHolder &emitNote( const char *fmt, Args &&...args ) noexcept
+        Error( const char *fmt, Args &&...args )
         {
-            eve::adt::Sds sds{ };
-            sds.catPrintf( fmt, std::forward<Args>( args )... );
-            mMsg.push_back( std::move( sds ) );
-            return *this;
+                mHolder = new ErrorHolder{ };
+                mHolder->emitNote( fmt, std::forward<Args>( args )... );
         }
-    };
 
-    //
-    // internal data structure
-    //
-    // should be as cheap as one pointer.
-    //
-  private:
-    ErrorHolder *mHolder{ nullptr };
+      private:
+        using Sds = eve::adt::Sds;
 
-  public:
-    Error( ) = default;
-    ~Error( ) { delete mHolder; }
+      public:
+        auto isOk( ) const noexcept -> bool { return mHolder == nullptr; }
+        auto isError( ) const noexcept -> bool { return !isOk( ); }
+        auto getKind( ) const noexcept -> ErrorKind
+        {
+                return mHolder->getKind( );
+        };
+        auto getMsg( ) const noexcept -> Sds { return mHolder->getMsg( ); };
+        auto unwrap( ) -> void { isError( ) ? dumpAndPanic( ) : void( 0 ); }
+        auto dump( ) const noexcept { std::cerr << mHolder->getMsg( ); };
 
-    EVE_DISABLE_COPY_CONSTRUCTOR( Error );
-    EVE_DECLARE_MOVE_CONSTRUCTOR( Error );
+        void dumpAndPanic( ) const noexcept
+        {
+                std::cerr << "panic error:\n"
+                          << mHolder->getMsg( ) << std::flush;
+                std::exit( 1 );
+        };
 
-    template <typename... Args>
-    Error( const char *fmt, Args &&...args )
-    {
-        mHolder = new ErrorHolder{ };
-        mHolder->emitNote( fmt, std::forward<Args>( args )... );
-    }
-
-  private:
-    using Sds = eve::adt::Sds;
-
-  public:
-    auto isOk( ) const noexcept -> bool { return mHolder == nullptr; }
-    auto isError( ) const noexcept -> bool { return !isOk( ); }
-    auto getKind( ) const noexcept -> ErrorKind { return mHolder->getKind( ); };
-    auto getMsg( ) const noexcept -> Sds { return mHolder->getMsg( ); };
-    auto unwrap( ) -> void { isError( ) ? dumpAndPanic( ) : void( 0 ); }
-    auto dump( ) const noexcept { std::cerr << mHolder->getMsg( ); };
-
-    void dumpAndPanic( ) const noexcept
-    {
-        std::cerr << "panic error:\n" << mHolder->getMsg( ) << std::flush;
-        std::exit( 1 );
-    };
-
-    template <typename... Args>
-    Error &emitNote( const char *fmt, Args &&...args )
-    {
-        mHolder->emitNote( fmt, std::forward<Args>( args )... );
-        return *this;
-    }
+        template <typename... Args>
+        Error &emitNote( const char *fmt, Args &&...args )
+        {
+                mHolder->emitNote( fmt, std::forward<Args>( args )... );
+                return *this;
+        }
 };
 
 void panic_impl_( const char *msg, const char *file, int line_no,
@@ -123,13 +128,13 @@ template <typename... Args>
 auto
 newError( const char *fmt, Args &&...args ) -> Error
 {
-    return eve::base::Error{ fmt, std::forward<Args>( args )... };
+        return eve::base::Error{ fmt, std::forward<Args>( args )... };
 }
 
-#define panic( fmt, ... )                                \
-    eve::base::panic_impl_( "panic", __FILE__, __LINE__, \
-                            fmt __VA_OPT__(, ) __VA_ARGS__ )
-#define unimplemented( fmt, ... )                                \
-    eve::base::panic_impl_( "unimplemented", __FILE__, __LINE__, \
-                            fmt __VA_OPT__(, ) __VA_ARGS__ )
+#define panic( fmt, ... )                                    \
+        eve::base::panic_impl_( "panic", __FILE__, __LINE__, \
+                                fmt __VA_OPT__(, ) __VA_ARGS__ )
+#define unimplemented( fmt, ... )                                    \
+        eve::base::panic_impl_( "unimplemented", __FILE__, __LINE__, \
+                                fmt __VA_OPT__(, ) __VA_ARGS__ )
 }  // namespace eve

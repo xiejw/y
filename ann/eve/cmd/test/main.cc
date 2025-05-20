@@ -5,6 +5,6 @@
 int
 main( )
 {
-    eve::testing::SuiteDriver driver{ };
-    driver.RunAllSuites( );
+        eve::testing::SuiteDriver driver{ };
+        driver.RunAllSuites( );
 }
