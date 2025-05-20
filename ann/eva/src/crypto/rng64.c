@@ -73,76 +73,76 @@ static uint64_t rng64_mix56( uint64_t z );
 struct rng64 *
 rng64New( uint64_t seed )
 {
-    return rng64NewWithGamma( seed, /*gamma_seed=*/0L );
+        return rng64NewWithGamma( seed, /*gamma_seed=*/0L );
 }
 
 struct rng64 *
 rng64NewWithGamma( uint64_t seed, uint64_t gamma_seed )
 {
-    struct rng64 *rng;
+        struct rng64 *rng;
 
-    assert( gamma_seed < gamma_prime_ );
-    rng = malloc( sizeof( struct rng64 ) );
+        assert( gamma_seed < gamma_prime_ );
+        rng = malloc( sizeof( struct rng64 ) );
 
-    rng->seed_ = seed;
-    gamma_seed += gamma_gamma_;
-    if ( gamma_seed >= gamma_prime_ ) gamma_seed -= gamma_prime_;
-    rng->gamma_           = rng64_mix56( gamma_seed ) + 13;
-    rng->next_gamma_seed_ = gamma_seed;
-    return rng;
+        rng->seed_ = seed;
+        gamma_seed += gamma_gamma_;
+        if ( gamma_seed >= gamma_prime_ ) gamma_seed -= gamma_prime_;
+        rng->gamma_           = rng64_mix56( gamma_seed ) + 13;
+        rng->next_gamma_seed_ = gamma_seed;
+        return rng;
 }
 
 struct rng64 *
 rng64Split( struct rng64 *rng )
 {
-    uint64_t seed       = rng64_advance_seed( (struct rng64 *)rng );
-    uint64_t gamma_seed = rng->next_gamma_seed_;
-    return rng64NewWithGamma( seed, gamma_seed );
+        uint64_t seed       = rng64_advance_seed( (struct rng64 *)rng );
+        uint64_t gamma_seed = rng->next_gamma_seed_;
+        return rng64NewWithGamma( seed, gamma_seed );
 }
 
 void
 rng64To( struct rng64 *rng, u64_t states[2] )
 {
-    states[0] = rng->seed_;
-    states[1] = rng->next_gamma_seed_;
+        states[0] = rng->seed_;
+        states[1] = rng->next_gamma_seed_;
 }
 
 void
 rng64From( struct rng64 *rng, u64_t states[2] )
 {
-    rng->seed_            = states[0];
-    rng->gamma_           = rng64_mix56( states[1] ) + 13;
-    rng->next_gamma_seed_ = states[1];
+        rng->seed_            = states[0];
+        rng->gamma_           = rng64_mix56( states[1] ) + 13;
+        rng->next_gamma_seed_ = states[1];
 }
 
 void
 rng64Free( struct rng64 *rng )
 {
-    free( rng );
+        free( rng );
 }
 
 uint64_t
 rng64U64( struct rng64 *rng )
 {
-    return rng64_mix64( rng64_advance_seed( rng ) );
+        return rng64_mix64( rng64_advance_seed( rng ) );
 }
 
 uint32_t
 rng64U32( struct rng64 *rng )
 {
-    return (uint32_t)( rng64U64( rng ) );
+        return (uint32_t)( rng64U64( rng ) );
 }
 
 double
 rng64F64( struct rng64 *rng )
 {
-    return ( rng64U64( rng ) >> 11 ) * double_ulp_;
+        return ( rng64U64( rng ) >> 11 ) * double_ulp_;
 }
 
 float
 rng64F32( struct rng64 *rng )
 {
-    return (float)( rng64U64( rng ) >> 11 ) * float_ulp_;
+        return (float)( rng64U64( rng ) >> 11 ) * float_ulp_;
 }
 
 // -----------------------------------------------------------------------------
@@ -152,29 +152,29 @@ rng64F32( struct rng64 *rng )
 uint64_t
 rng64_update( uint64_t seed, uint64_t gamma )
 {
-    uint64_t p = seed + gamma;
-    return ( p >= seed ) ? p : ( p >= 13L ) ? p - 13L : ( p - 13L ) + gamma;
+        uint64_t p = seed + gamma;
+        return ( p >= seed ) ? p : ( p >= 13L ) ? p - 13L : ( p - 13L ) + gamma;
 }
 
 uint64_t
 rng64_mix64( uint64_t z )
 {
-    z = ( ( z ^ ( z >> 33 ) ) * 0xff51afd7ed558ccdL );
-    z = ( ( z ^ ( z >> 33 ) ) * 0xc4ceb9fe1a85ec53L );
-    return z ^ ( z >> 33 );
+        z = ( ( z ^ ( z >> 33 ) ) * 0xff51afd7ed558ccdL );
+        z = ( ( z ^ ( z >> 33 ) ) * 0xc4ceb9fe1a85ec53L );
+        return z ^ ( z >> 33 );
 }
 
 uint64_t
 rng64_advance_seed( struct rng64 *rng )
 {
-    /* Advance one more coefficient at current level. */
-    return ( rng->seed_ = rng64_update( rng->seed_, rng->gamma_ ) );
+        /* Advance one more coefficient at current level. */
+        return ( rng->seed_ = rng64_update( rng->seed_, rng->gamma_ ) );
 }
 
 uint64_t
 rng64_mix56( uint64_t z )
 {
-    z = ( ( z ^ ( z >> 33 ) ) * 0xff51afd7ed558ccdL ) & 0x00FFFFFFFFFFFFFFL;
-    z = ( ( z ^ ( z >> 33 ) ) * 0xc4ceb9fe1a85ec53L ) & 0x00FFFFFFFFFFFFFFL;
-    return z ^ ( z >> 33 );
+        z = ( ( z ^ ( z >> 33 ) ) * 0xff51afd7ed558ccdL ) & 0x00FFFFFFFFFFFFFFL;
+        z = ( ( z ^ ( z >> 33 ) ) * 0xc4ceb9fe1a85ec53L ) & 0x00FFFFFFFFFFFFFFL;
+        return z ^ ( z >> 33 );
 }

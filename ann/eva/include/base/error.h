@@ -75,7 +75,7 @@ extern void    errDumpSds( void *sds, const char *,
                            ... );  // _mut_ sds_t * for sds
 
 #define errFatalAndExit( fmt, ... ) \
-    errFatalAndExit_( __FILE__, __LINE__, fmt, __VA_ARGS__ )
+        errFatalAndExit_( __FILE__, __LINE__, fmt, __VA_ARGS__ )
 #define errFatalAndExit1( fmt ) errFatalAndExit_( __FILE__, __LINE__, fmt )
 
 // alias
@@ -84,9 +84,9 @@ extern void    errDumpSds( void *sds, const char *,
 // -----------------------------------------------------------------------------
 // helper macro.
 // -----------------------------------------------------------------------------
-#define errMalloc( )                                                    \
-    errNewWithNote( EMALLOC, "malloc err. file: %s, loc: %d", __FILE__, \
-                    __LINE__ )
+#define errMalloc( )                                                        \
+        errNewWithNote( EMALLOC, "malloc err. file: %s, loc: %d", __FILE__, \
+                        __LINE__ )
 
 // -----------------------------------------------------------------------------
 // private prototype.

@@ -13,11 +13,11 @@
 // =============================================================================
 
 union value {
-    i64_t i64;
-    u64_t u64;
-    f64_t f64;
-    f32_t f32;
-    void *data;
+        i64_t i64;
+        u64_t u64;
+        f64_t f64;
+        f32_t f32;
+        void *data;
 };
 
 // compound literal (in-place)

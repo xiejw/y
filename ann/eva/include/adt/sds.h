@@ -44,8 +44,8 @@
 typedef char *sds_t;
 
 struct sds_head {
-    size_t len;
-    size_t alloc;
+        size_t len;
+        size_t alloc;
 };
 
 // allocator and free fns.
@@ -65,11 +65,11 @@ void  sdsFree( sds_t s );
 #define sdsCap( s )   _sdsCap( s )
 #define sdsAvail( s ) _sdsAvail( s )
 #define sdsSetLen( s, l ) \
-    _sdsSetLen( ( s ), ( l ) )  // caller checks invariance
+        _sdsSetLen( ( s ), ( l ) )  // caller checks invariance
 #define sdsSetCap( s, l ) \
-    _sdsSetCap( ( s ), ( l ) )  // caller checks invariance
+        _sdsSetCap( ( s ), ( l ) )  // caller checks invariance
 #define sdsIncLen( s, inc ) \
-    _sdsIncLen( ( s ), ( inc ) )  // caller checks invariance
+        _sdsIncLen( ( s ), ( inc ) )  // caller checks invariance
 
 // allocte enough space (typically larger) for the new_len.
 void sdsReserve( _mut_ sds_t *s, size_t new_len );
@@ -92,48 +92,48 @@ int sdsCmp( const sds_t s1, const sds_t s2 );
 // -----------------------------------------------------------------------------
 
 #define SDS_HEAD( s ) \
-    ( (struct sds_head *)( ( s ) - ( sizeof( struct sds_head ) ) ) )
+        ( (struct sds_head *)( ( s ) - ( sizeof( struct sds_head ) ) ) )
 static inline size_t
 _sdsLen( const sds_t s )
 {
-    return s == NULL ? 0 : SDS_HEAD( s )->len;
+        return s == NULL ? 0 : SDS_HEAD( s )->len;
 }
 static inline size_t
 _sdsCap( const sds_t s )
 {
-    return s == NULL ? 0 : SDS_HEAD( s )->alloc;
+        return s == NULL ? 0 : SDS_HEAD( s )->alloc;
 }
 static inline size_t
 _sdsAvail( const sds_t s )
 {
-    if ( s == NULL ) return 0;
-    struct sds_head *p = SDS_HEAD( s );
-    return p->alloc - p->len;
+        if ( s == NULL ) return 0;
+        struct sds_head *p = SDS_HEAD( s );
+        return p->alloc - p->len;
 }
 static inline void
 _sdsSetLen( const sds_t s, size_t newlen )
 {
-    assert( s != NULL );
-    SDS_HEAD( s )->len = newlen;
+        assert( s != NULL );
+        SDS_HEAD( s )->len = newlen;
 }
 static inline void
 _sdsIncLen( const sds_t s, size_t inc )
 {
-    assert( s != NULL );
-    SDS_HEAD( s )->len += inc;
+        assert( s != NULL );
+        SDS_HEAD( s )->len += inc;
 }
 static inline void
 _sdsSetCap( const sds_t s, size_t newcap )
 {
-    assert( s != NULL );
-    SDS_HEAD( s )->alloc = newcap;
+        assert( s != NULL );
+        SDS_HEAD( s )->alloc = newcap;
 }
 static inline void
 _sdsClear( sds_t s )
 {
-    assert( s != NULL );
-    sdsSetLen( s, 0 );
-    s[0] = '\0';
+        assert( s != NULL );
+        sdsSetLen( s, 0 );
+        s[0] = '\0';
 }
 
 #endif  // EVA_SDS_H_

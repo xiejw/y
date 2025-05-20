@@ -88,9 +88,9 @@
 #define vecIsEmpty( vec ) ( vecSize( ( vec ) ) == 0 )
 
 #define vecSetSize( vec, new_s ) \
-    _VEC_SET_SIZE_IMPL( vec, new_s )  // ret error_t
+        _VEC_SET_SIZE_IMPL( vec, new_s )  // ret error_t
 #define vecReserve( pvec, count ) \
-    _VEC_RESERVE_IMPL( pvec, count )                           // ret error_t
+        _VEC_RESERVE_IMPL( pvec, count )                       // ret error_t
 #define vecPushBack( pvec, v ) _VEC_PUSH_BACK_IMPL( pvec, v )  // ret error_t
 #define vecPopBack( vec )      _VEC_POP_BACK_IMPL( vec )       // ret last item
 #define vecExtend( pdst, src ) _VEC_EXTEND_IMPL( pdst, src )   // ret error_t
@@ -102,33 +102,34 @@
 #ifdef EVA_VEC_CHECK_MAGIC
 #define _VEC_MAGIC_NUM 0xFEDCBA
 #define _VEC_CHECK_MAGIC( vec ) \
-    ( assert( ( (size_t *)( vec ) )[-3] == _VEC_MAGIC_NUM ) )
+        ( assert( ( (size_t *)( vec ) )[-3] == _VEC_MAGIC_NUM ) )
 #else
 #define _VEC_CHECK_MAGIC( vec ) ( (void)0 )
 #endif
 
 #define _VEC_FREE_IMPL( vec ) _vecFree( vec )
 
-#define _VEC_SET_SIZE_IMPL( vec, new_s )                  \
-    ( ( vec ) ? ( _VEC_CHECK_MAGIC( ( vec ) ),            \
-                  ( (size_t *)vec )[-2] = ( new_s ), OK ) \
-              : ENOTEXIST )
+#define _VEC_SET_SIZE_IMPL( vec, new_s )                      \
+        ( ( vec ) ? ( _VEC_CHECK_MAGIC( ( vec ) ),            \
+                      ( (size_t *)vec )[-2] = ( new_s ), OK ) \
+                  : ENOTEXIST )
 
 #define _VEC_RESERVE_IMPL( pvec, count ) \
-    _vecReserve( (size_t **)( pvec ), count, sizeof( **( pvec ) ) )
+        _vecReserve( (size_t **)( pvec ), count, sizeof( **( pvec ) ) )
 
-#define _VEC_EXTEND_IMPL( pdst, src )                      \
-    _vecExtend( (size_t **)( pdst ), vecSize( *( pdst ) ), \
-                sizeof( **( pdst ) ), (size_t *)( src ), vecSize( ( src ) ) )
+#define _VEC_EXTEND_IMPL( pdst, src )                          \
+        _vecExtend( (size_t **)( pdst ), vecSize( *( pdst ) ), \
+                    sizeof( **( pdst ) ), (size_t *)( src ),   \
+                    vecSize( ( src ) ) )
 
-#define _VEC_PUSH_BACK_IMPL( pvec, v )                              \
-    ( _vecGrow( (size_t **)( pvec ), sizeof( **( pvec ) ) ) ||      \
-      ( ( ( *( pvec ) )[( (size_t *)( *( pvec ) ) )[-2]] = ( v ) ), \
-        ( (size_t *)( *( pvec ) ) )[-2]++, OK ) )
+#define _VEC_PUSH_BACK_IMPL( pvec, v )                                  \
+        ( _vecGrow( (size_t **)( pvec ), sizeof( **( pvec ) ) ) ||      \
+          ( ( ( *( pvec ) )[( (size_t *)( *( pvec ) ) )[-2]] = ( v ) ), \
+            ( (size_t *)( *( pvec ) ) )[-2]++, OK ) )
 
-#define _VEC_POP_BACK_IMPL( vec )                             \
-    ( assert( ( vec ) != NULL ), _VEC_CHECK_MAGIC( ( vec ) ), \
-      *( ( vec ) + --( ( (size_t *)( vec ) )[-2] ) ) )
+#define _VEC_POP_BACK_IMPL( vec )                                 \
+        ( assert( ( vec ) != NULL ), _VEC_CHECK_MAGIC( ( vec ) ), \
+          *( ( vec ) + --( ( (size_t *)( vec ) )[-2] ) ) )
 
 #define VEC_INIT_BUF_SIZE 16
 
@@ -138,17 +139,17 @@ extern error_t _vecReserve( _mut_ size_t **vec, size_t new_cap,
 static inline error_t
 _vecGrow( _mut_ size_t **vec, size_t unit_size )
 {
-    if ( !*vec ) {
-        return _vecReserve( vec, VEC_INIT_BUF_SIZE, unit_size );
-    }
+        if ( !*vec ) {
+                return _vecReserve( vec, VEC_INIT_BUF_SIZE, unit_size );
+        }
 
-    _VEC_CHECK_MAGIC( *vec );
+        _VEC_CHECK_MAGIC( *vec );
 
-    const size_t cap  = ( *vec )[-1];
-    const size_t size = ( *vec )[-2];
-    assert( size <= cap );
-    if ( cap != size ) return OK;
-    return _vecReserve( vec, 2 * cap, unit_size );
+        const size_t cap  = ( *vec )[-1];
+        const size_t size = ( *vec )[-2];
+        assert( size <= cap );
+        if ( cap != size ) return OK;
+        return _vecReserve( vec, 2 * cap, unit_size );
 }
 
 static inline error_t
@@ -156,30 +157,30 @@ _vecExtend( _mut_ size_t **pdst, size_t dst_size, size_t unit_size, size_t *src,
             size_t src_size )
 {
 #ifdef EVA_VEC_CHECK_MAGIC
-    if ( *pdst != NULL ) _VEC_CHECK_MAGIC( *pdst );
-    if ( src != NULL ) _VEC_CHECK_MAGIC( src );
+        if ( *pdst != NULL ) _VEC_CHECK_MAGIC( *pdst );
+        if ( src != NULL ) _VEC_CHECK_MAGIC( src );
 #endif
 
-    const size_t new_size = dst_size + src_size;
-    error_t      err      = _vecReserve( pdst, new_size, unit_size );
-    if ( err ) return err;
-    memcpy( ( (char *)( *pdst ) ) + unit_size * dst_size, src,
-            unit_size * src_size );
-    ( *pdst )[-2] = new_size;
-    return OK;
+        const size_t new_size = dst_size + src_size;
+        error_t      err      = _vecReserve( pdst, new_size, unit_size );
+        if ( err ) return err;
+        memcpy( ( (char *)( *pdst ) ) + unit_size * dst_size, src,
+                unit_size * src_size );
+        ( *pdst )[-2] = new_size;
+        return OK;
 }
 
 static inline void
 _vecFree( void *vec )
 {
-    if ( vec != NULL ) {
-        _VEC_CHECK_MAGIC( vec );
+        if ( vec != NULL ) {
+                _VEC_CHECK_MAGIC( vec );
 #ifdef EVA_VEC_CHECK_MAGIC
-        free( &( (size_t *)vec )[-3] );
+                free( &( (size_t *)vec )[-3] );
 #else
-        free( &( (size_t *)vec )[-2] );
+                free( &( (size_t *)vec )[-2] );
 #endif
-    }
+        }
 }
 
 #endif  // EVA_VEC_H_

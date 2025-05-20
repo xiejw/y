@@ -12,10 +12,10 @@
 // -----------------------------------------------------------------------------
 
 struct rng64 {
-    // interal fields.
-    uint64_t seed_;   // must be the first field.
-    uint64_t gamma_;  // must be the second field.
-    uint64_t next_gamma_seed_;
+        // interal fields.
+        uint64_t seed_;   // must be the first field.
+        uint64_t gamma_;  // must be the second field.
+        uint64_t next_gamma_seed_;
 };
 
 extern struct rng64 *rng64New( uint64_t seed );

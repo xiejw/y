@@ -15,30 +15,30 @@
 // public helper macros
 // -----------------------------------------------------------------------------
 #define logTrace( ... ) \
-    loge( LOG_TRACE, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
+        loge( LOG_TRACE, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
 #define logDebug( ... ) \
-    loge( LOG_DEBUG, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
+        loge( LOG_DEBUG, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
 #define logInfo( ... ) \
-    loge( LOG_INFO, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
+        loge( LOG_INFO, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
 #define logWarn( ... ) \
-    loge( LOG_WARN, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
+        loge( LOG_WARN, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
 #define logError( ... ) \
-    loge( LOG_ERROR, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
+        loge( LOG_ERROR, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
 #define logFatal( ... ) \
-    loge( LOG_FATAL, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
+        loge( LOG_FATAL, /*dump=*/0, __FILE__, __LINE__, __VA_ARGS__ )
 #define logFatalAndDump( ... ) \
-    loge( LOG_FATAL, /*dump=*/1, __FILE__, __LINE__, __VA_ARGS__ )
+        loge( LOG_FATAL, /*dump=*/1, __FILE__, __LINE__, __VA_ARGS__ )
 
 // -----------------------------------------------------------------------------
 // public low-level apis
 // -----------------------------------------------------------------------------
 enum {
-    LOG_TRACE,
-    LOG_DEBUG,
-    LOG_INFO,
-    LOG_WARN,
-    LOG_ERROR,
-    LOG_FATAL,
+        LOG_TRACE,
+        LOG_DEBUG,
+        LOG_INFO,
+        LOG_WARN,
+        LOG_ERROR,
+        LOG_FATAL,
 };
 
 // logIsLevelOn returns 1 if the logging for given level is on.
@@ -59,7 +59,7 @@ extern int logSetQuiet( int enable );
 
 extern void loge_( int level, int dump, const char *file, int line,
                    const char *fmt, ... );
-extern void _simple_loge_( int level, const char *file, int line,
+extern void _simple_loge_( int level, int dump, const char *file, int line,
                            const char *fmt, ... );
 
 #endif  // EVA_LOG_H

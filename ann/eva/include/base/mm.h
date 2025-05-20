@@ -45,16 +45,16 @@
 //
 // -----------------------------------------------------------------------------
 struct arr {
-    // internal fields
+        // internal fields
 
-    size_t slot_byte_size;    // byte size per slot
-    size_t slots_per_line;    // num slots per memory line
-    vec_t( void * ) lines;    // holds lines' address. auto grow.
-    size_t       cap;         // current cap (slot count)
-    size_t       mask;        // mask to find line level index.
-    unsigned int sbits : 10;  // shift_bits
-    unsigned int mode : 1;    // either stack 0 or bitmap
-    unsigned int flag : 7;    // for future use
+        size_t slot_byte_size;    // byte size per slot
+        size_t slots_per_line;    // num slots per memory line
+        vec_t( void * ) lines;    // holds lines' address. auto grow.
+        size_t       cap;         // current cap (slot count)
+        size_t       mask;        // mask to find line level index.
+        unsigned int sbits : 10;  // shift_bits
+        unsigned int mode : 1;    // either stack 0 or bitmap
+        unsigned int flag : 7;    // for future use
 };
 
 //-----------------------------------------------------------------------------
@@ -92,19 +92,19 @@ extern void *arrPop( struct arr * );  // NULL if empty
 // stack macros
 #define ARR_STACK_NEW( type ) arrStackNew( sizeof( type ), 32, 128 )
 
-#define ARR_PUSH( arr, v )                     \
-    do {                                       \
-        __typeof__( v ) *ptr = arrPush( arr ); \
-        *ptr                 = ( v );          \
-    } while ( 0 )
+#define ARR_PUSH( arr, v )                             \
+        do {                                           \
+                __typeof__( v ) *ptr = arrPush( arr ); \
+                *ptr                 = ( v );          \
+        } while ( 0 )
 
 // cannot be empty
-#define ARR_POP( v, arr )                     \
-    do {                                      \
-        __typeof__( v ) *ptr = arrPop( arr ); \
-        assert( ptr != NULL );                \
-        ( v ) = ( *ptr );                     \
-    } while ( 0 )
+#define ARR_POP( v, arr )                             \
+        do {                                          \
+                __typeof__( v ) *ptr = arrPop( arr ); \
+                assert( ptr != NULL );                \
+                ( v ) = ( *ptr );                     \
+        } while ( 0 )
 
 //-----------------------------------------------------------------------------
 // bitmap mode (unimpled yet)

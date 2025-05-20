@@ -32,16 +32,16 @@
 #define CRON_FIELD_KIND_SINGLE_VALUE 1
 
 struct cron_field {
-    int kind;  // see CRON_FIELD_KIND_XXX above
-    int value;
+        int kind;  // see CRON_FIELD_KIND_XXX above
+        int value;
 };
 
 struct cron_expr {
-    struct cron_field minute;
-    struct cron_field hour;
-    struct cron_field day;
-    struct cron_field month;
-    struct cron_field day_of_week;
+        struct cron_field minute;
+        struct cron_field hour;
+        struct cron_field day;
+        struct cron_field month;
+        struct cron_field day_of_week;
 };
 
 extern void    cronExprInit( struct cron_expr *expr );
@@ -57,14 +57,14 @@ int cronFieldMatch( struct cron_field *field, int v );
 static inline void
 cronFieldSetAsAny( struct cron_field *p )
 {
-    p->kind = CRON_FIELD_KIND_ANY;
+        p->kind = CRON_FIELD_KIND_ANY;
 }
 
 static inline void
 cronFieldSetSingleValue( struct cron_field *p, int v )
 {
-    p->kind  = CRON_FIELD_KIND_SINGLE_VALUE;
-    p->value = v;
+        p->kind  = CRON_FIELD_KIND_SINGLE_VALUE;
+        p->value = v;
 }
 
 #endif  // EVA_CRON_H_

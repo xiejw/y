@@ -13,37 +13,37 @@
 
 // date type for tensors.
 enum vm_dtype {
-    VM_F32,  // f32_t
-    VM_U64,  // u64_t
+        VM_F32,  // f32_t
+        VM_U64,  // u64_t
 };
 
 // shape for tensors, immutable.
 //
 // sharable via ref counts.
 struct vm_sp {
-    int      rank;       // rank of the shape, i.e., len of dims
-    uint64_t size;       // total number of elements
-    int      ref_count;  // not thread safe
-    int      dims[];     // size is rank
+        int      rank;       // rank of the shape, i.e., len of dims
+        uint64_t size;       // total number of elements
+        int      ref_count;  // not thread safe
+        int      dims[];     // size is rank
 };
 
 // the tensor structure
 struct vm_tensor {
-    enum vm_dtype dtype : 7;
-    unsigned int  used : 1;
-    struct vm_sp *shape;
-    void         *data;
+        enum vm_dtype dtype : 7;
+        unsigned int  used : 1;
+        struct vm_sp *shape;
+        void         *data;
 };
 
 struct vm;  // forward def
 
 struct vm_opopt {
-    int mode;  // see details in op.h
-    union {
-        i32_t        i;
-        f32_t        f;
-        struct rng64 r;
-    };
+        int mode;  // see details in op.h
+        union {
+                i32_t        i;
+                f32_t        f;
+                struct rng64 r;
+        };
 };
 
 #define VM_OP( op ) VM_OP_##op,
@@ -66,12 +66,12 @@ error_t vmExec( struct vm *, enum vm_opcode, const struct vm_opopt *, int d,
 // apis for batch execution  / vm.c
 // -----------------------------------------------------------------------------
 struct vm_oparg {
-    enum vm_opcode  op;
-    int             dst;
-    int             t1;
-    int             t2;
-    int             has_opt;
-    struct vm_opopt opt;
+        enum vm_opcode  op;
+        int             dst;
+        int             t1;
+        int             t2;
+        int             has_opt;
+        struct vm_opopt opt;
 };
 
 extern void    vmOpsToSds( _mut_ sds_t *psds, size_t size,
@@ -113,7 +113,7 @@ struct vm_sp *vmSpNew( struct vm *vm, int rank, int *dims );  // vm.c
 #define VM_VR1S( vm, s1 )     vmSpNew( vm, 1, (int[]){ ( s1 ) } )
 #define VM_VR2S( vm, s1, s2 ) vmSpNew( vm, 2, (int[]){ ( s1 ), ( s2 ) } )
 #define VM_VR3S( vm, s1, s2, s3 ) \
-    vmSpNew( vm, 3, (int[]){ ( s1 ), ( s2 ), ( s3 ) } )
+        vmSpNew( vm, 3, (int[]){ ( s1 ), ( s2 ), ( s3 ) } )
 
 // -----------------------------------------------------------------------------
 // opt mask bits.
@@ -133,7 +133,7 @@ struct vm_sp *vmSpNew( struct vm *vm, int rank, int *dims );  // vm.c
 //
 // --- Element wise ops
 #define VM_OPT_SET_SCALAR_OPERAND( opt, v ) \
-    ( ( opt ).mode = VM_OPT_MODE_F_BIT, ( opt ).f = ( v ) )
+        ( ( opt ).mode = VM_OPT_MODE_F_BIT, ( opt ).f = ( v ) )
 
 // --- Matmul
 #define VM_OPT_MATMUL_TRANS_NOT 0
@@ -142,12 +142,12 @@ struct vm_sp *vmSpNew( struct vm *vm, int rank, int *dims );  // vm.c
 
 // --- Reduction
 #define VM_OPT_SET_REDUCTION_SUM( opt, axis ) \
-    ( ( opt ).mode = 0 | VM_OPT_MODE_I_BIT, ( opt ).i = ( axis ) )
+        ( ( opt ).mode = 0 | VM_OPT_MODE_I_BIT, ( opt ).i = ( axis ) )
 
 // --- Rng
 #define VM_OPT_RNG_STD_NORMAL 0
 
 // --- Loss
 #define VM_OPT_SET_GRAD_TENSOR_HANDLER( opt, td ) \
-    ( ( opt ).mode |= VM_OPT_MODE_I_BIT, ( opt ).i = ( td ) )
+        ( ( opt ).mode |= VM_OPT_MODE_I_BIT, ( opt ).i = ( td ) )
 #endif  // EVA_MLVM_VM_H_

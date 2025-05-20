@@ -13,13 +13,13 @@
 #define SHA224_256_BLOCK_SIZE ( 512 / 8 )  // 64 bytes
 
 struct sha256 {
-    // all internal fields.
+        // all internal fields.
 
-    unsigned char block[SHA224_256_BLOCK_SIZE];  // unprocessed bytes.
-    uint64_t      len;        // unprocessed bytes stored in block.
-    uint64_t      total_len;  // total of bytes processed in history.
-    uint32_t      h[8];       // hash values.
-    int           finalized;  // once marked, must be reset for next usage.
+        unsigned char block[SHA224_256_BLOCK_SIZE];  // unprocessed bytes.
+        uint64_t      len;        // unprocessed bytes stored in block.
+        uint64_t      total_len;  // total of bytes processed in history.
+        uint32_t      h[8];       // hash values.
+        int           finalized;  // once marked, must be reset for next usage.
 };
 
 extern void    sha256Reset( struct sha256 * );

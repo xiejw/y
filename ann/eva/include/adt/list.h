@@ -13,24 +13,24 @@
 // -----------------------------------------------------------------------------
 
 struct list_node {
-    struct list_node *prev;
-    struct list_node *next;
-    union value       v;
+        struct list_node *prev;
+        struct list_node *next;
+        union value       v;
 };
 
 struct list_iter {
-    struct list_node *next;
-    int               direction;  // 1 for toward forward, and 0 for tail
+        struct list_node *next;
+        int               direction;  // 1 for toward forward, and 0 for tail
 };
 
 struct list {
-    // internal fields.
-    struct list_node *head;
-    struct list_node *tail;
-    void *( *dup )( void *ptr );             // optional, used by listDup
-    void ( *free )( void *ptr );             // optional
-    int ( *match )( void *ptr, void *key );  // optional
-    unsigned long len;
+        // internal fields.
+        struct list_node *head;
+        struct list_node *tail;
+        void *( *dup )( void *ptr );             // optional, used by listDup
+        void ( *free )( void *ptr );             // optional
+        int ( *match )( void *ptr, void *key );  // optional
+        unsigned long len;
 };
 
 // -----------------------------------------------------------------------------
