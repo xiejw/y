@@ -5,6 +5,17 @@
 <details>
   <summary>Click me</summary>
 
+  #### Linux Kernel Local Structure
+
+  ```
+  [~/Workspace/kernel]
+  drwxrwxr-x     - xiejw 22 May 13:19  configs
+  lrwxrwxrwx     - xiejw 22 May 12:00  linux -> linux-6.14.8-src
+  .rw-rw-r--  209k xiejw 22 May 13:17  linux-6.14.8-config
+  drwxrwxr-x     - xiejw 22 May 12:10  linux-6.14.8-src
+  .rw-rw-r--  149M xiejw 22 May 05:46  linux-6.14.8.tar.xz
+  ```
+
   #### Bootstrap Linux Kernel Config
 
   ```
@@ -139,6 +150,17 @@
 
 <details>
   <summary>Click me</summary>
+
+  #### Local Dir Structure
+  ```
+  [~/Workspace/build/llvm]
+  drwxrwxr-x     - xiejw 21 May 17:19  build-clang-2025-05-21
+  drwxrwxr-x     - xiejw 22 May 13:11  build-libcxx-2025-05-22
+  lrwxrwxrwx     - xiejw 21 May 17:19  install -> build-clang-2025-05-21
+  lrwxrwxrwx     - xiejw 22 May 13:11  install-libcxx -> build-libcxx-2025-05-22
+  drwxrwxr-x     - xiejw 21 May 15:10  llvm-project
+  lrwxrwxrwx     - xiejw 21 May 15:19  src -> llvm-project
+  ```
 
   #### Bootstrap
 
