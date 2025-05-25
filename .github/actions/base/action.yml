@@ -25,6 +25,14 @@ runs:
   using: "composite"
   steps:
 
+    # === --- System cleanup --------------------------------------------- ===
+    #
+    # man-db is too slow and useless
+    #
+    - name: Remove man-db
+      shell: bash
+      run: sudo apt-get remove --purge man-db
+
     # --------------------------------------------------------------------------
     # Clang related
     #
