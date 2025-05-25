@@ -360,12 +360,12 @@ autocmd BufRead,BufNewFile *.h setlocal filetype=c
 " - see colors in https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 "
 " - define some keywords for storage, e.g., _mut_, _out_,
-autocmd FileType c :match cStorageClass /\<_mut_\|_out_\|_inout_\|_moved_in_\|_null_\>/
+autocmd FileType c :match cStorageClass /\<_MUT_\|_OUT_\|_INOUT_\|_MOVED_IN_\|_NULLABLE_\>/
 
 " - added more int types and error_t as cType
 autocmd FileType c :syn keyword	cType	i64_t u64_t i32_t u32_t f32_t f64_t
+autocmd FileType c :syn keyword	cType	i64 u64 i32 u32 u8 f32 f64
 autocmd FileType c :syn keyword	cType	vec_t error_t sds_t
-autocmd FileType c :syn keyword	cType	rc_t sv_s str_s constexpr
 
 " - highlight function for c, check \ze in pattern
 autocmd FileType c :syn match cFunction "\<\k\+\ze("
