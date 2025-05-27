@@ -26,6 +26,17 @@ man xcrun
 clang -H
 ```
 
+### Linker
+```
+# Find system search path.
+# Run the following command line and see "Shared library search path" section.
+#
+/lib64/ld-linux-x86-64.so.2 --help
+
+# Or
+ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012
+```
+
 ### Clang-format
 
 https://clang.llvm.org/docs/ClangFormatStyleOptions.html
