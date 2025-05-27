@@ -155,3 +155,6 @@ autocmd FileType html :iabbrev <buffer> aa <a href="" target="_blank"></a><esc>b
 autocmd FileType html :iabbrev <buffer> cc <code></code><esc>bbli
 autocmd FileType html :iabbrev <buffer> pp <p></p><esc>bbli<enter><esc>ko
 
+" Make formatting ignore html tags (e.g., <a...>)
+autocmd FileType html :set indentexpr=|set cindent
+
