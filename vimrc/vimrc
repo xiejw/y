@@ -382,5 +382,8 @@ autocmd FileType c :syn clear cStructure
 autocmd FileType c :syn match cStructureType /\(struct\|union\|enum\) \<\k\+\>/
 autocmd FileType c :hi cStructureType ctermfg=Yellow
 
+" - make list in comments formatting easier.
+autocmd FileType c :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
+
 " ------------------------------------------------------------------------------
 source ~/Workspace/y/vimrc/vimrc.programming_language.vim
