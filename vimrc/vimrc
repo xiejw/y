@@ -382,8 +382,12 @@ autocmd FileType c :syn clear cStructure
 autocmd FileType c :syn match cStructureType /\(struct\|union\|enum\) \<\k\+\>/
 autocmd FileType c :hi cStructureType ctermfg=Yellow
 
+" Disable incorrect curly warning for compound literal.
+let g:c_no_curly_error=1
+
 " - make list in comments formatting easier.
 autocmd FileType c :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
+
 
 " ------------------------------------------------------------------------------
 source ~/Workspace/y/vimrc/vimrc.programming_language.vim
