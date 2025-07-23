@@ -1,5 +1,14 @@
 ## C and CC
 
+### Linux Distribution and Compiler Support
+
+C++23 Support
+
+| Spec  | Linux     | Compiler |
+| ----- | --------- | ------------- |
+| C++23 | Ubuntu 24 | Gcc 14+  |
+| C++23 | Debian 13 | Gcc 14+  |
+
 ### Language Linkage
 
 #### `Extern` for Language Linkage
