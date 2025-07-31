@@ -123,8 +123,7 @@ autocmd FileType help :setlocal iskeyword+=45
 "
 autocmd FileType python :setlocal tw=80
 autocmd FileType python :setlocal shiftwidth=4
-autocmd FileType python :setlocal foldlevel=1
-autocmd FileType python :setlocal foldmethod=expr foldexpr=fold#GetPythonFold(v:lnum)
+autocmd FileType python :setlocal formatoptions=tcqo
 
 " {{{2 tex/latex
 " ------------------------------------------------------------------------------
