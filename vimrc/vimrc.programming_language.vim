@@ -46,6 +46,7 @@ autocmd FileType cpp :hi cStructureType ctermfg=Yellow
 "
 autocmd FileType rust :setlocal textwidth=80
 autocmd FileType rust :setlocal nofoldenable foldmethod=syntax foldcolumn=1 foldlevel=0
+autocmd FileType rust :unmap <space>
 
 " {{{2 java
 " ------------------------------------------------------------------------------
