@@ -1,4 +1,4 @@
-.PHONY: compile test test
+.PHONY: compile fmt clean test
 compile:
 	make -C demo compile
 

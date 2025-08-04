@@ -1,4 +1,8 @@
 // vim: ft=cpp
+//
+// A non-thread-safe Context to record diagnose notes when Error occurs. The
+// call stacks can record more context, i.e., more notes, to the same Context.
+//
 #pragma once
 
 #include <memory>
@@ -59,7 +63,7 @@ class Context {
       public:
         /* Low level API to emit a diagnose note.
          *
-         * Use EMIT_ERROR_NOTE helper macro for common use cases.
+         * Use ZION_EMIT_ERROR_NOTE helper macro for common use cases.
          */
         void emit_diag_note( std::string msg, const char *file, int line )
         {
@@ -71,14 +75,14 @@ class Context {
                             std::format( fmt, file, line, "|> " ) );
                 else
                         error_msg_.append(
-                            std::format( fmt, file, line, "|= " ) );
+                            std::format( fmt, file, line, "~~> " ) );
 
                 error_msg_.append( std::move( msg ) );
                 if ( !end_with_newline ) error_msg_.push_back( '\n' );
         }
 };
 
-#define EMIT_DIAG_NOTE( ctx, ... )                                     \
+#define ZION_EMIT_DIAG_NOTE( ctx, ... )                                \
         ( ctx )->emit_diag_note( std::format( __VA_ARGS__ ), __FILE__, \
                                  __LINE__ )
 }  // namespace zion

@@ -1,4 +1,9 @@
 // vim: ft=cpp
+//
+// Macros for the language.
+// - Class: Remove copy/move constructors.
+// - Types: Define rust like int/float types, e.g u64, i8, etc.
+//
 #pragma once
 
 #include <stdint.h>
