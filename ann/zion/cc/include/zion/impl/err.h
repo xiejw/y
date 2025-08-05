@@ -10,6 +10,7 @@
 //
 #pragma once
 
+#include <cassert>
 #include <expected>
 #include <memory>
 
@@ -82,16 +83,38 @@ class Error {
         }
 };
 
+static_assert( sizeof( Error ) <= 16, "Error size is too large" );
+
 #define ZION_EMIT_DIAG_NOTE( err, ... ) \
         ( err ).emit_diag_note( std::format( __VA_ARGS__ ), __FILE__, __LINE__ )
 
 template <class T>
 using Expected = std::expected<T, Error>;
 
-auto
-Err( Error &&err )
-{
-        return std::unexpected{ std::move( err ) };
-}
+#define ZION_CHECK_OK_OR_RETURN( expect, ... ) \
+        _ZION_CHECK_OK_OR_RETURN( expect, __FILE__, __LINE__, __VA_ARGS__ )
+
+#define _ZION_CHECK_OK_OR_RETURN( expect, file, lineno, ... )                  \
+        do {                                                                   \
+                if ( !bool( expect ) ) {                                       \
+                        ( expect.error( ) )                                    \
+                            .emit_diag_note( std::format( __VA_ARGS__ ), file, \
+                                             lineno );                         \
+                        return std::unexpected{                                \
+                            std::move( expect.error( ) ) };                    \
+                }                                                              \
+        } while ( 0 )
+
+#define ZION_RETURN_ERR( expect, ... ) \
+        _ZION_RETURN_ERR( expect, __FILE__, __LINE__, __VA_ARGS__ )
+
+#define _ZION_RETURN_ERR( expect, file, lineno, ... )                   \
+        do {                                                            \
+                assert( !bool( expect ) );                              \
+                ( expect.error( ) )                                     \
+                    .emit_diag_note( std::format( __VA_ARGS__ ), file,  \
+                                     lineno );                          \
+                return std::unexpected{ std::move( expect.error( ) ) }; \
+        } while ( 0 )
 
 }  // namespace zion

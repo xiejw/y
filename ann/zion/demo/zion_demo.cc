@@ -19,7 +19,15 @@ emit_note( )
         auto rc = emit_root_note( );
         ZION_EMIT_DIAG_NOTE( rc.error( ), "more context:     {}", 456 );
         ZION_EMIT_DIAG_NOTE( rc.error( ), "one more context: {}", 789 );
-        return zion::Err( std::move( rc.error( ) ) );
+        ZION_CHECK_OK_OR_RETURN( rc, "should return" );
+        return zion::Expected<void>{ };
+}
+
+zion::Expected<void>
+emit_note_again( )
+{
+        auto rc = emit_note( );
+        ZION_RETURN_ERR( rc, "final context" );
 }
 
 }  // namespace
@@ -29,7 +37,7 @@ main( )
 {
         u64 a = 345;
         INFO( "Logging       from zion: {}", a );
-        auto rc = emit_note( );
+        auto rc = emit_note_again( );
         WARN( "Diagnose note from zion:\n{}", rc.error( ).get_diag_notes( ) );
         //        PANIC( "panic point" );
 
