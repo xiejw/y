@@ -2,10 +2,46 @@
 //
 // A non-thread-safe Error to record diagnose notes when Error occurs. The
 // call stacks can record more context, i.e., more notes, to the same
-// Error.
+// Error. It is typically used as standalone or with std::expected.
+//
+// Best Practice:
+// 1. Use zion::Expected as alias of std::Expected<..., zion::Error>
+// 2. Use ZION_EMIT_DIAG_NOTE with zion::Error to emit diagnose notes in place.
+// 3. Use ZION_CHECK_OK_OR_RETURN with std::expected to emit diagnose notes and
+//    return if error occurs.
+// 4. Use ZION_RETURN_ERR with std::expected to emit diagnose notes and return
+//    unconditionally.
 //
 // ```
+// # Standalone 1
+// zion::Error
+// emit_root_note( )
+// {
+//         auto err = zion::Error::runtime_error( );
+//         ZION_EMIT_DIAG_NOTE( err, "try to emit diag note: {}", 123 );
+//         return err;
+// }
+//
+// # Standalone 2
+// std::expected<void, zion::Error>
+// emit_root_note( )
+// {
+//         auto err = zion::Error::runtime_error( );
+//         ZION_EMIT_DIAG_NOTE( err, "try to emit diag note: {}", 123 );
+//         return std::unexpected{ std::move( err ) };
+// }
+//
 // # With std::expected
+// zion::Expected<void>
+// emit_note( )
+// {
+//         auto rc = emit_root_note( ); // std::expected<void, zion::Error>
+//         ...
+//         // upon error
+//         ZION_EMIT_DIAG_NOTE( rc.error( ), "more context:     {}", 456 );
+//         ZION_CHECK_OK_OR_RETURN( rc, "should return" );
+//         return zion::Expected<void>{ };
+// }
 // ```
 //
 #pragma once

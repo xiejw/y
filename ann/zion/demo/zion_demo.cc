@@ -5,10 +5,18 @@
 #include <print>
 
 namespace {
+zion::Error
+emit_error( )
+{
+        auto err = zion::Error::runtime_error( );
+        ZION_EMIT_DIAG_NOTE( err, "root" );
+        return err;
+}
+
 std::expected<void, zion::Error>
 emit_root_note( )
 {
-        auto err = zion::Error::runtime_error( );
+        auto err = emit_error( );
         ZION_EMIT_DIAG_NOTE( err, "try to emit diag note: {}", 123 );
         return std::unexpected{ std::move( err ) };
 }
