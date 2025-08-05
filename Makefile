@@ -28,8 +28,7 @@ fmt:
 	make -C ann/eva                   fmt         && \
 	make -C ann/eve                   fmt         && \
 	make -C ann/luna                  fmt         && \
-	make -C ann/taocp/v4-dancing-link fmt         && \
-	make -C ann/taocp/v4-horn-clause  fmt         && \
+	make -C ann/zion                  fmt         && \
 	make -C ann/tlpi/chp62_term       fmt         && \
 	${WE_ARE_GOOD}
 
@@ -38,8 +37,7 @@ fmt:
 #       compilation cache. This makes the second `make test` run recompiles.
 test:
 	make -C ann/luna                  test        && \
-	make -C ann/taocp/v4-dancing-link test        && \
-	make -C ann/taocp/v4-horn-clause  test        && \
+	make -C ann/zion                  test        && \
 	make -C ann/tlpi/chp62_term       test        && \
 	make -C ann/eva                   test        && \
 	make -C ann/eve                   test        && \
