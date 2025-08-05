@@ -1,24 +1,25 @@
 #include <zion/zion.h>
 
+#include <exception>
 #include <expected>
 #include <print>
 
 namespace {
-  std::expected<void, zion::Error>
+std::expected<void, zion::Error>
 emit_root_note( )
 {
-  auto err = zion::Error::runtime_error();
+        auto err = zion::Error::runtime_error( );
         ZION_EMIT_DIAG_NOTE( err, "try to emit diag note: {}", 123 );
-        return std::unpected{err};
+        return std::unexpected{ std::move( err ) };
 }
 
-  std::expected<void, zion::Error>
-emit_note(  )
+zion::Expected<void>
+emit_note( )
 {
-        auto rc = emit_root_note(  );
-        ZION_EMIT_DIAG_NOTE( rc->error(), "more context: {}", 456 );
-        ZION_EMIT_DIAG_NOTE( rc->error(), "one more context: {}", 789 );
-        return std::unpected{std::move(rc->error())};
+        auto rc = emit_root_note( );
+        ZION_EMIT_DIAG_NOTE( rc.error( ), "more context:     {}", 456 );
+        ZION_EMIT_DIAG_NOTE( rc.error( ), "one more context: {}", 789 );
+        return zion::Err( std::move( rc.error( ) ) );
 }
 
 }  // namespace
@@ -26,10 +27,10 @@ emit_note(  )
 int
 main( )
 {
-        u64           a = 345;
+        u64 a = 345;
         INFO( "Logging       from zion: {}", a );
         auto rc = emit_note( );
-        WARN( "Diagnose note from zion:\n{}", rc.error().get_diag_notes( ) );
+        WARN( "Diagnose note from zion:\n{}", rc.error( ).get_diag_notes( ) );
         //        PANIC( "panic point" );
 
         return 0;

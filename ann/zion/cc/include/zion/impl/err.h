@@ -10,6 +10,7 @@
 //
 #pragma once
 
+#include <expected>
 #include <memory>
 
 #include "lang.h"
@@ -44,12 +45,15 @@ class Error {
       public:
         Error( Kind kind ) : kind_( kind ) {};
 
-        ZION_DISABLE_COPY_AND_MOVE( Error );
+        ZION_DECLARE_MOVE( Error );
+        ZION_DISABLE_COPY( Error );
 
       public:
-        static auto runtime_error() { return Error{Kind::RuntimeError};}
+        static auto runtime_error( ) { return Error{ Kind::RuntimeError }; }
 
       public:
+        /* Get the Error kind. */
+        Kind get_kind( ) const { return kind_; };
         /* Get the diagnose notes. */
         const std::string &get_diag_notes( ) const { return *error_msg_; };
 
@@ -78,6 +82,16 @@ class Error {
         }
 };
 
-#define ZION_EMIT_DIAG_NOTE( err, ... )                                \
-        ( err ).emit_diag_note( std::format( __VA_ARGS__ ), __FILE__, \
-                                 __LINE__ )
+#define ZION_EMIT_DIAG_NOTE( err, ... ) \
+        ( err ).emit_diag_note( std::format( __VA_ARGS__ ), __FILE__, __LINE__ )
+
+template <class T>
+using Expected = std::expected<T, Error>;
+
+auto
+Err( Error &&err )
+{
+        return std::unexpected{ std::move( err ) };
+}
+
+}  // namespace zion

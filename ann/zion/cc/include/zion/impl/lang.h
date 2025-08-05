@@ -17,6 +17,10 @@
         T( T && )            = delete; \
         T &operator=( T && ) = delete;
 
+#define ZION_DECLARE_MOVE( T )          \
+        T( T && )            = default; \
+        T &operator=( T && ) = default;
+
 #define ZION_DISABLE_COPY_AND_MOVE( T ) \
         ZION_DISABLE_COPY( T ) ZION_DISABLE_MOVE( T )
 
