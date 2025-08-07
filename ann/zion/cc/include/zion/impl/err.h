@@ -9,8 +9,8 @@
 // 2. Use ZION_EMIT_DIAG_NOTE with zion::Error to emit diagnose notes in place.
 // 3. Use ZION_CHECK_OK_OR_RETURN with std::expected to emit diagnose notes and
 //    return if error occurs.
-// 4. Use ZION_RETURN_ERR with std::expected to emit diagnose notes and return
-//    unconditionally.
+// 4. Use ZION_RETURN_ERR with zion::Error or std::expected<>.Error() to emit
+//    diagnose notes and return unconditionally.
 //
 // ```
 // # Standalone 1
@@ -58,7 +58,7 @@ namespace zion {
 /* An Error records diagnose notes when error occurs. This is not thread safe
  * in general.
  */
-class Error {
+class [[nodiscard]] Error {
       public:
         enum class Kind {
                 /* Result codes */
@@ -87,6 +87,7 @@ class Error {
 
       public:
         static auto runtime_error( ) { return Error{ Kind::RuntimeError }; }
+        static auto io_error( ) { return Error{ Kind::IOError }; }
 
       public:
         /* Get the Error kind. */
@@ -141,16 +142,14 @@ using Expected = std::expected<T, Error>;
                 }                                                              \
         } while ( 0 )
 
-#define ZION_RETURN_ERR( expect, ... ) \
-        _ZION_RETURN_ERR( expect, __FILE__, __LINE__, __VA_ARGS__ )
+#define ZION_RETURN_ERR( err, ... ) \
+        _ZION_RETURN_ERR( err, __FILE__, __LINE__, __VA_ARGS__ )
 
-#define _ZION_RETURN_ERR( expect, file, lineno, ... )                   \
-        do {                                                            \
-                assert( !bool( expect ) );                              \
-                ( expect.error( ) )                                     \
-                    .emit_diag_note( std::format( __VA_ARGS__ ), file,  \
-                                     lineno );                          \
-                return std::unexpected{ std::move( expect.error( ) ) }; \
+#define _ZION_RETURN_ERR( err, file, lineno, ... )                        \
+        do {                                                              \
+                ( err ).emit_diag_note( std::format( __VA_ARGS__ ), file, \
+                                        lineno );                         \
+                return std::unexpected{ std::move( err ) };               \
         } while ( 0 )
 
 }  // namespace zion

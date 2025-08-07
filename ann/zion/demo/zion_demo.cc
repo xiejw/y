@@ -35,7 +35,7 @@ zion::Expected<void>
 emit_note_again( )
 {
         auto rc = emit_note( );
-        ZION_RETURN_ERR( rc, "final context" );
+        ZION_RETURN_ERR( rc.error( ), "final context" );
 }
 
 }  // namespace
