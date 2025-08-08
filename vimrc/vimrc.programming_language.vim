@@ -34,11 +34,15 @@ autocmd FileType cpp :syn match cFunction "\<\k\+\ze("
 autocmd FileType cpp :hi link cFunction Function
 
 
+
 " - highlight the entire type with type name for struct/union/enum (instead of
 "   just the keywords)
 autocmd FileType cpp :syn clear cStructure
 autocmd FileType cpp :syn match cStructureType /\(struct\|union\|enum\) \<\k\+\>/
 autocmd FileType cpp :hi cStructureType ctermfg=Yellow
+
+" - also highlight namespace prefix
+autocmd FileType cpp :syn match cStructureType /\<\k\+\>::/
 
 " {{{2 rust
 " ------------------------------------------------------------------------------
