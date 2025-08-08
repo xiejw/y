@@ -83,7 +83,23 @@ class [[nodiscard]] Error {
         Error( Kind kind ) : kind_( kind ) {};
 
         ZION_DECLARE_MOVE( Error );
-        ZION_DISABLE_COPY( Error );
+
+        Error( const Error &err )
+        {
+                kind_ = err.kind_;
+                if ( err.error_msg_.get( ) != nullptr ) {
+                        error_msg_.reset( new std::string{ *err.error_msg_ } );
+                }
+        }
+
+        Error &operator=( const Error &err )
+        {
+                kind_ = err.kind_;
+                if ( err.error_msg_.get( ) != nullptr ) {
+                        error_msg_.reset( new std::string{ *err.error_msg_ } );
+                }
+                return *this;
+        }
 
       public:
         static auto runtime_error( ) { return Error{ Kind::RuntimeError }; }
