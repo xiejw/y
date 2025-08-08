@@ -5,12 +5,18 @@
 // Error. It is typically used as standalone or with std::expected.
 //
 // Best Practice:
+//
 // 1. Use zion::Expected as alias of std::Expected<..., zion::Error>
+//
 // 2. Use ZION_EMIT_DIAG_NOTE with zion::Error to emit diagnose notes in place.
+//
 // 3. Use ZION_CHECK_OK_OR_RETURN with std::expected to emit diagnose notes and
 //    return if error occurs.
-// 4. Use ZION_RETURN_ERR with zion::Error or std::expected<>.Error() to emit
+//
+// 4. Use ZION_RETURN_ERR with zion::Error or std::expected<>.error() to emit
 //    diagnose notes and return unconditionally.
+//
+// Examples:
 //
 // ```
 // # Standalone 1
@@ -27,8 +33,7 @@
 // emit_root_note( )
 // {
 //         auto err = zion::Error::runtime_error( );
-//         ZION_EMIT_DIAG_NOTE( err, "try to emit diag note: {}", 123 );
-//         return std::unexpected{ std::move( err ) };
+//         ZION_RETURN_ERR( err, "try to emit diag note: {}", 123 );
 // }
 //
 // # With std::expected

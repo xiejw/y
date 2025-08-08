@@ -17,8 +17,10 @@ std::expected<void, zion::Error>
 emit_root_note( )
 {
         auto err = emit_error( );
-        ZION_EMIT_DIAG_NOTE( err, "try to emit diag note: {}", 123 );
-        return std::unexpected{ std::move( err ) };
+        // // This also works
+        // ZION_EMIT_DIAG_NOTE( err, "try to emit diag note: {}", 123 );
+        // return std::unexpected{ std::move( err ) };
+        ZION_RETURN_ERR( err, "try to emit diag note: {}", 123 );
 }
 
 zion::Expected<void>
