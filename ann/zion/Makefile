@@ -5,9 +5,9 @@ compile:
 fmt:
 	make -C demo fmt
 	make -C cc   fmt
+	make -C c    fmt
 
 clean:
 	go run ~/Workspace/y/tools/delete_unused_dirs.go
-
 
 test: compile
