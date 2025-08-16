@@ -1,6 +1,7 @@
 .PHONY: compile fmt clean test
 compile:
 	make -C demo compile
+	make -C c    compile
 
 fmt:
 	make -C demo fmt

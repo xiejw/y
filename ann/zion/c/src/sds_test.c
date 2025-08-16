@@ -17,4 +17,3 @@ main( void )
         printf( "Test passed.\n" );
         return 0;
 }
-
