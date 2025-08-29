@@ -177,8 +177,6 @@ alias fd='fd -c always'
 # Jarvis (jv)
 #
 function jv {
-  ed_rs
-
   if [[ $# -eq 1 ]]; then
     ~/Workspace/.bin/jarvis $1
   else
