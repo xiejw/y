@@ -25,11 +25,12 @@ SCHEME=full
 
 mkdir -p ${TEXDIR}
 
-./install-tl \
-  -no-gui \
-  -no-doc-install \
-  -no-src-install \
-  -paper=letter \
-  -portable \
+./install-tl        \
+  -no-gui           \
+  -no-doc-install   \
+  -no-src-install   \
+  -paper=letter     \
+  -portable         \
   -scheme=${SCHEME} \
-  -texdir=${TEXDIR}
+  -texdir=${TEXDIR} \
+  -no-interaction
