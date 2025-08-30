@@ -180,7 +180,7 @@ function jv {
   if [[ $# -eq 1 ]]; then
     ~/Workspace/.bin/jarvis $1
   else
-    ~/Workspace/.bin/jarvis house-keeping
+    ~/Workspace/.bin/jarvis
   fi
 }
 
