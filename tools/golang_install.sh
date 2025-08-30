@@ -27,7 +27,8 @@ find_arch() {
   ARCH=arm64
   PROC=`uname -p`
   if [ "${PROC}" == "i386" ]; then
-    ARCH=amd64
+    echo "Arch x86-64 is out of date for Go. Skip..."
+    exit 0
   fi
   echo "Find Arch: ${ARCH}"
 }
