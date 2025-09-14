@@ -49,7 +49,7 @@ autocmd FileType cpp :syn match cStructureType /\<\k\+\>::/
 "
 autocmd FileType rust :setlocal textwidth=80
 autocmd FileType rust :setlocal nofoldenable foldmethod=syntax foldcolumn=1 foldlevel=0
-autocmd FileType rust :unmap <space>
+autocmd FileType rust :silent! unmap <space>
 
 " {{{2 java
 " ------------------------------------------------------------------------------
