@@ -26,7 +26,7 @@ LIBCXX_BUILD_DIR=build-libcxx-${TODAY_STR}
 
 mkdir ${LIBCXX_BUILD_DIR}
 cd ${LIBCXX_BUILD_DIR}
-cmake -G Ninja -S ../src/runtimes -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind"
+cmake -G Ninja -S ../src/runtimes -DCMAKE_CXX_COMPILER=clang++ -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind"
 ninja
 cd ..
 ln -sf ${LIBCXX_BUILD_DIR} install-libcxx
