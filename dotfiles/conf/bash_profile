@@ -97,6 +97,14 @@ if [[ "$_OS" == 'darwin' ]]; then
 fi
 
 # ------------------------------------------------------------------------------
+# Wget on macOS
+#
+if [[ "$_OS" == 'darwin' ]]; then
+  # There is no way to show progress bar and speed at the same time.
+  alias wget='curl -L -C - -O'
+fi
+
+# ------------------------------------------------------------------------------
 # macOS
 #
 if [[ "$_OS" == 'darwin' ]]; then
