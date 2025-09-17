@@ -88,13 +88,16 @@ fi
 # ------------------------------------------------------------------------------
 # Brew
 #
-if [[ "$_OS" == 'darwin' ]]; then
-  export PATH=/opt/homebrew/bin:$PATH
+# Not enabled by default.
+ed_brew() {
+  if [[ "$_OS" == 'darwin' ]]; then
+    export PATH=/opt/homebrew/bin:$PATH
 
   # Use the ctags from brew. Usage:
   #   ctags -R .
   alias ctags="`brew --prefix`/bin/ctags"
-fi
+  fi
+}
 
 # ------------------------------------------------------------------------------
 # Wget on macOS
@@ -280,8 +283,6 @@ export FZF_DEFAULT_COMMAND='fd -t f --exclude ./bin'
 ed_fzf() {
   fzf --version > /dev/null 2>&1 || export PATH=$HOME/.fzf/bin:$PATH
 }
-
-ed_fzf
 
 # ------------------------------------------------------------------------------
 # Bash completion with fzf
