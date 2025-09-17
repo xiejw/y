@@ -196,10 +196,12 @@ function jv {
 }
 
 # ------------------------------------------------------------------------------
-# Zoxide (must be after brew)
+# Zoxide
 #
-eval "$(zoxide init bash)"
-alias w='z'
+ed_zoxide() {
+  eval "$(zoxide init bash)"
+  alias w='z'
+}
 
 # ==============================================================================
 # Builds and Toolchains
@@ -290,6 +292,8 @@ ed_fzf() {
 
 # Helper Method
 __fzf_history__() {
+     # Must enable fzf
+     ed_fzf
      output=`
        builtin fc -lnr -2147483648 |
        uniq |
