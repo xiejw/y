@@ -78,6 +78,13 @@ function ed_lite_prompt {
 export EDITOR=vim
 
 # ------------------------------------------------------------------------------
+# ncdu
+#
+# So hard to compile. I used my own version then.
+#
+alias ncdu='du -h -d 1 | sort -h -r'
+
+# ------------------------------------------------------------------------------
 # Global path fix
 #
 if [[ "$_DISTRO" =~ debian ]]; then
