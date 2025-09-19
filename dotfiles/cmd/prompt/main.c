@@ -24,20 +24,20 @@ int gitBranceName( char * );
 int
 main( void )
 {
-    char name[100];
-    if ( YES == gitBranceName( name ) ) {
-        printf( "(%s", name );
-        // if lite prompt is enabled, skip the potential **slow** git
-        // pending check.
-        if ( litePrompt( ) ) {
-            printf( "-?" );  // one - to make it clear
-        } else if ( YES == gitPending( ) ) {
-            printf( "*" );
+        char name[100];
+        if ( YES == gitBranceName( name ) ) {
+                printf( "(%s", name );
+                // if lite prompt is enabled, skip the potential **slow** git
+                // pending check.
+                if ( litePrompt( ) ) {
+                        printf( "-?" );  // one - to make it clear
+                } else if ( YES == gitPending( ) ) {
+                        printf( "*" );
+                }
+                printf( ") " );
         }
-        printf( ") " );
-    }
-    if ( YES == vimRunInBg( ) ) printf( "--vim-- " );
-    fflush( stdout );
+        if ( YES == vimRunInBg( ) ) printf( "--vim-- " );
+        fflush( stdout );
 }
 
 // ----------------------------------------------------------------------------
@@ -47,33 +47,33 @@ main( void )
 int
 vimRunInBg( void )
 {
-    char *args[] = { "ps", "-T", NULL };
-    int   fd     = execCmd( args );
+        char *args[] = { "ps", "-T", NULL };
+        int   fd     = execCmd( args );
 
-    fr_handle_t *handle;
-    if ( frDOpen( &handle, fd ) != OK ) {
-        cPrint( COLOR_ERROR, "Error: failed to call ps" );
-        close( fd );
-        return EUNSPECIFIED;
-    }
-
-    int  result = NO;
-    char line[MAX_STR_LINE_LEN];
-    while ( 1 ) {
-        int len = frNextLine( handle, line );
-        if ( len < 0 && len != EEOF ) {
-            printf( "(panic %d)", len );
-            return NO;
+        fr_handle_t *handle;
+        if ( frDOpen( &handle, fd ) != OK ) {
+                cPrint( COLOR_ERROR, "Error: failed to call ps" );
+                close( fd );
+                return EUNSPECIFIED;
         }
-        if ( len == 0 || len == EEOF ) break;
 
-        if ( strstr( line, "vim" ) != NULL ) {
-            result = YES;
-            break;
+        int  result = NO;
+        char line[MAX_STR_LINE_LEN];
+        while ( 1 ) {
+                int len = frNextLine( handle, line );
+                if ( len < 0 && len != EEOF ) {
+                        printf( "(panic %d)", len );
+                        return NO;
+                }
+                if ( len == 0 || len == EEOF ) break;
+
+                if ( strstr( line, "vim" ) != NULL ) {
+                        result = YES;
+                        break;
+                }
         }
-    }
-    frClose( handle );
-    return result;
+        frClose( handle );
+        return result;
 }
 
 // return 1 if lite prompt is enabled. see bash profile.
@@ -82,65 +82,65 @@ vimRunInBg( void )
 int
 litePrompt( void )
 {
-    return NULL != getenv( "LITE_PROMPT" );
+        return NULL != getenv( "LITE_PROMPT" );
 }
 
 int
 gitPending( void )
 {
-    char *args[] = { "git", "status", "-s", NULL };
-    int   fd     = execCmd( args );
+        char *args[] = { "git", "status", "-s", NULL };
+        int   fd     = execCmd( args );
 
-    fr_handle_t *handle;
-    if ( frDOpen( &handle, fd ) != OK ) {
-        cPrint( COLOR_ERROR, "Error: failed to call ps" );
-        close( fd );
-        return EUNSPECIFIED;
-    }
+        fr_handle_t *handle;
+        if ( frDOpen( &handle, fd ) != OK ) {
+                cPrint( COLOR_ERROR, "Error: failed to call ps" );
+                close( fd );
+                return EUNSPECIFIED;
+        }
 
-    int  result = NO;
-    char line[MAX_STR_LINE_LEN];
-    // read oneline is enough.
-    int len = frNextLine( handle, line );
-    if ( len < 0 && len != EEOF ) {
-        printf( "(panic %d)", len );
-        return NO;
-    }
-    if ( len > 0 ) {
-        result = YES;
-    }
-    frClose( handle );
-    return result;
+        int  result = NO;
+        char line[MAX_STR_LINE_LEN];
+        // read oneline is enough.
+        int len = frNextLine( handle, line );
+        if ( len < 0 && len != EEOF ) {
+                printf( "(panic %d)", len );
+                return NO;
+        }
+        if ( len > 0 ) {
+                result = YES;
+        }
+        frClose( handle );
+        return result;
 }
 
 int
 gitBranceName( char *name )
 {
-    char *args[] = { "git", "branch", "--no-color", NULL };
-    int   fd     = execCmd( args );
+        char *args[] = { "git", "branch", "--no-color", NULL };
+        int   fd     = execCmd( args );
 
-    fr_handle_t *handle;
-    if ( frDOpen( &handle, fd ) != OK ) {
-        cPrint( COLOR_ERROR, "Error: failed to call ps" );
-        close( fd );
-        return EUNSPECIFIED;
-    }
-
-    int  result = NO;
-    char line[MAX_STR_LINE_LEN];
-    while ( 1 ) {
-        int len = frNextLine( handle, line );
-        if ( len < 0 && len != EEOF ) {
-            printf( "(panic %d)", len );
-            return NO;
+        fr_handle_t *handle;
+        if ( frDOpen( &handle, fd ) != OK ) {
+                cPrint( COLOR_ERROR, "Error: failed to call ps" );
+                close( fd );
+                return EUNSPECIFIED;
         }
-        if ( len == 0 || len == EEOF ) break;
-        if ( len < 3 ) continue;
-        if ( line[0] != '*' ) continue;
-        strcpy( name, line + 2 );
-        result = YES;
-        break;
-    }
-    frClose( handle );
-    return result;
+
+        int  result = NO;
+        char line[MAX_STR_LINE_LEN];
+        while ( 1 ) {
+                int len = frNextLine( handle, line );
+                if ( len < 0 && len != EEOF ) {
+                        printf( "(panic %d)", len );
+                        return NO;
+                }
+                if ( len == 0 || len == EEOF ) break;
+                if ( len < 3 ) continue;
+                if ( line[0] != '*' ) continue;
+                strcpy( name, line + 2 );
+                result = YES;
+                break;
+        }
+        frClose( handle );
+        return result;
 }

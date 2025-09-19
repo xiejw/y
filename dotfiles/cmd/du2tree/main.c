@@ -99,9 +99,9 @@ sort_children( Node *n )
 }
 
 void
-print_tree( Node *n, int depth, int *has_more, int has_more_len , int max_depth)
+print_tree( Node *n, int depth, int *has_more, int has_more_len, int max_depth )
 {
-        if (max_depth > 0 && depth > max_depth) return;
+        if ( max_depth > 0 && depth > max_depth ) return;
         char buf[64];
         printf( "%8s ", hrsize( n->size, buf ) );
 
@@ -117,7 +117,8 @@ print_tree( Node *n, int depth, int *has_more, int has_more_len , int max_depth)
                 int more[128];
                 memcpy( more, has_more, has_more_len * sizeof( int ) );
                 more[has_more_len] = ( i < n->child_count - 1 );
-                print_tree( n->children[i], depth + 1, more, has_more_len + 1 , max_depth);
+                print_tree( n->children[i], depth + 1, more, has_more_len + 1,
+                            max_depth );
         }
 }
 
@@ -136,11 +137,11 @@ insert_path( Node *root, char *path, long long size )
 }
 
 int
-main( int argc, char**argv )
+main( int argc, char **argv )
 {
-        int max_depth = -1; // -1 == no limit
-        if (argc == 3 && strcmp(argv[1], "-d") == 0) {
-                max_depth = atoi(argv[2]);
+        int max_depth = -1;  // -1 == no limit
+        if ( argc == 3 && strcmp( argv[1], "-d" ) == 0 ) {
+                max_depth = atoi( argv[2] );
         }
 
         Node *root = new_node( ".", 0 );
@@ -159,7 +160,7 @@ main( int argc, char**argv )
         sort_children( root );
         for ( int i = 0; i < root->child_count; i++ ) {
                 int more[1] = { i < root->child_count - 1 };
-                print_tree( root->children[i], 1, more, 1, max_depth);
+                print_tree( root->children[i], 1, more, 1, max_depth );
         }
 
         return 0;

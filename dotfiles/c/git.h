@@ -12,7 +12,7 @@
 // -----------------------------------------------------------------------------
 
 typedef struct {
-    char *path;  // set/own by owner.
+        char *path;  // set/own by owner.
 } git_status_t;
 
 // The gitReadStatus reads the repository status. `status.path` must be set by
@@ -28,21 +28,21 @@ extern error_t gitReadStatus( git_status_t *status );
 error_t
 gitReadStatus( git_status_t *status )
 {
-    char *const path = status->path;
+        char *const path = status->path;
 
-    if ( OK != chdir( path ) ) return ENOTPATH;
+        if ( OK != chdir( path ) ) return ENOTPATH;
 
-    int s = system( "git pull --rebase" );
-    if ( OK != s ) {
-        if ( WIFSIGNALED( s ) ) {
-            // The chid process is terminated by signals. Read man
-            // pages for system(3) and waitpid(2).
-            return ETERMSIG;
-        } else {
-            return EGITPULL;
+        int s = system( "git pull --rebase" );
+        if ( OK != s ) {
+                if ( WIFSIGNALED( s ) ) {
+                        // The chid process is terminated by signals. Read man
+                        // pages for system(3) and waitpid(2).
+                        return ETERMSIG;
+                } else {
+                        return EGITPULL;
+                }
         }
-    }
-    return OK;
+        return OK;
 }
 #endif  // INLINE_C_CODE
 
