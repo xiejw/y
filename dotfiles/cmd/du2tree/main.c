@@ -1,7 +1,10 @@
+#define _GNU_SOURCE
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define BUF_SIZE 64
 
 typedef struct Node {
         char         *name;
@@ -41,6 +44,7 @@ parse_size( const char *s )
 char *
 hrsize( long long size, char *buf )
 {
+        char        local_buf[BUF_SIZE];
         const char *units[] = { "B", "K", "M", "G", "T", "P" };
         double      s       = size;
         int         u       = 0;
@@ -49,9 +53,14 @@ hrsize( long long size, char *buf )
                 u++;
         }
         if ( u == 0 )
-                sprintf( buf, "%lld%s", size, units[u] );
+                sprintf( local_buf, "%lld%s", size, units[u] );
         else
-                sprintf( buf, "%.1f%s", s, units[u] );
+                sprintf( local_buf, "%.1f%s", s, units[u] );
+
+        if ( u >= 3 )
+                sprintf( buf, "\033[32m%8s\033[0m", local_buf );
+        else
+                sprintf( buf, "%8s", local_buf );
         return buf;
 }
 
@@ -102,8 +111,9 @@ void
 print_tree( Node *n, int depth, int *has_more, int has_more_len, int max_depth )
 {
         if ( max_depth > 0 && depth > max_depth ) return;
-        char buf[64];
-        printf( "%8s ", hrsize( n->size, buf ) );
+
+        char buf[BUF_SIZE];
+        printf( "%s ", hrsize( n->size, buf ) );
 
         for ( int i = 0; i < has_more_len - 1; i++ ) {
                 printf( "%s", has_more[i] ? "│   " : "    " );
