@@ -82,7 +82,8 @@ export EDITOR=vim
 #
 # So hard to compile. I used my own version then.
 #
-alias ncdu='du -h -d 1 | sort -h -r'
+alias ncdu='du -h -d 2 | ${HOME}/Workspace/y/dotfiles/bin/du2tree'
+alias ncdua='du -h -a  | ${HOME}/Workspace/y/dotfiles/bin/du2tree -d 2'
 
 # ------------------------------------------------------------------------------
 # Global path fix
