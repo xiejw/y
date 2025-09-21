@@ -1,4 +1,4 @@
-" vim: foldenable:foldlevel=0:foldmethod=marker
+" vim: nofoldenable:foldlevel=0:foldmethod=marker
 
 " ==============================================================================
 " {{{1 general settings
