@@ -100,10 +100,6 @@ fi
 ed_brew() {
   if [[ "$_OS" == 'darwin' ]]; then
     export PATH=/opt/homebrew/bin:$PATH
-
-  # Use the ctags from brew. Usage:
-  #   ctags -R .
-  alias ctags="`brew --prefix`/bin/ctags"
   fi
 }
 
