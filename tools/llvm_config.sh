@@ -1,8 +1,5 @@
 #!/bin/bash
 #
-# Run with LITE_LLVM_COMPILE=1 ~/Workspace/dotfiles/tools/llvm_config.sh to
-# disable unnecessary compilation.
-
 # set -x
 
 # high level doc is https://llvm.org/docs/CMake.html
@@ -42,26 +39,10 @@ fi
 
 # ------------------------------------------------------------------------------
 # cmd
-if [[ -n "$LITE_LLVM_COMPILE" ]]; then
-  echo "compile llvm in minimal mode."
 
-# removed compiler-rt until https://github.com/llvm/llvm-project/issues/69616
-# is resolved.
-
-  CMD="cmake -G '${LLVM_GENERATOR}' \
+CMD="cmake -G '${LLVM_GENERATOR}' \
 -DCMAKE_BUILD_TYPE=Release \
--DLLVM_ENABLE_PROJECTS='clang' \
--DLLVM_ENABLE_ASSERTIONS=NO \
--DLLVM_ENABLE_THREADS=NO \
--DLLVM_TARGETS_TO_BUILD='${SINGLE_ARCH}' \
-${LLVM_CMAKE_MACOS_FLAGS} \
-${LLVM_CMAKE_LD_FLAGS} \
-../src/llvm/"
-else
-  echo "compile llvm in normal mode."
-
-  CMD="cmake -G '${LLVM_GENERATOR}' \
--DCMAKE_BUILD_TYPE=Release \
+-DCMAKE_INSTALL_PREFIX=${HOME}/Workspace/build/usr/share/llvm \
 -DLLVM_ENABLE_PROJECTS='clang;lld;compiler-rt' \
 -DLLVM_ENABLE_ASSERTIONS=NO \
 -DLLVM_ENABLE_THREADS=NO \
@@ -69,7 +50,6 @@ else
 ${LLVM_CMAKE_MACOS_FLAGS} \
 ${LLVM_CMAKE_LD_FLAGS} \
 ../src/llvm/"
-fi
 
 echo "cmd to run:"
 echo "================================"

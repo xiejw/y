@@ -24,18 +24,13 @@ set -e
 TODAY_STR=`date '+%Y-%m-%d'`
 LIBCXX_BUILD_DIR=build-libcxx-${TODAY_STR}
 
-LIBCXX_INSTALL_DIR=${HOME}/Workspace/build/usr/libcxx
-LIBCXX_INSTALL_DIR_TMP=${HOME}/Workspace/build/usr/libcxx_${TODAY_STR}
-
 mkdir ${LIBCXX_BUILD_DIR}
 cd ${LIBCXX_BUILD_DIR}
-cmake -G Ninja -S ../src/runtimes                             \
-    -DCMAKE_CXX_COMPILER=clang++                              \
-    -DCMAKE_INSTALL_PREFIX=${LIBCXX_INSTALL_DIR_TMP}          \
+cmake -G Ninja -S ../src/runtimes                                 \
+    -DCMAKE_INSTALL_PREFIX=${HOME}/Workspace/build/usr/share/llvm \
+    -DCMAKE_CXX_COMPILER=clang++                                  \
     -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind"
 ninja
-rm -rf ${LIBCXX_INSTALL_DIR}*
 cmake --install .
-ln -sf ${LIBCXX_INSTALL_DIR_TMP} ${LIBCXX_INSTALL_DIR}
 
 
