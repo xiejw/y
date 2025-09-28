@@ -231,8 +231,8 @@ export CC=clang
 export CXX=clang++
 
 ed_llvm() {
-  if [[ "$PATH" != *"$BUILD_HOME/llvm/install/bin"* ]]; then
-    export PATH=$BUILD_HOME/llvm/install/bin:$PATH
+  if [[ "$PATH" != *"$BUILD_HOME/usr/llvm/bin"* ]]; then
+    export PATH=$BUILD_HOME/usr/llvm/bin:$PATH
   fi
   if [[ "$_OS" == "darwin" ]]; then
     # for clang compiled from source, SDKROOT is needed to provide sdk path for
@@ -246,7 +246,7 @@ ed_llvm() {
 ed_libcxx() {
   # libcxx
   if [[ "$LIBCXX_PATH" == "" ]]; then
-    export LIBCXX_PATH=~/Workspace/build/usr/libcxx
+    export LIBCXX_PATH=${BUILD_HOME}/usr/llvm
     export CXX="clang++ -nostdinc++ -nostdlib++ -isystem ${LIBCXX_PATH}/include/c++/v1 -L ${LIBCXX_PATH}/lib -Wl,-rpath,${LIBCXX_PATH}/lib -lc++"
     export CXXFLAGS=-Wno-unused-command-line-argument
   fi
