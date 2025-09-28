@@ -21,6 +21,15 @@ TODAY_STR=`date '+%Y-%m-%d'`
 LLVM_BUILD_DIR=build-llvm-${TODAY_STR}
 LIBCXX_BUILD_DIR=build-libcxx-${TODAY_STR}
 
+# === --- Arch ------------------------------------------------------------- ===
+if [[ "$ARCH" == *"arm64"* ]]; then
+  SINGLE_ARCH="AArch64"  # macOs
+elif [[ "$ARCH" == *"aarch64"* ]]; then
+  SINGLE_ARCH="AArch64"  # linux
+else
+  SINGLE_ARCH="X86"
+fi
+
 # === --- Linker ----------------------------------------------------------- ===
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   LLVM_CMAKE_LD_FLAGS=-DLLVM_USE_LINKER=lld
@@ -50,15 +59,15 @@ rm -rf ${LLVM_INSTALL_DIR}
 mkdir ${LLVM_BUILD_DIR}
 cd ${LLVM_BUILD_DIR}
 
-cmake -G "${LLVM_GENERATOR}" \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_INSTALL_PREFIX=${LLVM_INSTALL_DIR}                    \
-    -DLLVM_ENABLE_PROJECTS='clang;lld;compiler-rt' \
-    -DLLVM_ENABLE_ASSERTIONS=NO \
-    -DLLVM_ENABLE_THREADS=NO \
-    -DLLVM_TARGETS_TO_BUILD='X86;ARM;AArch64' \
-    ${LLVM_CMAKE_MACOS_FLAGS} \
-    ${LLVM_CMAKE_LD_FLAGS} \
+cmake -G "${LLVM_GENERATOR}"                                       \
+    -DCMAKE_BUILD_TYPE=Release                                     \
+    -DCMAKE_INSTALL_PREFIX=${LLVM_INSTALL_DIR}                     \
+    -DLLVM_ENABLE_PROJECTS='clang;lld;compiler-rt'                 \
+    -DLLVM_ENABLE_ASSERTIONS=NO                                    \
+    -DLLVM_ENABLE_THREADS=NO                                       \
+    -DLLVM_TARGETS_TO_BUILD='${SINGLE_ARCH}'                       \
+    ${LLVM_CMAKE_MACOS_FLAGS}                                      \
+    ${LLVM_CMAKE_LD_FLAGS}                                         \
     ../src/llvm/
 
 time ninja
