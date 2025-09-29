@@ -13,6 +13,9 @@
 set -x
 set -e
 
+cmake --version
+ninja --version
+
 LLVM_WORK_ROOT=${HOME}/Workspace/build/llvm
 LLVM_INSTALL_DIR=${HOME}/Workspace/build/usr/llvm2
 LLVM_GENERATOR="Ninja"
@@ -65,7 +68,7 @@ cmake -G "${LLVM_GENERATOR}"                                       \
     -DLLVM_ENABLE_PROJECTS='clang;lld;compiler-rt'                 \
     -DLLVM_ENABLE_ASSERTIONS=NO                                    \
     -DLLVM_ENABLE_THREADS=NO                                       \
-    -DLLVM_TARGETS_TO_BUILD='${SINGLE_ARCH}'                       \
+    -DLLVM_TARGETS_TO_BUILD="${SINGLE_ARCH}"                       \
     ${LLVM_CMAKE_MACOS_FLAGS}                                      \
     ${LLVM_CMAKE_LD_FLAGS}                                         \
     ../src/llvm/
