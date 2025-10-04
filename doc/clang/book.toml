@@ -1,9 +1,0 @@
-[book]
-authors = ["Jianwei Xie"]
-language = "en"
-multilingual = false
-src = "src"
-title = "Clang Tips"
-
-[build]
-build-dir = ".build"
