@@ -394,27 +394,3 @@
 
 </details>
 
-## PCRE2
-
-<details>
-  <summary>Click me</summary>
-
-  - Basic folder structure
-
-      ```
-      /Workspace/build/pcre2
-      - src
-      - install
-      ```
-  - Download source file from https://github.com/PCRE2Project/pcre2/releases
-  - After decompress, set up the `src` folder as usual
-
-  #### Compile and Install
-
-  ```
-  cd src
-  ./configure --prefix=`pwd`/../install
-  make
-  make install
-  ```
-</details>
