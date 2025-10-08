@@ -44,6 +44,6 @@ fi
 find_arch
 
 URL="https://go.dev/dl/go${VERSION}.darwin-${ARCH}.pkg"
-wget --show-progress -O /tmp/go.pkg "${URL}"
+curl -L -o /tmp/go.pkg "${URL}"
 open -W /tmp/go.pkg
 rm -rf /tmp/go.pkg
