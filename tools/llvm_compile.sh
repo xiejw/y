@@ -78,7 +78,7 @@ cmake --install .
 
 # === --- Libcxx ----------------------------------------------------------- ===
 
-export PATH=${LLVM_INSTALL_DIR}/bin:$PATH
+# export PATH=${LLVM_INSTALL_DIR}/bin:$PATH
 
 cd ${LLVM_WORK_ROOT}
 
