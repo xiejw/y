@@ -24,15 +24,6 @@ TODAY_STR=`date '+%Y-%m-%d'`
 LLVM_BUILD_DIR=build-llvm-${TODAY_STR}
 LIBCXX_BUILD_DIR=build-libcxx-${TODAY_STR}
 
-# === --- Arch ------------------------------------------------------------- ===
-if [[ "$ARCH" == *"arm64"* ]]; then
-  SINGLE_ARCH="AArch64"  # macOs
-elif [[ "$ARCH" == *"aarch64"* ]]; then
-  SINGLE_ARCH="AArch64"  # linux
-else
-  SINGLE_ARCH="X86"
-fi
-
 # === --- Linker ----------------------------------------------------------- ===
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   LLVM_CMAKE_LD_FLAGS=-DLLVM_USE_LINKER=lld
@@ -68,7 +59,7 @@ cmake -G "${LLVM_GENERATOR}"                                       \
     -DLLVM_ENABLE_PROJECTS='clang;lld;compiler-rt'                 \
     -DLLVM_ENABLE_ASSERTIONS=NO                                    \
     -DLLVM_ENABLE_THREADS=NO                                       \
-    -DLLVM_TARGETS_TO_BUILD="${SINGLE_ARCH}"                       \
+    -DLLVM_TARGETS_TO_BUILD='X86;ARM;AArch64;RISCV'                \
     ${LLVM_CMAKE_MACOS_FLAGS}                                      \
     ${LLVM_CMAKE_LD_FLAGS}                                         \
     ../src/llvm/
@@ -78,7 +69,8 @@ cmake --install .
 
 # === --- Libcxx ----------------------------------------------------------- ===
 
-# export PATH=${LLVM_INSTALL_DIR}/bin:$PATH
+# Use latest compile.
+export PATH=${LLVM_INSTALL_DIR}/bin:$PATH
 
 cd ${LLVM_WORK_ROOT}
 
