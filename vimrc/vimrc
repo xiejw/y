@@ -2,8 +2,8 @@
 "
 " === --- General Rules ---------------------------------------------------- ===
 "
-" 1. Config must be simple. Simplify it as much as possible.
-" 2. No fold.
+" Rule 1. Config must be simple. Simplify it as much as possible.
+" Rule 2. No fold. Fold is so hard for my little brain.
 "
 
 "
@@ -277,6 +277,41 @@ set autoread
 "
 
 "
+" === --- CC --------------------------------------------------------------- ===
+"
+
+autocmd FileType cpp :setlocal shiftwidth=2 tabstop=2 softtabstop=2
+
+" Highlight field (-> or .) for c and adjust the colors for it
+autocmd FileType cpp :syn match cField /\(->\|\.\)\<\k\+\>/
+autocmd FileType cpp :hi cField ctermfg=Green
+
+" Color for String.
+autocmd FileType cpp :hi String ctermfg=Red
+
+" Highlight function for c, check \ze in pattern
+autocmd FileType cpp :syn match cFunction "\<\k\+\ze("
+autocmd FileType cpp :hi link cFunction Function
+
+" Highlight the entire type with type name for struct/union/enum/class
+" (instead of just the keywords)
+autocmd FileType cpp :syn clear cStructure
+autocmd FileType cpp :syn clear cppStructure
+autocmd FileType cpp :syn match cStructureType /\(struct\|union\|class\|enum\|namespace\) \<\k\+\>/
+autocmd FileType cpp :hi cStructureType ctermfg=Yellow
+
+" Highlight namespace as well (cppStructure is cleared above). Supports
+" annoymous namespace as well.
+autocmd FileType cpp :syn match cNamespaceType /\(namespace\) \(\<\k\+\>\|\)/
+autocmd FileType cpp :hi cNamespaceType ctermfg=Magenta
+
+" Highlight namespace prefix
+autocmd FileType cpp :syn match cNamespaceType /\<\k\+\>::/
+
+" Nested lists inside comments
+autocmd FileType cpp :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
+
+"
 " === --- C ---------------------------------------------------------------- ===
 "
 " - make header files as c not cpp.
@@ -291,25 +326,25 @@ autocmd BufRead,BufNewFile *.h setlocal filetype=c
 " - see 'help usr_44.tx'
 " - see colors in https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 "
-" - define some keywords for storage, e.g., _mut_, _out_,
+" Efine some keywords for storage, e.g., _mut_, _out_,
 autocmd FileType c :match cStorageClass /\<_MUT_\|_OUT_\|_INOUT_\|_MOVED_IN_\|_NULLABLE_\>/
 
-" - added more int types and error_t as cType
+" Add more int types and error_t as cType
 autocmd FileType c :syn keyword	cType	i64_t u64_t i32_t u32_t f32_t f64_t byte
 autocmd FileType c :syn keyword	cType	i64 u64 i32 u32 u8 f32 f64
 autocmd FileType c :syn keyword	cType	vec_t error_t sds_t
 
-" - highlight function for c, check \ze in pattern
+" Highlight function for c, check \ze in pattern
 autocmd FileType c :syn match cFunction "\<\k\+\ze("
 autocmd FileType c :hi link cFunction Function
 
-" - highlight field (-> or .) for c and adjust the colors for it and String.
+" Highlight field (-> or .) for c and adjust the colors for it and String.
 autocmd FileType c :syn match cField /\(->\|\.\)\<\k\+\>/
 autocmd FileType c :hi cField ctermfg=Green
 autocmd FileType c :hi String ctermfg=Red
 
-" - highlight the entire type with type name for struct/union/enum (instead of
-"   just the keywords)
+" Highlight the entire type with type name for struct/union/enum (instead of
+" just the keywords)
 autocmd FileType c :syn clear cStructure
 autocmd FileType c :syn match cStructureType /\(struct\|union\|enum\) \<\k\+\>/
 autocmd FileType c :hi cStructureType ctermfg=Yellow
@@ -317,48 +352,10 @@ autocmd FileType c :hi cStructureType ctermfg=Yellow
 " Disable incorrect curly warning for compound literal.
 let g:c_no_curly_error=1
 
-" - make list in comments formatting easier.
+" Make list in comments formatting easier.
 autocmd FileType c :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
 
-
-" ------------------------------------------------------------------------------
 "
-" === --- C ---------------------------------------------------------------- ===
+" === --- Others ----------------------------------------------------------- ===
 "
 source ~/Workspace/y/vimrc/vimrc.programming_language.vim
-
-" {{{2 cc
-" ------------------------------------------------------------------------------
-" --- cc
-"
-autocmd FileType cpp :setlocal shiftwidth=2 tabstop=2 softtabstop=2
-
-" TODO: remove this.
-function! GoogleCC()
-  :set shiftwidth=2 tabstop=2 softtabstop=2
-endfunction
-
-" - added more int types and error_t as cType
-autocmd FileType cpp :syn keyword	cType	i64 u64 i32 u32 f32 f64
-
-" - highlight field (-> or .) for c and adjust the colors for it and String.
-autocmd FileType cpp :syn match cField /\(->\|\.\)\<\k\+\>/
-autocmd FileType cpp :hi cField ctermfg=Green
-autocmd FileType cpp :hi String ctermfg=Red
-
-" - highlight function for c, check \ze in pattern
-autocmd FileType cpp :syn match cFunction "\<\k\+\ze("
-autocmd FileType cpp :hi link cFunction Function
-
-
-
-" - highlight the entire type with type name for struct/union/enum (instead of
-"   just the keywords)
-autocmd FileType cpp :syn clear cStructure
-autocmd FileType cpp :syn match cStructureType /\(struct\|union\|enum\) \<\k\+\>/
-autocmd FileType cpp :hi cStructureType ctermfg=Yellow
-
-" - also highlight namespace prefix
-autocmd FileType cpp :syn match cStructureType /\<\k\+\>::/
-" nested lists inside comments the leading / is compensate ///
-autocmd FileType cpp :setlocal formatoptions+=2n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
