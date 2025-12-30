@@ -10,38 +10,6 @@ autocmd FileType go :setlocal comments=:// formatoptions=tcrqon
 autocmd FileType go :setlocal flp=^\\s*-\\s*
 " autocmd FileType go :hi goField ctermfg=Cyan
 
-" {{{2 cc
-" ------------------------------------------------------------------------------
-" --- cc
-"
-autocmd FileType cpp :setlocal shiftwidth=2 tabstop=2 softtabstop=2
-
-function! GoogleCC()
-  :set shiftwidth=2 tabstop=2 softtabstop=2
-endfunction
-
-" - added more int types and error_t as cType
-autocmd FileType cpp :syn keyword	cType	i64 u64 i32 u32 f32 f64
-
-" - highlight field (-> or .) for c and adjust the colors for it and String.
-autocmd FileType cpp :syn match cField /\(->\|\.\)\<\k\+\>/
-autocmd FileType cpp :hi cField ctermfg=Green
-autocmd FileType cpp :hi String ctermfg=Red
-
-" - highlight function for c, check \ze in pattern
-autocmd FileType cpp :syn match cFunction "\<\k\+\ze("
-autocmd FileType cpp :hi link cFunction Function
-
-
-
-" - highlight the entire type with type name for struct/union/enum (instead of
-"   just the keywords)
-autocmd FileType cpp :syn clear cStructure
-autocmd FileType cpp :syn match cStructureType /\(struct\|union\|enum\) \<\k\+\>/
-autocmd FileType cpp :hi cStructureType ctermfg=Yellow
-
-" - also highlight namespace prefix
-autocmd FileType cpp :syn match cStructureType /\<\k\+\>::/
 
 " {{{2 rust
 " ------------------------------------------------------------------------------

@@ -1,8 +1,14 @@
 " vim: nofoldenable:foldlevel=0:foldmethod=marker
+"
+" === --- General Rules ---------------------------------------------------- ===
+"
+" 1. Config must be simple. Simplify it as much as possible.
+" 2. No fold.
+"
 
-" ==============================================================================
-" {{{1 general settings
-" ==============================================================================
+"
+" === --- General Settings ------------------------------------------------- ===
+"
 syntax on               " enable syntax highlighting
 
 set nocompatible        " make Vim behave in a more useful way
@@ -15,23 +21,21 @@ set tabstop=2           " number of spaces that a <tab> in the file counts for
 set expandtab           " in insert mode: use spaces to insert a <tab>
 set softtabstop=2       " number of spaces that a <tab> counts for while editing
 set cindent             " indent for line according the C indenting rules
-set noignorecase        " ignore case in a pattern
-set noinfercase         " case sensitive for auto-complete
+set noignorecase        " (no) ignore case in a pattern
+set noinfercase         " (no) case sensitive for auto-complete
 set showcmd             " show selecting area size in visual mode, cmd in normal
 set nu                  " line number
 set cursorline          " highlight the cursor line with CursorLine
 set ruler               " show the line and column number of the cursor pos
 set vb                  " use a visual bell instead of beeping
-set modeline            " enable the 'modeline' option when editing a new file
+set modeline            " enable the 'modeline' option when opening a new file
 set modelines=5         " must be set to enable modeline
 set incsearch           " search pattern while typing in search.
 set encoding=utf8       " character encoding
 set nofoldenable        " disable fold in general.
-set foldlevel=1         " folds with a higher level will be closed
-set foldcolumn=0        " >0, show a col in the specified width indicating fold
 set nospell             " disable spell. spelllang=en_us
 set nowrapscan          " disable searches wrapping around the end of the file
-set list                " the next two lines shows the tab as special symbols
+set list                " this and line below show the tab as visible symbol
 set listchars=tab:>-
 
 set wildmenu            " possible matches are shown just above the command line
@@ -41,17 +45,19 @@ set completeopt=longest,menuone " completion mode in insert mode
 filetype plugin indent on
 filetype plugin on
 
-" disable netrw plugin which writes a .netrwhist file in ~/.vim when open dir
+"
+" === --- Plugins ---------------------------------------------------------- ===
+"
+
+" === --- Disable netrw
+"
+" disable netrw (Vim’s built-in network and file explorer plugin) which writes
+" a .netrwhist file in ~/.vim when open dir.
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
-
-" ==============================================================================
-" {{{1 vim plugs
-" ==============================================================================
 call plug#begin('~/.vim/plugged')
 
-" ------------------------------------------------------------------------------
-" tiled window management for Vim, like dwm
+" === --- tiled window management for Vim, like dwm
 "
 " <c-n> creates a new window and place it in the master pane [M] & stacks all
 "       previous windows in the stacked pane [S]
@@ -391,3 +397,39 @@ autocmd FileType c :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
 
 " ------------------------------------------------------------------------------
 source ~/Workspace/y/vimrc/vimrc.programming_language.vim
+
+" {{{2 cc
+" ------------------------------------------------------------------------------
+" --- cc
+"
+autocmd FileType cpp :setlocal shiftwidth=2 tabstop=2 softtabstop=2
+
+" TODO: remove this.
+function! GoogleCC()
+  :set shiftwidth=2 tabstop=2 softtabstop=2
+endfunction
+
+" - added more int types and error_t as cType
+autocmd FileType cpp :syn keyword	cType	i64 u64 i32 u32 f32 f64
+
+" - highlight field (-> or .) for c and adjust the colors for it and String.
+autocmd FileType cpp :syn match cField /\(->\|\.\)\<\k\+\>/
+autocmd FileType cpp :hi cField ctermfg=Green
+autocmd FileType cpp :hi String ctermfg=Red
+
+" - highlight function for c, check \ze in pattern
+autocmd FileType cpp :syn match cFunction "\<\k\+\ze("
+autocmd FileType cpp :hi link cFunction Function
+
+
+
+" - highlight the entire type with type name for struct/union/enum (instead of
+"   just the keywords)
+autocmd FileType cpp :syn clear cStructure
+autocmd FileType cpp :syn match cStructureType /\(struct\|union\|enum\) \<\k\+\>/
+autocmd FileType cpp :hi cStructureType ctermfg=Yellow
+
+" - also highlight namespace prefix
+autocmd FileType cpp :syn match cStructureType /\<\k\+\>::/
+" nested lists inside comments the leading / is compensate ///
+autocmd FileType cpp :setlocal formatoptions+=2n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
