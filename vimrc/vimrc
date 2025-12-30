@@ -1,4 +1,4 @@
-" vim: nofoldenable:foldlevel=0:foldmethod=marker
+" vim:
 "
 " === --- General Rules ---------------------------------------------------- ===
 "
@@ -71,24 +71,74 @@ let g:loaded_netrwPlugin = 1
 " Ctrl-w <   -> narrower
 
 "
+" === --- Comments, Formating, and Pattern --------------------------------- ===
+"
+" - Comments is a comma separated list of string parts to start comments. A
+"   part has format {flags}:{literal text}
+"
+" - Formatoptions: a string that contains any letters below to control Vim fmt
+"
+"   t  Auto-wrap text using textwidth
+"   c  Auto-wrap comments using textwidth, inserting the current comment
+"      leader automatically.
+"   r  Automatically insert the current comment leader after hitting
+"      <enter> in Insert mode.
+"   o  Automatically insert the current comment leader after hitting 'o' or
+"      'O' in Normal mode.
+"   q  Allow formatting of comments with "gq".
+"      Note that formatting will not change blank lines or lines containing
+"      only the comment leader.
+"   n  When formatting text, recognize numbered lists.  This actually uses
+"      the 'formatlistpat' option, thus any kind of list can be used. Note that
+"      'autoindent' must be set too.  Doesn't work well together with "2".
+"   2  When formatting text, use the indent of the second line of a paragraph
+"      for the rest of the paragraph, instead of the indent of the first
+"      line.  This supports paragraphs in which the first line has a
+"      different indent than the rest.  Note that 'autoindent' must be set.
+"
+" - Formatlistpat or flp:  A pattern that is used to recognize a list header.
+"   This is used for the "n" flag in 'formatoptions'.
+"
+" - Pattern: with `magic` on,
+"
+"       $      matches end-of-line
+"       .      matches any character
+"       *      any number of the previous atom
+"       ~      latest substitute string
+"       \(\)   grouping into an atom
+"       \|     separating alternatives
+"       \a     alphabetic character
+"       \\     literal backslash
+"       \.     literal dot
+"       {      literal '{'
+"       a      literal 'a'
+"
+"   See :h pattern.
+"
+"   For example, in search cmd, /a\(b\|c\) will search ab and ac.
+"
+"   For option value, the number of backslash is doubled. For example the flp
+"   used in this vimrc. see :h option-backslash.
+"
+
+"
 " === --- Plugins ---------------------------------------------------------- ===
 "
 call plug#begin('~/.vim/plugged')
 
-" Airline
+" === --- Airline
 "
 Plug 'vim-airline/vim-airline', {'commit': 'f86f1e8' }  " 2017-06
 let g:airline_section_b = '%{strftime("%c")}'
 set laststatus=2  " Enable the nice status bar show filename, mode, file type...
 
-
-" Fzf
+" === --- Fzf
 "
 " search FZF_DEFAULT_COMMAND in bash_profile
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin', 'commit': '9cb7a36'} " 2022-01
 Plug 'junegunn/fzf.vim', {'commit': '70541d2'} " 2022-01
 
-" Dracula (not used now)
+" === --- Dracula (Not Used Now)
 "
 " adjust: disable italic fonts to avoid the background highlight bugs.
 " see https://github.com/dracula/vim/issues/81
@@ -96,7 +146,7 @@ Plug 'junegunn/fzf.vim', {'commit': '70541d2'} " 2022-01
 " Plug 'dracula/vim', {'commit': 'b64b22a'} " 2020-08
 " let g:dracula_italic = 0
 
-" Nord
+" === --- Nord
 "
 Plug 'arcticicestudio/nord-vim', {'commit': 'bc0f057'} " 2022-09
 
@@ -223,59 +273,6 @@ endif
 autocmd CursorHold * checktime
 set autoread
 
-" ------------------------------------------------------------------------------
-" --- comments, formating, and pattern
-"
-" - comments is a comma separated list of string parts to start comments. A
-"   part has format {flags}:{literal text}
-"
-" - formatoptions: a string that contains any letters below to control Vim fmt
-"
-"   t  Auto-wrap text using textwidth
-"   c  Auto-wrap comments using textwidth, inserting the current comment
-"      leader automatically.
-"   r  Automatically insert the current comment leader after hitting
-"      <enter> in Insert mode.
-"   o  Automatically insert the current comment leader after hitting 'o' or
-"      'O' in Normal mode.
-"   q  Allow formatting of comments with "gq".
-"      Note that formatting will not change blank lines or lines containing
-"      only the comment leader.
-"   n  When formatting text, recognize numbered lists.  This actually uses
-"      the 'formatlistpat' option, thus any kind of list can be used. Note that
-"      'autoindent' must be set too.  Doesn't work well together with "2".
-"   2  When formatting text, use the indent of the second line of a paragraph
-"      for the rest of the paragraph, instead of the indent of the first
-"      line.  This supports paragraphs in which the first line has a
-"      different indent than the rest.  Note that 'autoindent' must be set.
-"
-" - formatlistpat or flp:  A pattern that is used to recognize a list header.
-"   This is used for the "n" flag in 'formatoptions'.
-"
-" - pattern
-"
-"     with `magic` on,
-"
-"         $      matches end-of-line
-"         .      matches any character
-"         *      any number of the previous atom
-"         ~      latest substitute string
-"         \(\)   grouping into an atom
-"         \|     separating alternatives
-"         \a     alphabetic character
-"         \\     literal backslash
-"         \.     literal dot
-"         {      literal '{'
-"         a      literal 'a'
-"
-"     see :h pattern.
-"
-"     for example, in search cmd, /a\(b\|c\) will search ab and ac.
-"
-"     for option value, the number of backslash is doubled. For example the
-"     flp used in this vimrc. see :h option-backslash.
-"
-
 "
 " === --- CC --------------------------------------------------------------- ===
 "
@@ -314,19 +311,18 @@ autocmd FileType cpp :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
 "
 " === --- C ---------------------------------------------------------------- ===
 "
-" - make header files as c not cpp.
-" - set shift and tabstop per linux kernel style.
+" Make header files as c not cpp.
+" Set shift and tabstop per linux kernel style.
 "
-" autocmd BufRead,BufNewFile *.h setlocal filetype=c
 autocmd FileType c :setlocal shiftwidth=8 tabstop=8 softtabstop=8
 autocmd FileType c :setlocal nofoldenable
 autocmd BufRead,BufNewFile *.h setlocal filetype=c
 
-" customize syntax for c
+" Customize syntax for c
 " - see 'help usr_44.tx'
 " - see colors in https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 "
-" Efine some keywords for storage, e.g., _mut_, _out_,
+" Define some keywords for storage, e.g., _mut_, _out_,
 autocmd FileType c :match cStorageClass /\<_MUT_\|_OUT_\|_INOUT_\|_MOVED_IN_\|_NULLABLE_\>/
 
 " Add more int types and error_t as cType
