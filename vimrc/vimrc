@@ -150,21 +150,17 @@ hi visual ctermbg=166
 " make the pop up menu more visible. 166 is orange.
 hi PmenuSel ctermfg=White ctermbg=166
 
-
-
-" ==============================================================================
-" {{{1 leaders
-" ==============================================================================
+"
+" === --- Leaders ---------------------------------------------------------- ===
+"
 let mapleader = ","
 set timeoutlen=500
 
-" ------------------------------------------------------------------------------
-" refresh or save the file content
+" Refresh or save the file content
 "
 nmap <silent> <leader>r :e! <CR>
 
-" ------------------------------------------------------------------------------
-" navigation for buffers
+" Navigation for buffers
 "
 nmap <silent> <leader>b :bn! <CR>
 nmap <silent> <leader>B :bp! <CR>
@@ -175,29 +171,19 @@ nmap <silent> <leader>2 :tabn 2<CR>
 nmap <silent> <leader>3 :tabn 3<CR>
 nmap <silent> <leader>4 :tabn 4<CR>
 
-" ------------------------------------------------------------------------------
-" some switches for spell, paste, etc
+" Some switches for spell, paste, etc
 "
 nmap <silent> <leader>p :set paste<CR>
 nmap <silent> <leader>np :set nopaste<CR>
 nmap <silent> <leader>s :set spell<CR>
 nmap <silent> <leader>ns :set nospell<CR>
 
-" ------------------------------------------------------------------------------
-" list the files to open, such as recent files, pending files in git
+" List the files to open, such as recent files, pending files in git
 "
 nmap <silent> <leader>lb :call fns#LoadRecentFiles()<CR>
 nmap <silent> <leader>ll :call fns#LoadPendingFiles()<CR>
 
-" ------------------------------------------------------------------------------
-" tagbar
-"
-" see https://github.com/preservim/tagbar/blob/master/doc/tagbar.txt for
-" flags. f is auto focus and c is auto close.
-nmap <silent> <leader>lt :TagbarToggle fc<CR>
-
-" ------------------------------------------------------------------------------
-" fzf
+" FZF
 "
 " check FZF_DEFAULT_COMMAND env var for the command to use.
 "
@@ -207,13 +193,8 @@ nmap <silent> <leader>z :call fzf#run({
         \ 'options': '-i',
         \ 'down': '40%'})<cr>
 
-" ------------------------------------------------------------------------------
-" indentLine
-"
-nmap <silent> <leader>i :IndentGuidesToggle<cr>:hi IndentGuidesOdd  ctermbg=red<cr>
 
-" ------------------------------------------------------------------------------
-" open files related
+" Open files related
 "
 " open in current working dir
 " open in current working dir but in a new tab
@@ -221,63 +202,41 @@ nmap <silent> <leader>i :IndentGuidesToggle<cr>:hi IndentGuidesOdd  ctermbg=red<
 nmap <silent> <leader>e :e %:p:h/
 nmap <silent> <leader>t :tabnew %:p:h/
 
-" ------------------------------------------------------------------------------
-" put `` and '' around a word
+" Put `` and '' around a word
 "
 nmap <silent> <leader>` bi`<esc>wea`<esc>
 nmap <silent> <leader>' bi'<esc>wea'<esc>
 
-" ------------------------------------------------------------------------------
-" insert a 80-char line
+" Insert a 80-char line
 "
 " useful in comments and ft=help mode
 "
 nmap <silent> <leader>- i-<esc>79.
 nmap <silent> <leader>= i=<esc>79.
 
-" ------------------------------------------------------------------------------
-" insert a code block for help mode.
 "
-" ```
-" >
-"     <cursor>
-" <
-" ```
+" === --- Other Mappings --------------------------------------------------- ===
 "
-nmap <silent> <leader>> i><esc>o<<esc>O<esc>i <esc>$<esc>4.a
 
-" ==============================================================================
-" other mappings
-" ==============================================================================
-
-" ------------------------------------------------------------------------------
-" kill the current buffer without losing split
+" Kill the current buffer without losing split
 "
 nmap <silent> <leader>d :bp \| bd #<CR>
 
-" ------------------------------------------------------------------------------
-" map tab to auto complete
+" Map tab to auto complete
 "
 imap <tab> <c-x><c-p>
 
-nnoremap <space> za
-nnoremap <tab> zi
-
-" ==============================================================================
-" {{{1 filetype related
-" ==============================================================================
-
-" {{{2 general
-" ------------------------------------------------------------------------------
-" general
 "
-" delete tailing spaces for all lines (all files). The env var can turn it
+" === --- General File Related --------------------------------------------- ===
+"
+
+" Delete tailing spaces for all lines (all files). The env var can turn it
 " off.
 if empty($DOTFILES_VIM_NOT_DEL_EMPTY_LINESEND)
   autocmd BufWritePre * :call fns#DelEmptyLinesEnd()
 endif
 
-" auto detect and load file change
+" Auto detect and load file change
 "
 " Ask vim to check file timestamp (checktime). Once detected new change, due
 " to `autoread`, the content will be loaded.
@@ -337,15 +296,8 @@ set autoread
 "     flp used in this vimrc. see :h option-backslash.
 "
 
-" {{{2 vim
-" ------------------------------------------------------------------------------
-" --- vim
 "
-autocmd FileType vim :setlocal foldlevel=2 foldmethod=marker
-
-" {{{2 c
-" ------------------------------------------------------------------------------
-" --- c
+" === --- C ---------------------------------------------------------------- ===
 "
 " - make header files as c not cpp.
 " - set shift and tabstop per linux kernel style.
@@ -390,4 +342,7 @@ autocmd FileType c :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
 
 
 " ------------------------------------------------------------------------------
+"
+" === --- C ---------------------------------------------------------------- ===
+"
 source ~/Workspace/y/vimrc/vimrc.programming_language.vim
