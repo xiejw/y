@@ -45,53 +45,50 @@ set completeopt=longest,menuone " completion mode in insert mode
 filetype plugin indent on
 filetype plugin on
 
-"
-" === --- Plugins ---------------------------------------------------------- ===
-"
-
 " === --- Disable netrw
 "
 " disable netrw (Vim’s built-in network and file explorer plugin) which writes
 " a .netrwhist file in ~/.vim when open dir.
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
+
+"
+" === --- Panel Operations ------------------------------------------------- ===
+"
+" Ctrl-w v   -> open vertical split
+"
+" Ctrl-w c   -> close the current panel
+" Ctrl-w o   -> close others
+"
+" Ctrl-w w   -> cycle to next window
+" Ctrl-w p   -> go to previous (last) window
+" Ctrl-w t   -> go to top-left window
+" Ctrl-w b   -> go to bottom-right window
+"
+" Ctrl-w +   -> taller
+" Ctrl-w -   -> shorter
+" Ctrl-w >   -> wider
+" Ctrl-w <   -> narrower
+
+"
+" === --- Plugins ---------------------------------------------------------- ===
+"
 call plug#begin('~/.vim/plugged')
 
-" === --- tiled window management for Vim, like dwm
-"
-" <c-n> creates a new window and place it in the master pane [M] & stacks all
-"       previous windows in the stacked pane [S]
-" <c-c> close the current window if no unsaved changes
-" <c-j> jumps to next window (clockwise)
-" <c-k> jumps to previous window (anti-clockwise)
-" <c-space>
-"       focus the current window, that is, place it in the master pane [M] &
-"       stacks all other windows in the stacked pane [S]
-"
-Plug 'xiejw/dwm.vim'
-
-" ------------------------------------------------------------------------------
-" airline
+" Airline
 "
 Plug 'vim-airline/vim-airline', {'commit': 'f86f1e8' }  " 2017-06
-
-" adjust: setup the fonts for ubuntu.
-"
-" follow https://github.com/powerline/fonts and select the font in termial
-" profile (say xfce4-terminal with Droid Sans Mno Dotted for Powerline 9).
-let g:airline#extensions#tabline#enabled = 1
 let g:airline_section_b = '%{strftime("%c")}'
-set laststatus=2
+set laststatus=2  " Enable the nice status bar show filename, mode, file type...
 
-" ------------------------------------------------------------------------------
-" fzf
+
+" Fzf
 "
 " search FZF_DEFAULT_COMMAND in bash_profile
 Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --bin', 'commit': '9cb7a36'} " 2022-01
 Plug 'junegunn/fzf.vim', {'commit': '70541d2'} " 2022-01
 
-" ------------------------------------------------------------------------------
-" dracula
+" Dracula (not used now)
 "
 " adjust: disable italic fonts to avoid the background highlight bugs.
 " see https://github.com/dracula/vim/issues/81
@@ -99,78 +96,51 @@ Plug 'junegunn/fzf.vim', {'commit': '70541d2'} " 2022-01
 " Plug 'dracula/vim', {'commit': 'b64b22a'} " 2020-08
 " let g:dracula_italic = 0
 
-" ------------------------------------------------------------------------------
-" nord
+" Nord
 "
-" see https://github.com/arcticicestudio/nord-vim
 Plug 'arcticicestudio/nord-vim', {'commit': 'bc0f057'} " 2022-09
-
-" ------------------------------------------------------------------------------
-" indent guide
-"
-Plug 'preservim/vim-indent-guides', {'commit': 'a1e1390'} " 2023-11
-
-" ------------------------------------------------------------------------------
-" html
-"
-" Plugin `matchup` allows
-" - `%` to jump between html open/close tags.
-" - `[%` to jump to prev open tag.
-"
-Plug 'andymass/vim-matchup', {'commit': '57d3a4b'} " 2024-10
-
-" ------------------------------------------------------------------------------
-" tagbar
-"
-" Shows a panel on right to show the high level structure of the current
-" source code file.
-"
-" See <leaders> section for shortcut.
-Plug 'preservim/tagbar', {'commit': '8de7694'} " 2024-12
 
 call plug#end()
 
-" ==============================================================================
-" {{{1 colors settings
-" ==============================================================================
+"
+" === --- Color Settings --------------------------------------------------- ===
+"
 
-" ------------------------------------------------------------------------------
-" dracula
+" Dracula
 "
 set background=dark " background must be set before colorscheme
 " colorscheme dracula
 colorscheme nord
 
-" ------------------------------------------------------------------------------
-" color adjustments
+" Color Adjustments
 "
-" define color for current line number. `set cursorline` must be set.
+" Define color for current line number. `set cursorline` must be set.
 hi CursorLineNR ctermfg=Cyan
-" define a special group for some languages, used in c, etc.
+
+" Define a special group for some languages, used in c, etc.
 hi MyCKeyword ctermbg=DarkCyan ctermfg=Black
-" change comment to darg green. makes it visible in terminal (usually is blue).
+
+" Change comment to darg green. makes it visible in terminal (usually is blue).
 "hi Comment ctermfg=DarkMagenta
 hi Comment ctermfg=LightGrey
-" make the visual selection more visible. 166 is orange.
+
+" Make the visual selection more visible. 166 is orange.
 hi visual ctermbg=166
-" make the pop up menu more visible. 166 is orange.
+
+" Make the pop up menu more visible. 166 is orange.
 hi PmenuSel ctermfg=White ctermbg=166
 
-
-
-" ==============================================================================
-" {{{1 leaders
-" ==============================================================================
+"
+" === --- Leaders ---------------------------------------------------------- ===
+"
 let mapleader = ","
 set timeoutlen=500
 
-" ------------------------------------------------------------------------------
-" refresh or save the file content
+" Refresh or save the file content
 "
 nmap <silent> <leader>r :e! <CR>
 
-" ------------------------------------------------------------------------------
-" navigation for buffers
+" Navigation for buffers
 "
 nmap <silent> <leader>b :bn! <CR>
 nmap <silent> <leader>B :bp! <CR>
@@ -181,29 +151,19 @@ nmap <silent> <leader>2 :tabn 2<CR>
 nmap <silent> <leader>3 :tabn 3<CR>
 nmap <silent> <leader>4 :tabn 4<CR>
 
-" ------------------------------------------------------------------------------
-" some switches for spell, paste, etc
+" Some switches for spell, paste, etc
 "
 nmap <silent> <leader>p :set paste<CR>
 nmap <silent> <leader>np :set nopaste<CR>
 nmap <silent> <leader>s :set spell<CR>
 nmap <silent> <leader>ns :set nospell<CR>
 
-" ------------------------------------------------------------------------------
-" list the files to open, such as recent files, pending files in git
+" List the files to open, such as recent files, pending files in git
 "
 nmap <silent> <leader>lb :call fns#LoadRecentFiles()<CR>
 nmap <silent> <leader>ll :call fns#LoadPendingFiles()<CR>
 
-" ------------------------------------------------------------------------------
-" tagbar
-"
-" see https://github.com/preservim/tagbar/blob/master/doc/tagbar.txt for
-" flags. f is auto focus and c is auto close.
-nmap <silent> <leader>lt :TagbarToggle fc<CR>
-
-" ------------------------------------------------------------------------------
-" fzf
+" FZF
 "
 " check FZF_DEFAULT_COMMAND env var for the command to use.
 "
@@ -213,13 +173,8 @@ nmap <silent> <leader>z :call fzf#run({
         \ 'options': '-i',
         \ 'down': '40%'})<cr>
 
-" ------------------------------------------------------------------------------
-" indentLine
-"
-nmap <silent> <leader>i :IndentGuidesToggle<cr>:hi IndentGuidesOdd  ctermbg=red<cr>
 
-" ------------------------------------------------------------------------------
-" open files related
+" Open files related
 "
 " open in current working dir
 " open in current working dir but in a new tab
@@ -227,63 +182,41 @@ nmap <silent> <leader>i :IndentGuidesToggle<cr>:hi IndentGuidesOdd  ctermbg=red<
 nmap <silent> <leader>e :e %:p:h/
 nmap <silent> <leader>t :tabnew %:p:h/
 
-" ------------------------------------------------------------------------------
-" put `` and '' around a word
+" Put `` and '' around a word
 "
 nmap <silent> <leader>` bi`<esc>wea`<esc>
 nmap <silent> <leader>' bi'<esc>wea'<esc>
 
-" ------------------------------------------------------------------------------
-" insert a 80-char line
+" Insert a 80-char line
 "
 " useful in comments and ft=help mode
 "
 nmap <silent> <leader>- i-<esc>79.
 nmap <silent> <leader>= i=<esc>79.
 
-" ------------------------------------------------------------------------------
-" insert a code block for help mode.
 "
-" ```
-" >
-"     <cursor>
-" <
-" ```
+" === --- Other Mappings --------------------------------------------------- ===
 "
-nmap <silent> <leader>> i><esc>o<<esc>O<esc>i <esc>$<esc>4.a
 
-" ==============================================================================
-" other mappings
-" ==============================================================================
-
-" ------------------------------------------------------------------------------
-" kill the current buffer without losing split
+" Kill the current buffer without losing split
 "
 nmap <silent> <leader>d :bp \| bd #<CR>
 
-" ------------------------------------------------------------------------------
-" map tab to auto complete
+" Map tab to auto complete
 "
 imap <tab> <c-x><c-p>
 
-nnoremap <space> za
-nnoremap <tab> zi
-
-" ==============================================================================
-" {{{1 filetype related
-" ==============================================================================
-
-" {{{2 general
-" ------------------------------------------------------------------------------
-" general
 "
-" delete tailing spaces for all lines (all files). The env var can turn it
+" === --- General File Related --------------------------------------------- ===
+"
+
+" Delete tailing spaces for all lines (all files). The env var can turn it
 " off.
 if empty($DOTFILES_VIM_NOT_DEL_EMPTY_LINESEND)
   autocmd BufWritePre * :call fns#DelEmptyLinesEnd()
 endif
 
-" auto detect and load file change
+" Auto detect and load file change
 "
 " Ask vim to check file timestamp (checktime). Once detected new change, due
 " to `autoread`, the content will be loaded.
@@ -343,15 +276,8 @@ set autoread
 "     flp used in this vimrc. see :h option-backslash.
 "
 
-" {{{2 vim
-" ------------------------------------------------------------------------------
-" --- vim
 "
-autocmd FileType vim :setlocal foldlevel=2 foldmethod=marker
-
-" {{{2 c
-" ------------------------------------------------------------------------------
-" --- c
+" === --- C ---------------------------------------------------------------- ===
 "
 " - make header files as c not cpp.
 " - set shift and tabstop per linux kernel style.
@@ -396,6 +322,9 @@ autocmd FileType c :setlocal formatoptions+=n flp=^\\s*\\(\\d\\+\\.\\\|-\\)\\s
 
 
 " ------------------------------------------------------------------------------
+"
+" === --- C ---------------------------------------------------------------- ===
+"
 source ~/Workspace/y/vimrc/vimrc.programming_language.vim
 
 " {{{2 cc
