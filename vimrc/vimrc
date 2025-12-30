@@ -7,52 +7,6 @@
 "
 
 "
-" === --- General Settings ------------------------------------------------- ===
-"
-syntax on               " enable syntax highlighting
-
-set nocompatible        " make Vim behave in a more useful way
-set mouse=a             " enable mouse in all modes (normal, visual, etc)
-set colorcolumn=80,100  " screen columns that are highlighted with ColorColumn
-set backspace=2         " make backspace work like most other programs
-set splitright          " if off, vsplit to left
-set shiftwidth=2        " number of spaces to use for each step of (auto)indent
-set tabstop=2           " number of spaces that a <tab> in the file counts for
-set expandtab           " in insert mode: use spaces to insert a <tab>
-set softtabstop=2       " number of spaces that a <tab> counts for while editing
-set cindent             " indent for line according the C indenting rules
-set noignorecase        " (no) ignore case in a pattern
-set noinfercase         " (no) case sensitive for auto-complete
-set showcmd             " show selecting area size in visual mode, cmd in normal
-set nu                  " line number
-set cursorline          " highlight the cursor line with CursorLine
-set ruler               " show the line and column number of the cursor pos
-set vb                  " use a visual bell instead of beeping
-set modeline            " enable the 'modeline' option when opening a new file
-set modelines=5         " must be set to enable modeline
-set incsearch           " search pattern while typing in search.
-set encoding=utf8       " character encoding
-set nofoldenable        " disable fold in general.
-set nospell             " disable spell. spelllang=en_us
-set nowrapscan          " disable searches wrapping around the end of the file
-set list                " this and line below show the tab as visible symbol
-set listchars=tab:>-
-
-set wildmenu            " possible matches are shown just above the command line
-set wildmode=longest:full " emacs-style filename matching
-set completeopt=longest,menuone " completion mode in insert mode
-
-filetype plugin indent on
-filetype plugin on
-
-" === --- Disable netrw
-"
-" disable netrw (Vim’s built-in network and file explorer plugin) which writes
-" a .netrwhist file in ~/.vim when open dir.
-let g:loaded_netrw       = 1
-let g:loaded_netrwPlugin = 1
-
-"
 " === --- Panel Operations ------------------------------------------------- ===
 "
 " Ctrl-w v   -> open vertical split
@@ -122,6 +76,52 @@ let g:loaded_netrwPlugin = 1
 "
 
 "
+" === --- General Settings ------------------------------------------------- ===
+"
+syntax on               " enable syntax highlighting
+
+set nocompatible        " make Vim behave in a more useful way
+set mouse=a             " enable mouse in all modes (normal, visual, etc)
+set colorcolumn=80,100  " screen columns that are highlighted with ColorColumn
+set backspace=2         " make backspace work like most other programs
+set splitright          " if off, vsplit to left
+set shiftwidth=2        " number of spaces to use for each step of (auto)indent
+set tabstop=2           " number of spaces that a <tab> in the file counts for
+set expandtab           " in insert mode: use spaces to insert a <tab>
+set softtabstop=2       " number of spaces that a <tab> counts for while editing
+set cindent             " indent for line according the C indenting rules
+set noignorecase        " (no) ignore case in a pattern
+set noinfercase         " (no) case sensitive for auto-complete
+set showcmd             " show selecting area size in visual mode, cmd in normal
+set nu                  " line number
+set cursorline          " highlight the cursor line with CursorLine
+set ruler               " show the line and column number of the cursor pos
+set vb                  " use a visual bell instead of beeping
+set modeline            " enable the 'modeline' option when opening a new file
+set modelines=5         " must be set to enable modeline
+set incsearch           " search pattern while typing in search.
+set encoding=utf8       " character encoding
+set nofoldenable        " disable fold in general.
+set nospell             " disable spell. spelllang=en_us
+set nowrapscan          " disable searches wrapping around the end of the file
+set list                " this and line below show the tab as visible symbol
+set listchars=tab:>-
+
+set wildmenu            " possible matches are shown just above the command line
+set wildmode=longest:full " emacs-style filename matching
+set completeopt=longest,menuone " completion mode in insert mode
+
+filetype plugin indent on
+filetype plugin on
+
+" === --- Disable netrw
+"
+" disable netrw (Vim’s built-in network and file explorer plugin) which writes
+" a .netrwhist file in ~/.vim when open dir.
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+
+"
 " === --- Plugins ---------------------------------------------------------- ===
 "
 call plug#begin('~/.vim/plugged')
@@ -156,10 +156,9 @@ call plug#end()
 " === --- Color Settings --------------------------------------------------- ===
 "
 
-" Dracula
+" Colorscheme
 "
 set background=dark " background must be set before colorscheme
-" colorscheme dracula
 colorscheme nord
 
 " Color Adjustments
