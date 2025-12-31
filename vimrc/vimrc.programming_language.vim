@@ -1,12 +1,16 @@
 " === --- Go
 "
-" - config flp: the list \s*-\s* in comments. The comment leader '//' is not
-"   part of it
 autocmd FileType go :setlocal tw=0
 autocmd FileType go :setlocal shiftwidth=8 softtabstop=8 tabstop=8
+
+" Config flp: the list \s*-\s* in comments. The comment leader '//' is not
+" part of it
 autocmd FileType go :setlocal comments=:// formatoptions=tcrqon
 autocmd FileType go :setlocal flp=^\\s*-\\s*
-" autocmd FileType go :hi goField ctermfg=Cyan
+
+" Highlight function for go, check \ze in pattern
+autocmd FileType go :syn match goFunction "\<\k\+\ze("
+autocmd FileType go :hi link goFunction Function
 
 " === --- Text
 "
