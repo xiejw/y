@@ -1,6 +1,6 @@
 " === --- Go
 "
-autocmd FileType go :setlocal tw=0
+autocmd FileType go :setlocal tw=80
 autocmd FileType go :setlocal shiftwidth=8 softtabstop=8 tabstop=8
 
 " Config flp: the list \s*-\s* in comments. The comment leader '//' is not
@@ -11,6 +11,9 @@ autocmd FileType go :setlocal flp=^\\s*-\\s*
 " Highlight function for go, check \ze in pattern
 autocmd FileType go :syn match goFunction "\<\k\+\ze("
 autocmd FileType go :hi link goFunction Function
+
+" Clear format (gq) to use default one (not gofmt).
+autocmd FileType go :setlocal formatprg=
 
 " === --- Text
 "
