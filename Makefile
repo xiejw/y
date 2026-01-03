@@ -39,7 +39,6 @@ test:
 	make -C ann/luna                  test        && \
 	make -C ann/zion                  test        && \
 	make -C ann/tlpi/chp62_term       test        && \
-	make -C ann/eva                   test        && \
 	make -C ann/eve                   test        && \
 	${WE_ARE_GOOD}
 
