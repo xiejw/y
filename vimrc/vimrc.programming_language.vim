@@ -1,6 +1,6 @@
 " === --- Go
 "
-autocmd FileType go :setlocal tw=80
+autocmd FileType go :setlocal tw=1000
 autocmd FileType go :setlocal shiftwidth=8 softtabstop=8 tabstop=8
 
 " Config flp: the list \s*-\s* in comments. The comment leader '//' is not
