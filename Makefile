@@ -25,20 +25,9 @@ WE_ARE_GOOD = printf "\n\e[1;32m>>> We are good!!! <<<\e[0m\n"
 fmt:
 	make -C dotfiles                  fmt         && \
 	make -C tools                     fmt         && \
-	make -C ann/eva                   fmt         && \
-	make -C ann/eve                   fmt         && \
-	make -C ann/luna                  fmt         && \
-	make -C ann/zion                  fmt         && \
-	make -C ann/tlpi/chp62_term       fmt         && \
 	${WE_ARE_GOOD}
 
-# NOTE: keep eva and eve at the end to avoid re-compilation.
-# WHY:  The release eva/eve builds, required by other projects, clean the
-#       compilation cache. This makes the second `make test` run recompiles.
 test:
-	make -C ann/luna                  test        && \
-	make -C ann/tlpi/chp62_term       test        && \
-	make -C ann/eve                   test        && \
 	${WE_ARE_GOOD}
 
 clean:
