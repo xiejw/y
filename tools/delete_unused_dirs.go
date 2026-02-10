@@ -121,6 +121,17 @@ func (gw *GabageWiper) workOnCandidates() bool {
 			workDone = false
 			continue
 		}
+
+		// Rule 4: If file .DS_Store exists, delete it
+		path_to_ds_store := os_path.Join(dirToConsider, ".DS_Store")
+		if _, err := os.Stat(path_to_ds_store); err == nil {
+			actions = append(actions, Action{
+				kind: DelFile,
+				path: path_to_ds_store,
+			})
+			workDone = false
+			continue
+		}
 	}
 
 	for _, act := range actions {
