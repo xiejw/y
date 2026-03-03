@@ -2,7 +2,10 @@
 
 FMT_FOLDERS     = cmd c
 
-CFLAGS         +=-std=c99 -O2 -Wall -Werror -pedantic -Wno-c11-extensions
+# This flag is OK. It can be used for all machines having compilers out of ctl.
+CFLAGS         +=-std=c99 -O2
+#
+# CFLAGS         +=-std=c99 -O2 -Wall -Werror -pedantic -Wno-c11-extensions
 
 # -------
 # actions
