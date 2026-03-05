@@ -1,4 +1,4 @@
-# CLAUDE.md — install-tools
+# CLAUDE.md — kit
 
 ## Overview
 

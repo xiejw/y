@@ -1,4 +1,4 @@
-// install-tools installs macOS developer tools from source without Homebrew.
+// kit installs macOS developer tools from source without Homebrew.
 // All binaries are placed in ~/Workspace/build/usr/bin.
 //
 // Usage:

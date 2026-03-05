@@ -3,32 +3,32 @@ BUILD = /tmp/build
 test: test_toolchain test_c test_rs test_go test_lib
 
 test_toolchain:
-	go run install-tools rust                  ${BUILD}
-	go run install-tools git                   ${BUILD}
-	go run install-tools cmake                 ${BUILD}
-	go run install-tools ninja                 ${BUILD}
+	go run kit rust                  ${BUILD}
+	go run kit git                   ${BUILD}
+	go run kit cmake                 ${BUILD}
+	go run kit ninja                 ${BUILD}
 
 # Tools written in c/cc
 test_c:
-	go run install-tools rsync                 ${BUILD}
-	go run install-tools telnet                ${BUILD}
-	go run install-tools jq                    ${BUILD}
-	go run install-tools bash                  ${BUILD}
-	go run install-tools vim                   ${BUILD}
+	go run kit rsync                 ${BUILD}
+	go run kit telnet                ${BUILD}
+	go run kit jq                    ${BUILD}
+	go run kit bash                  ${BUILD}
+	go run kit vim                   ${BUILD}
 
 # Tools written in rust
 test_rs:
-	go run install-tools fd                    ${BUILD}
-	go run install-tools eza                   ${BUILD}
-	go run install-tools ripgrep               ${BUILD}
-	go run install-tools zoxide                ${BUILD}
+	go run kit fd                    ${BUILD}
+	go run kit eza                   ${BUILD}
+	go run kit ripgrep               ${BUILD}
+	go run kit zoxide                ${BUILD}
 
 # Tools written in go
 test_go:
-	go run install-tools glow                  ${BUILD}
+	go run kit glow                  ${BUILD}
 
 test_lib:
-	go run install-tools pcre2                 ${BUILD}
+	go run kit pcre2                 ${BUILD}
 
 install:
-	go run install-tools
+	go run kit

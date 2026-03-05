@@ -1,3 +1,3 @@
-module install-tools
+module kit
 
 go 1.24
