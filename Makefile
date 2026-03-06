@@ -31,7 +31,7 @@ test:
 	${WE_ARE_GOOD}
 
 clean:
-	go run tools/delete_unused_dirs.go
+	go run tools/scripts/delete_unused_dirs.go
 
 # ------------------------------------------------------------------------------
 # Install
@@ -55,5 +55,5 @@ install:
 	rm -f ~/.tmux.conf
 	ln -sf ~/Workspace/y/dotfiles/conf/tmux.conf ~/.tmux.conf
 	@echo "==>" Patch ~/.profile
-	python3 ~/Workspace/y/tools/patch_profile_for_y.py
+	python3 ~/Workspace/y/tools/scripts/patch_profile_for_y.py
 

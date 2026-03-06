@@ -28,7 +28,7 @@ nginxfmt:
 # maintenance
 #
 fmt:
-	~/Workspace/y/tools/clang_format_all.sh ${FMT_FOLDERS}
+	~/Workspace/y/tools/scripts/clang_format_all.sh ${FMT_FOLDERS}
 
 clean:
 	rm -rf bin
