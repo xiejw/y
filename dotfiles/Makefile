@@ -10,18 +10,12 @@ CFLAGS         +=-std=c99 -O2
 # -------
 # actions
 #
-default: prompt sync_git_repo du2tree nginxfmt
+default: prompt sync_git_repo
 
 prompt:
 	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
 
 sync_git_repo:
-	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
-
-du2tree:
-	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
-
-nginxfmt:
 	mkdir -p bin && ${CC} ${CFLAGS} -I. -o bin/$@ cmd/$@/main.c
 
 # -----------
