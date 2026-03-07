@@ -1,6 +1,12 @@
 BUILD = /tmp/build
 
-test: test_toolchain test_c test_rs test_go test_lib
+test:
+	go build -o /dev/null kit
+
+fmt:
+	go fmt kit
+
+test_all: test_toolchain test_c test_rs test_go test_lib
 
 test_toolchain:
 	go run kit rust                  ${BUILD}

@@ -24,6 +24,8 @@ sync_git_repo:
 fmt:
 	~/Workspace/y/tools/scripts/clang_format_all.sh ${FMT_FOLDERS}
 
+test: default
+
 clean:
 	rm -rf bin
 

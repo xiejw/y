@@ -13,4 +13,3 @@ make install
 | `/dotfiles`      |  bash, and other configs   |
 | `/tools`         |  common tools              |
 | `/vimrc`         |  vim configs               |
-| `/ann/`          |  `c`, `cc`, `go` libs      |

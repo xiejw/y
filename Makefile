@@ -23,11 +23,13 @@ WE_ARE_GOOD = printf "\n\e[1;32m>>> We are good!!! <<<\e[0m\n"
 # Maintaince actions
 
 fmt:
-	make -C dotfiles                  fmt         && \
-	make -C tools                     fmt         && \
+	make -C dotfiles                  fmt
+	make -C tools                     fmt
 	${WE_ARE_GOOD}
 
 test:
+	make -C dotfiles                  test
+	make -C tools                     test
 	${WE_ARE_GOOD}
 
 clean:
