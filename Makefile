@@ -55,5 +55,6 @@ install:
 	rm -f ~/.tmux.conf
 	ln -sf ~/Workspace/y/dotfiles/conf/tmux.conf ~/.tmux.conf
 	@echo "==>" Patch ~/.profile
-	python3 ~/Workspace/y/tools/scripts/patch_profile_for_y.py
+	command -v go || (echo "must have go first"; exit 1)
+	go run ~/Workspace/y/tools/scripts/patch_profile.go
 
