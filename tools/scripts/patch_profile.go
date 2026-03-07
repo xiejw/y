@@ -1,3 +1,8 @@
+// patch_profile patches ~/.profile to source the dotfiles configuration.
+//
+// Usage:
+//
+//	go run patch_profile.go
 package main
 
 import (
