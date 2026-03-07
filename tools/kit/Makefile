@@ -9,7 +9,7 @@ fmt:
 test_all: test_bootstrap test_toolchain test_c test_rs test_go test_lib
 
 test_bootstrap:
-	./install_go.sh
+	./install_go.sh                  ${BUILD}
 
 test_toolchain:
 	go run kit rust                  ${BUILD}

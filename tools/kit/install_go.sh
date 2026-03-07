@@ -2,17 +2,19 @@
 set -euo pipefail
 
 #
-# Usage: ./install_go.sh
+# Usage: ./install_go.sh [build-dir]
 #
-# Installs the Go toolchain into ~/Workspace/build/usr/go/ and symlinks
-# go/gofmt into ~/Workspace/build/usr/bin/. Skips if already installed.
+# Installs the Go toolchain into <build-dir>/usr/go/ and symlinks
+# go/gofmt into <build-dir>/usr/bin/. Skips if already installed.
 # Run this first to bootstrap kit before using `go run .`.
+# Defaults to ~/Workspace/build if no build-dir is given.
 #
 
 GO_VERSION="1.26.1"
 
-PREFIX="$HOME/Workspace/build/usr"
-WORK_DIR="$HOME/Workspace/build/go"
+BUILD_DIR="${1:-$HOME/Workspace/build}"
+PREFIX="$BUILD_DIR/usr"
+WORK_DIR="$BUILD_DIR/go"
 
 # Detect OS and arch
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
@@ -27,6 +29,14 @@ TARBALL_PATH="$WORK_DIR/$TARBALL"
 DOWNLOAD_URL="https://go.dev/dl/$TARBALL"
 
 BIN_GO="$PREFIX/bin/go"
+
+echo "[config]  go version: $GO_VERSION"
+echo "[config]  tarball:    $TARBALL"
+echo "[config]  url:        $DOWNLOAD_URL"
+echo "[config]  build dir:  $BUILD_DIR"
+echo "[config]  prefix:     $PREFIX"
+echo "[config]  work dir:   $WORK_DIR"
+echo "[config]  go bin:     $BIN_GO"
 
 # Skip if already installed
 if [ -e "$BIN_GO" ]; then
