@@ -11,5 +11,10 @@ jobs:
         with:
           require_gcc: true
           require_go: true
+      - name: Install fd
+        shell: bash
+        run: |
+          sudo apt-get install -y --no-install-recommends \
+              fd-find
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ clean test
