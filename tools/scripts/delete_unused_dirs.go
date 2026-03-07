@@ -1,3 +1,20 @@
+// delete_unused_dirs.go - Recursively removes unused directories and files.
+//
+// Usage:
+//
+//	go run delete_unused_dirs.go [flags]
+//
+// Flags:
+//
+//	-skip_dir string  If set, directories with this exact base name are skipped.
+//
+// Rules applied (in order, per directory):
+//
+//  1. Delete empty directories (and re-check the parent).
+//  2. Delete directories whose base name starts with ".build" (recursively).
+//  3. Delete "a.out" files found inside a directory.
+//  4. Delete ".DS_Store" files found inside a directory.
+
 package main
 
 import (
