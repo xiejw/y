@@ -2,23 +2,35 @@
 
 ### Install
 
-Compile:
+Shortcut
+```
+# At y root dir
+make install
+```
 
+Or compile manually
 ```
 mkdir -p ~/Workspace
 cd ~/Workspace
 git clone git@github.com:xiejw/y.git
 cd y/dotfiles
-CC=clang make
+make
 ```
 
 ### Bashrc
 
 Use Bash for macOS
 
-    chsh -s /bin/bash
+    sudo vim /etc/shells
+    chsh
 
 Append the following block at the end of `~/.profile`.
+
+    # Automatically
+    go run tools/scripts/patch_profile.go
+
+    # Manually
+    # Add this block
 
     # xiejw/y/dotfiles
     export DOTFILES=~/Workspace/y/dotfiles
@@ -42,31 +54,3 @@ Link the file:
     ln -sf ~/Workspace/y/dotfiles/conf/kitty.conf ~/.config/kitty/kitty.conf
     ln -sf ~/Workspace/y/dotfiles/conf/zoom_toggle.py ~/.config/kitty/
 
-### XMonad
-
-_Likely_ deprecated.
-
-- See [manpage](https://xmonad.org/manpage.html) for default key bindings.
-- See [here](doc/xmonad_cheatsheet.md) for layout cheatsheet.
-
-## Canonical Project Paths
-
-LLVM
-```
-~/Workspace/build/llvm/src                # project
-~/Workspace/build/llvm/build-<date>       # cmake build
-~/Workspace/build/llvm/install            # install
-```
-
-TexLive
-```
-~/Workspace/build/texlive/<year>          # install (portable)
-```
-
-Libtorch
-```
-~/Workspace/build/torch/pyenv             # python venv
-~/Workspace/build/torch/src               # project
-~/Workspace/build/torch/build-<date>      # cmake build
-~/Workspace/build/torch/install           # install
-```
