@@ -19,6 +19,7 @@ This prefix is not configurable at the tool level — every installer targets it
   usr/
     bin/       ← compiled binaries (git, cmake, vim, …)
     lib/       ← libraries (libpcre2-8.dylib, …)
+    go/        ← Go toolchain (go/gofmt symlinked into bin/)
     rust/      ← Rust toolchain (cargo/rustc symlinked into bin/)
   <tool>/      ← per-tool build workspace (one directory per tool)
     <tarball>
@@ -26,6 +27,16 @@ This prefix is not configurable at the tool level — every installer targets it
 ```
 
 Each tool gets its own subdirectory under `~/Workspace/build/` for source and tarballs. Build artifacts are cleaned up after installation.
+
+## Bootstrap
+
+`kit` is written in Go, so Go must be available before running it.
+Use `install_go.sh` to install the Go toolchain from a pre-built tarball:
+
+    ./install_go.sh
+
+This installs Go into `~/Workspace/build/usr/go/` and symlinks `go`/`gofmt`
+into `~/Workspace/build/usr/bin/`. Once done, use `go run .` as normal.
 
 ## Usage
 
