@@ -176,12 +176,61 @@ func main() {
 				ExtractDir: "pcre2-10.46",
 			}),
 		},
+		{
+			Name: "libevent",
+			Lib:  "libevent.a",
+			Install: CAutoconf(CConfig{
+				WorkDir:    "libevent",
+				TarURL:     "https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz",
+				ExtractDir: "libevent-2.1.12-stable",
+				ConfigArgs: []string{"--disable-openssl"},
+			}),
+		},
+		{
+			Name: "tmux",
+			Bin:  "tmux",
+			Deps: []string{"libevent"},
+			Install: func(env *Env) error {
+				return CAutoconf(CConfig{
+					WorkDir:    "tmux",
+					TarURL:     "https://github.com/tmux/tmux/releases/download/3.5a/tmux-3.5a.tar.gz",
+					ExtractDir: "tmux-3.5a",
+					ConfigArgs: []string{"--disable-utf8proc"},
+					CFLAGS:     "-I" + env.UsrDir + "/include",
+					LDFLAGS:    "-L" + env.UsrDir + "/lib -levent -lncurses",
+				})(env)
+			},
+		},
 	}
 
 	// Optional: install only the named tool.
 	filter := ""
 	if len(os.Args) > 1 {
 		filter = os.Args[1]
+	}
+
+	toolsByName := map[string]*Tool{}
+	for _, t := range tools {
+		toolsByName[t.Name] = t
+	}
+
+	var installTool func(t *Tool) error
+	installTool = func(t *Tool) error {
+		for _, depName := range t.Deps {
+			dep := toolsByName[depName]
+			if dep == nil {
+				log.Fatalf("unknown dep %q for %s", depName, t.Name)
+			}
+			if dep.IsInstalled(env) {
+				continue
+			}
+			fmt.Printf("[install] %s (dep of %s)\n", dep.Name, t.Name)
+			if err := installTool(dep); err != nil {
+				log.Fatalf("[error]   %s: %v", dep.Name, err)
+			}
+			fmt.Printf("[done]    %s\n", dep.Name)
+		}
+		return t.Install(env)
 	}
 
 	for _, t := range tools {
@@ -197,7 +246,7 @@ func main() {
 			continue
 		}
 		fmt.Printf("[install] %s\n", t.Name)
-		if err := t.Install(env); err != nil {
+		if err := installTool(t); err != nil {
 			log.Fatalf("[error]   %s: %v", t.Name, err)
 		}
 		fmt.Printf("[done]    %s\n", t.Name)

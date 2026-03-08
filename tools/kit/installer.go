@@ -36,8 +36,9 @@ func NewEnv() (*Env, error) {
 // Tool represents a tool that can be installed.
 type Tool struct {
 	Name    string
-	Bin     string // binary filename to check in BinDir
-	Lib     string // library filename to check in LibDir (if set, takes precedence over Bin)
+	Bin     string   // binary filename to check in BinDir
+	Lib     string   // library filename to check in LibDir (if set, takes precedence over Bin)
+	Deps    []string // names of tools that must be installed before this one
 	Install func(env *Env) error
 }
 
@@ -55,6 +56,16 @@ func (t *Tool) IsInstalled(env *Env) bool {
 func run(dir, name string, args ...string) error {
 	cmd := exec.Command(name, args...)
 	cmd.Dir = dir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
+// runEnv is like run but prepends extra environment variables.
+func runEnv(dir string, extraEnv []string, name string, args ...string) error {
+	cmd := exec.Command(name, args...)
+	cmd.Dir = dir
+	cmd.Env = append(os.Environ(), extraEnv...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
@@ -140,6 +151,9 @@ type CConfig struct {
 	InstallBin string
 	// BinName overrides the installed filename. Defaults to basename of InstallBin.
 	BinName string
+
+	CFLAGS  string // optional; set as env var before ./configure
+	LDFLAGS string // optional; set as env var before ./configure
 }
 
 // CAutoconf creates an installer for C tools using ./configure && make.
@@ -192,8 +206,21 @@ func CAutoconf(cfg CConfig) func(*Env) error {
 			configCmd = "./configure"
 		}
 		configArgs := append([]string{"--prefix=" + env.UsrDir}, cfg.ConfigArgs...)
-		if err := run(srcDir, configCmd, configArgs...); err != nil {
-			return fmt.Errorf("configure: %w", err)
+		var extraEnv []string
+		if cfg.CFLAGS != "" {
+			extraEnv = append(extraEnv, "CFLAGS="+cfg.CFLAGS)
+		}
+		if cfg.LDFLAGS != "" {
+			extraEnv = append(extraEnv, "LDFLAGS="+cfg.LDFLAGS)
+		}
+		if len(extraEnv) > 0 {
+			if err := runEnv(srcDir, extraEnv, configCmd, configArgs...); err != nil {
+				return fmt.Errorf("configure: %w", err)
+			}
+		} else {
+			if err := run(srcDir, configCmd, configArgs...); err != nil {
+				return fmt.Errorf("configure: %w", err)
+			}
 		}
 
 		if err := run(srcDir, "make", "-j"); err != nil {

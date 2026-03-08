@@ -3,8 +3,13 @@ BUILD = /tmp/build
 test:
 	go build -o /dev/null kit
 
+install:
+	go run kit
+
 fmt:
 	go fmt kit
+
+# === --- For manually testing only ---------------------------------------- ===
 
 test_all: test_bootstrap test_toolchain test_c test_rs test_go test_lib
 
@@ -24,6 +29,7 @@ test_c:
 	go run kit jq                    ${BUILD}
 	go run kit bash                  ${BUILD}
 	go run kit vim                   ${BUILD}
+	go run kit tmux                  ${BUILD}
 
 # Tools written in rust
 test_rs:
@@ -39,5 +45,3 @@ test_go:
 test_lib:
 	go run kit pcre2                 ${BUILD}
 
-install:
-	go run kit
