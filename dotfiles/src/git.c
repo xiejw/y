@@ -1,4 +1,4 @@
-#include "git.h"
+#include "include/git.h"
 
 #include <stdlib.h>
 #include <sys/wait.h>

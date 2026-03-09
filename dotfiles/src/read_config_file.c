@@ -1,12 +1,12 @@
-#include "read_config_file.h"
+#include "include/read_config_file.h"
 
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "color_print.h"
-#include "constants.h"
-#include "file_reader.h"
-#include "path.h"
+#include "include/color_print.h"
+#include "include/constants.h"
+#include "include/file_reader.h"
+#include "include/path.h"
 
 error_t
 readRepoListFromConfig( char *config_path, char ***repo_list, int *count,

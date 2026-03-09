@@ -1,4 +1,4 @@
-#include "path.h"
+#include "include/path.h"
 
 #include <string.h>
 #include <wordexp.h>

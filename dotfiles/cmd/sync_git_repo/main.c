@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "color_print.h"
-#include "constants.h"
-#include "git.h"
-#include "path.h"
-#include "read_config_file.h"
+#include "include/color_print.h"
+#include "include/constants.h"
+#include "include/git.h"
+#include "include/path.h"
+#include "include/read_config_file.h"
 
 // ----------------------------------------------------------------------------
 // Prototype.
@@ -20,26 +20,8 @@ void    freeRepoList( char **repos, int repo_count );
 int
 main( void )
 {
-        // {
-        //         // ----------------------------------------
-        //         // A golden list of repos for all machines.
-        //         // ----------------------------------------
-        //         char *repos[] = {
-        //             /* clang-format off */
-
-        //             // core
-
-        //             /* clang-format on */
-        //         };
-
-        //         int repo_count = sizeof(repos) / sizeof(char *);
-        //         if (OK != gitPullRepos(repos, repo_count)) return
-        //         EUNSPECIFIED;
-        // }
         {
-                // ----------------------------------------
-                // A customized list of repos for local.
-                // ----------------------------------------
+                // === --- A customized list of repos for local.
                 char **repos = NULL;
                 int    repo_count;
                 if ( OK != readRepoListFromConfig( "~/.git_repo_list", &repos,

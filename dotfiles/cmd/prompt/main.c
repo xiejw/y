@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "color_print.h"
-#include "constants.h"
-#include "exec.h"
-#include "file_reader.h"
+#include "include/color_print.h"
+#include "include/constants.h"
+#include "include/exec.h"
+#include "include/file_reader.h"
 
 // ----------------------------------------------------------------------------
 // prototype of helper
