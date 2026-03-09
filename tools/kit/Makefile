@@ -37,6 +37,7 @@ test_rs:
 	go run kit eza                   ${BUILD}
 	go run kit ripgrep               ${BUILD}
 	go run kit zoxide                ${BUILD}
+	go run kit delta                 ${BUILD}
 
 # Tools written in go
 test_go:
