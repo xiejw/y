@@ -304,6 +304,10 @@ func RustInstall(cfg RustConfig) func(*Env) error {
 		if err := run(srcDir, "./install.sh", "--prefix="+rustPrefix); err != nil {
 			return fmt.Errorf("install.sh: %w", err)
 		}
+		// rustfmt is not included in the default rust distribution; install it separately.
+		if err := run(srcDir, "./install.sh", "--prefix="+rustPrefix, "--components=rustfmt-preview"); err != nil {
+			return fmt.Errorf("install.sh rustfmt-preview: %w", err)
+		}
 
 		for _, bin := range []string{"cargo", "rustc", "rustup"} {
 			src := filepath.Join(rustPrefix, "bin", bin)
