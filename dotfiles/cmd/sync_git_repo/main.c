@@ -1,13 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-#define INLINE_C_CODE
-
-#include "c/color_print.h"
-#include "c/constants.h"
-#include "c/git.h"
-#include "c/path.h"
-#include "c/read_config_file.h"
+#include "color_print.h"
+#include "constants.h"
+#include "git.h"
+#include "path.h"
+#include "read_config_file.h"
 
 // ----------------------------------------------------------------------------
 // Prototype.

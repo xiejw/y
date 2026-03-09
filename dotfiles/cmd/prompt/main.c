@@ -1,9 +1,10 @@
-#define INLINE_C_CODE
+#include <stdlib.h>
+#include <string.h>
 
-#include "c/color_print.h"
-#include "c/constants.h"
-#include "c/exec.h"
-#include "c/file_reader.h"
+#include "color_print.h"
+#include "constants.h"
+#include "exec.h"
+#include "file_reader.h"
 
 // ----------------------------------------------------------------------------
 // prototype of helper

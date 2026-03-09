@@ -1,30 +1,12 @@
-#ifndef READ_CONFIG_FILE_H_
-#define READ_CONFIG_FILE_H_
+#include "read_config_file.h"
 
-#include "c/constants.h"
-#include "c/file_reader.h"
-#include "c/path.h"
+#include <stdlib.h>
+#include <unistd.h>
 
-// -----------------------------------------------------------------------------
-// prototypes
-// -----------------------------------------------------------------------------
-
-/* Reads the config file at `config_path`.
- *
- * The `repo list` will be filled by the local repository path.
- * Space will be allocated. The total number will be filled in `count`.
- *
- * Upon success, the repo_list should be freed by call site. The `max_count`
- * limits the maximum number of repo.
- */
-extern error_t readRepoListFromConfig( char *config_path, char ***repo_list,
-                                       int *count, int max_count );
-
-// -----------------------------------------------------------------------------
-// implementation
-// -----------------------------------------------------------------------------
-
-#ifdef INLINE_C_CODE
+#include "color_print.h"
+#include "constants.h"
+#include "file_reader.h"
+#include "path.h"
 
 error_t
 readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
@@ -97,7 +79,3 @@ readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
         frClose( handle );
         return err;
 }
-
-#endif  // INLINE_C_CODE
-
-#endif  // READ_CONFIG_FILE_H_

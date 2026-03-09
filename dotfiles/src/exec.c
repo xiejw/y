@@ -1,23 +1,4 @@
-#ifndef EXEC_H_
-#define EXEC_H_
-
-#include <fcntl.h>      // open
-#include <sys/types.h>  // pid_t
-#include <unistd.h>
-
-#include "c/error.h"
-
-// ----------------------------------------------------------------------------
-// prototype
-// ----------------------------------------------------------------------------
-
-int execCmd( char **cmd );
-
-// ----------------------------------------------------------------------------
-// implementation
-// ----------------------------------------------------------------------------
-
-#ifdef INLINE_C_CODE
+#include "exec.h"
 
 // must be a NULL-terminated string list.
 int
@@ -44,7 +25,3 @@ execCmd( char **cmd )
                 return mypipe[0];
         }
 }
-
-#endif  // INLINE_C_CODE
-
-#endif  // EXEC_H_

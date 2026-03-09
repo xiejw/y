@@ -1,66 +1,8 @@
-#ifndef FILE_READER_H_
-#define FILE_READER_H_
+#include "file_reader.h"
 
-#include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-
-#include "c/constants.h"
-#include "c/error.h"
-
-// -----------------------------------------------------------------------------
-// apis
-// -----------------------------------------------------------------------------
-// This is a simple line reader written in c. It has a default MAX_STR_LINE_LEN
-// maximum line size limit.
-//
-// error_t frOpen(fr_handle_t **handle, char *path)
-//     Use to open the file `path` and fill the internal state in `handle`.
-//
-// error_t frDOpen(fr_handle_t **handle, int fd);
-//     Use to open the file description `fd` and fill the internal state in
-//     `handle`.
-//
-// void    frClose(fr_handle_t *handle);
-//     Close the reader and release all resources.
-//
-// int     frNextLine(fr_handle_t *handle, char *dst);
-//
-//     After open the file, frNextLine can read one more line, until end of
-//     file. It returns the size of the characters read (excluding the new
-//     line), upon succeed.  Result will be stored to `dst`, which is owned by
-//     call site. It should be at least MAX_STR_LINE_LEN + 1 size.
-//
-//     Specisl case, it returns EEOF, upon end of file, or other negative int
-//     for error.
-
-// -----------------------------------------------------------------------------
-// prototypes
-// -----------------------------------------------------------------------------
-
-// opaque handle for file line reading.
-typedef struct {
-        /* Internal fields. */
-        int            fd_;
-        unsigned char *buffer_;
-        char           end_of_file_;
-
-        ssize_t pos_;
-        ssize_t allocated_;
-} fr_handle_t;
-
-error_t frOpen( fr_handle_t **handle, char *path );
-error_t frDOpen( fr_handle_t **handle, int fd );
-void    frClose( fr_handle_t *handle );
-int     frNextLine( fr_handle_t *handle, char *dst );
-
-// -----------------------------------------------------------------------------
-// implementation
-// -----------------------------------------------------------------------------
-
-#ifdef INLINE_C_CODE
 
 static unsigned int max_buffer_size_ = 4096 * 16;
 static unsigned int max_line_len_    = MAX_STR_LINE_LEN;
@@ -183,7 +125,3 @@ _frLoadNextBuf( fr_handle_t *handle )
 
         return OK;
 }
-
-#endif  // INLINE_C_CODE
-
-#endif  // FILE_READER_H_
