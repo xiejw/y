@@ -5,7 +5,7 @@
 #include <unistd.h>
 
 error_t
-gitReadStatus( git_status_t *status )
+GitReadStatus( git_status_t *status )
 {
         char *const path = status->path;
 

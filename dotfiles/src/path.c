@@ -4,7 +4,7 @@
 #include <wordexp.h>
 
 error_t
-expand_tilde_path( char *original_path, char *dst )
+ExpandTildePath( char *original_path, char *dst )
 {
         wordexp_t exp_result;
         if ( OK != wordexp( original_path, &exp_result, /*flags=*/0 ) ) {

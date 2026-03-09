@@ -9,7 +9,7 @@
 #include "include/path.h"
 
 error_t
-readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
+ReadRepoListFromConfig( char *config_path, char ***repo_list, int *count,
                         int max_count )
 {
         *count = 0;  // Set first to avoid accident exit path.
@@ -17,7 +17,7 @@ readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
         // --------------------------------------------------------------------------
         // Step 1: normalize the git repository path.
         char normalized_path[MAX_PATH_LEN];
-        if ( OK != expand_tilde_path( config_path, normalized_path ) ) {
+        if ( OK != ExpandTildePath( config_path, normalized_path ) ) {
                 cPrintf( COLOR_ERROR,
                          "Error: not a valid path\n  Config File at: %s\n",
                          config_path );
@@ -36,7 +36,7 @@ readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
         // --------------------------------------------------------------------------
         // Step 3: read the file line by line.
         fr_handle_t *handle;
-        if ( OK != frOpen( &handle, normalized_path ) ) {
+        if ( OK != FrOpen( &handle, normalized_path ) ) {
                 cPrintf( COLOR_ERROR, "Failed to open config File at: %s\n",
                          normalized_path );
                 return EOPENFILE;
@@ -47,7 +47,7 @@ readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
         error_t err = OK;
         while ( ( *count ) < max_count ) {
                 char *line = malloc( MAX_PATH_LEN );
-                int   len  = frNextLine( handle, line );
+                int   len  = FrNextLine( handle, line );
                 if ( len == EEOF ) {
                         free( line );
                         break;
@@ -76,6 +76,6 @@ readRepoListFromConfig( char *config_path, char ***repo_list, int *count,
                 err = EUNSPECIFIED;
         }
 
-        frClose( handle );
+        FrClose( handle );
         return err;
 }

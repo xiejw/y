@@ -49,10 +49,10 @@ int
 vimRunInBg( void )
 {
         char *args[] = { "ps", "-T", NULL };
-        int   fd     = execCmd( args );
+        int   fd     = ExecCmd( args );
 
         fr_handle_t *handle;
-        if ( frDOpen( &handle, fd ) != OK ) {
+        if ( FrDOpen( &handle, fd ) != OK ) {
                 cPrint( COLOR_ERROR, "Error: failed to call ps" );
                 close( fd );
                 return EUNSPECIFIED;
@@ -61,7 +61,7 @@ vimRunInBg( void )
         int  result = NO;
         char line[MAX_STR_LINE_LEN];
         while ( 1 ) {
-                int len = frNextLine( handle, line );
+                int len = FrNextLine( handle, line );
                 if ( len < 0 && len != EEOF ) {
                         printf( "(panic %d)", len );
                         return NO;
@@ -73,7 +73,7 @@ vimRunInBg( void )
                         break;
                 }
         }
-        frClose( handle );
+        FrClose( handle );
         return result;
 }
 
@@ -90,10 +90,10 @@ int
 gitPending( void )
 {
         char *args[] = { "git", "status", "-s", NULL };
-        int   fd     = execCmd( args );
+        int   fd     = ExecCmd( args );
 
         fr_handle_t *handle;
-        if ( frDOpen( &handle, fd ) != OK ) {
+        if ( FrDOpen( &handle, fd ) != OK ) {
                 cPrint( COLOR_ERROR, "Error: failed to call ps" );
                 close( fd );
                 return EUNSPECIFIED;
@@ -102,7 +102,7 @@ gitPending( void )
         int  result = NO;
         char line[MAX_STR_LINE_LEN];
         // read oneline is enough.
-        int len = frNextLine( handle, line );
+        int len = FrNextLine( handle, line );
         if ( len < 0 && len != EEOF ) {
                 printf( "(panic %d)", len );
                 return NO;
@@ -110,7 +110,7 @@ gitPending( void )
         if ( len > 0 ) {
                 result = YES;
         }
-        frClose( handle );
+        FrClose( handle );
         return result;
 }
 
@@ -118,10 +118,10 @@ int
 gitBranceName( char *name )
 {
         char *args[] = { "git", "branch", "--no-color", NULL };
-        int   fd     = execCmd( args );
+        int   fd     = ExecCmd( args );
 
         fr_handle_t *handle;
-        if ( frDOpen( &handle, fd ) != OK ) {
+        if ( FrDOpen( &handle, fd ) != OK ) {
                 cPrint( COLOR_ERROR, "Error: failed to call ps" );
                 close( fd );
                 return EUNSPECIFIED;
@@ -130,7 +130,7 @@ gitBranceName( char *name )
         int  result = NO;
         char line[MAX_STR_LINE_LEN];
         while ( 1 ) {
-                int len = frNextLine( handle, line );
+                int len = FrNextLine( handle, line );
                 if ( len < 0 && len != EEOF ) {
                         printf( "(panic %d)", len );
                         return NO;
@@ -142,6 +142,6 @@ gitBranceName( char *name )
                 result = YES;
                 break;
         }
-        frClose( handle );
+        FrClose( handle );
         return result;
 }

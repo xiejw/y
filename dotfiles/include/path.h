@@ -9,6 +9,6 @@
 // Uses wordexp(3); only a single expansion result is supported — returns
 // ETOOMANYRESULTS if wordexp produces more than one word.
 // Returns OK on success or ENOTPATH if wordexp fails.
-extern error_t expand_tilde_path( char *original_path, char *dst );
+extern error_t ExpandTildePath( char *original_path, char *dst );
 
 #endif  // PATH_H_

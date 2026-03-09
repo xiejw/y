@@ -12,6 +12,6 @@
 // @param cmd  NULL-terminated argv array (e.g. {"git", "status", NULL}).
 // @return     Readable file descriptor for the child's stdout on success,
 //             or EPIPEFAIL / EFORKFAIL on error.
-int execCmd( char **cmd );
+int ExecCmd( char **cmd );
 
 #endif  // EXEC_H_

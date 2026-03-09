@@ -10,15 +10,15 @@ static unsigned int max_line_len_    = MAX_STR_LINE_LEN;
 static error_t _frLoadNextBuf( fr_handle_t *handle );
 
 error_t
-frOpen( fr_handle_t **handle, char *path )
+FrOpen( fr_handle_t **handle, char *path )
 {
         int fd = open( path, O_RDONLY );
         if ( fd == -1 ) return EOPENFILE;
-        return frDOpen( handle, fd );
+        return FrDOpen( handle, fd );
 }
 
 error_t
-frDOpen( fr_handle_t **handle, int fd )
+FrDOpen( fr_handle_t **handle, int fd )
 {
         // Allocate resources.
         *handle = malloc( sizeof( fr_handle_t ) );
@@ -33,7 +33,7 @@ frDOpen( fr_handle_t **handle, int fd )
 }
 
 void
-frClose( fr_handle_t *handle )
+FrClose( fr_handle_t *handle )
 {
         close( handle->fd_ );
         free( handle->buffer_ );
@@ -41,7 +41,7 @@ frClose( fr_handle_t *handle )
 }
 
 int
-frNextLine( fr_handle_t *handle, char *dst )
+FrNextLine( fr_handle_t *handle, char *dst )
 {
         // Special case, returns immediately if EOF.
         if ( handle->end_of_file_ ) return EEOF;

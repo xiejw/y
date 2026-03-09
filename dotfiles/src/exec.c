@@ -2,7 +2,7 @@
 
 // must be a NULL-terminated string list.
 int
-execCmd( char **cmd )
+ExecCmd( char **cmd )
 {
         int mypipe[2];
         if ( pipe( mypipe ) ) return EPIPEFAIL;

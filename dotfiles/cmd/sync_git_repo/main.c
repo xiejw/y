@@ -24,7 +24,7 @@ main( void )
                 // === --- A customized list of repos for local.
                 char **repos = NULL;
                 int    repo_count;
-                if ( OK != readRepoListFromConfig( "~/.git_repo_list", &repos,
+                if ( OK != ReadRepoListFromConfig( "~/.git_repo_list", &repos,
                                                    &repo_count,
                                                    MAX_REPO_COUNT ) )
                         return EUNSPECIFIED;
@@ -48,7 +48,7 @@ gitPull( char *path )
         // ---------------------------------------------------------------------------
         // Step 1: normalize the git repository path.
         char normalized_path[MAX_PATH_LEN];
-        if ( OK != expand_tilde_path( path, normalized_path ) ) {
+        if ( OK != ExpandTildePath( path, normalized_path ) ) {
                 cPrintf( COLOR_ERROR,
                          "Error: not a valid path\n  Repo at: %s\n", path );
                 return EUNSPECIFIED;
@@ -77,7 +77,7 @@ gitPull( char *path )
         git_status_t status;
         status.path = normalized_path;  // Lifetime s same as normalized_path.
 
-        error_t s = gitReadStatus( &status );
+        error_t s = GitReadStatus( &status );
         if ( OK == s ) {
                 cPrint( COLOR_SUCCESS, "Success.\n" );
         } else {

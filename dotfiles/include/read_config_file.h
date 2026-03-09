@@ -12,7 +12,7 @@
 //
 // If the file does not exist the function returns OK with *count == 0.
 // Returns ENOTPATH, EOPENFILE, or EREADFILE on other failures.
-extern error_t readRepoListFromConfig( char *config_path, char ***repo_list,
+extern error_t ReadRepoListFromConfig( char *config_path, char ***repo_list,
                                        int *count, int max_count );
 
 #endif  // READ_CONFIG_FILE_H_

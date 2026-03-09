@@ -14,6 +14,6 @@ typedef struct {
 // Returns OK on success, ENOTPATH if the path cannot be chdir'd into,
 // ETERMSIG if the child process was killed by a signal, or EGITPULL on
 // any other git failure.
-extern error_t gitReadStatus( git_status_t *status );
+extern error_t GitReadStatus( git_status_t *status );
 
 #endif  // GIT_H_
