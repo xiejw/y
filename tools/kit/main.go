@@ -129,6 +129,14 @@ func main() {
 			}),
 		},
 		{
+			Name: "delta",
+			Bin:  "delta",
+			Install: RustCargoInstall(RustCargoConfig{
+				RepoURL: "https://github.com/dandavison/delta.git",
+				BinName: "delta",
+			}),
+		},
+		{
 			Name: "telnet",
 			Bin:  "telnet",
 			Install: CAutoconf(CConfig{
