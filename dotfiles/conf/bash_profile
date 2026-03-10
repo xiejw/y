@@ -35,29 +35,31 @@ function prompt_command {
   export PS1="\n\[\033[1;31m\]${CONDA_PROMPT_MODIFIER}\[\033[0m\][\[\033[1;34m\]\w]\[\033[0m\]\n\[\033[1;${PROMPT_COMMAND_COLOR}m\]\u:\h\[\033[1;33m\] $(${DOTFILES}/bin/prompt)-> \[\033[0m\]"
 }
 
-# makes the color different for different hosts.
+# Makes the color different for different hosts.
+#
+# To override, set PROMPT_COMMAND_COLOR=<code> before sourcing, e.g.
+#
+# - export PROMPT_COMMAND_COLOR=33  # yellow
+# - export PROMPT_COMMAND_COLOR=32  # green
+# - export PROMPT_COMMAND_COLOR=35  # magenta
+# - export PROMPT_COMMAND_COLOR=36  # cyan
+#
+if [[ -z "${PROMPT_COMMAND_COLOR}" ]]; then
+  # -----------------------------------------------
+  # xieqi vpc category
+  if [[ "$HOSTNAME" =~ .*xieqi.* ]]; then
+    export PROMPT_COMMAND_COLOR=32 # green 2022-11
 
-# -----------------------------------------------
-# xieqi vpc category
-if [[ "$HOSTNAME" =~ .*xieqi.* ]]; then
-  export PROMPT_COMMAND_COLOR=32 # green 2022-11
+  # -----------------------------------------------
+  # personal hosts
+  elif [[ "$HOSTNAME" =~ .*macbook.* ]]; then
+    export PROMPT_COMMAND_COLOR=36 # cyan
 
-# -----------------------------------------------
-# vm category
-elif [[ "$HOSTNAME" =~ dt.* ]]; then
-  export PROMPT_COMMAND_COLOR=33 # yellow 2024-08
-
-# -----------------------------------------------
-# personal hosts
-elif [[ "$HOSTNAME" =~ .*macbook.* ]]; then
-  export PROMPT_COMMAND_COLOR=36 # cyan
-elif [[ "$HOSTNAME" =~ .*pi.* ]]; then
-  export PROMPT_COMMAND_COLOR=35 # magenta 2022-11
-
-# -----------------------------------------------
-# defaut
-else
-  export PROMPT_COMMAND_COLOR=36 # cyan
+  # -----------------------------------------------
+  # default
+  else
+    export PROMPT_COMMAND_COLOR=36 # cyan
+  fi
 fi
 
 # -----------------------------------------------
