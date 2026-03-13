@@ -207,10 +207,9 @@ nmap <silent> <leader>np :set nopaste<CR>
 nmap <silent> <leader>s :set spell<CR>
 nmap <silent> <leader>ns :set nospell<CR>
 
-" List the files to open, such as recent files, pending files in git
+" List the files to open, such as pending files in git
 "
-nmap <silent> <leader>lb :call fns#LoadRecentFiles()<CR>
-nmap <silent> <leader>ll :call fns#LoadPendingFiles()<CR>
+nmap <silent> <leader>l :call fns#LoadPendingFiles()<CR>
 
 " FZF
 "
