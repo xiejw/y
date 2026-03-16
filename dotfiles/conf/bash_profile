@@ -155,7 +155,7 @@ alias gg='git log --graph --oneline --all'
 
 # Alias for email
 #
-alias email='~/Workspace/y/tools/email.sh'
+alias email='~/Workspace/y/tools/scripts/email.sh'
 
 # Alias for tmux
 #
