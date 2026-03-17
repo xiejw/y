@@ -29,7 +29,7 @@ endfun
 if !empty($FZF_PENDING_FILE_COMMAND)
   let g:load_pending_files_cmd=$FZF_PENDING_FILE_COMMAND
 else
-  let g:load_pending_files_cmd=get(g:, 'load_pending_files_cmd', 'echo $(git diff --cached --name-only --relative)  $(git diff  --name-only --relative) | tr " " "\n" | sort| uniq')
+  let g:load_pending_files_cmd=get(g:, 'load_pending_files_cmd', 'echo $(git diff --cached --name-only --relative)  $(git diff  --name-only --relative) $(git ls-files -o --exclude-standard) | tr " " "\n" | sort| uniq')
 endif
 
 function! fns#LoadPendingFiles()
