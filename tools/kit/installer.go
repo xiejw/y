@@ -154,6 +154,8 @@ type CConfig struct {
 
 	CFLAGS  string // optional; set as env var before ./configure
 	LDFLAGS string // optional; set as env var before ./configure
+
+	SingleJob bool // if true, build with -j1 to avoid OOM
 }
 
 // CAutoconf creates an installer for C tools using ./configure && make.
@@ -223,7 +225,11 @@ func CAutoconf(cfg CConfig) func(*Env) error {
 			}
 		}
 
-		if err := run(srcDir, "make", "-j"); err != nil {
+		makeJobs := "-j"
+		if cfg.SingleJob {
+			makeJobs = "-j1"
+		}
+		if err := run(srcDir, "make", makeJobs); err != nil {
 			return fmt.Errorf("make: %w", err)
 		}
 
@@ -392,6 +398,7 @@ type CMakeBuildConfig struct {
 	TarURL     string   // tarball download URL
 	ExtractDir string   // directory name created by tar extraction
 	CMakeArgs  []string // extra -D flags (install prefix is added automatically)
+	SingleJob  bool     // if true, build with -j1 to avoid OOM
 }
 
 // CMakeBuild creates an installer for tools built with CMake.
@@ -439,7 +446,11 @@ func CMakeBuild(cfg CMakeBuildConfig) func(*Env) error {
 			return fmt.Errorf("cmake configure: %w", err)
 		}
 
-		if err := run(srcDir, "cmake", "--build", "build"); err != nil {
+		buildArgs := []string{"--build", "build"}
+		if cfg.SingleJob {
+			buildArgs = append(buildArgs, "--parallel", "1")
+		}
+		if err := run(srcDir, "cmake", buildArgs...); err != nil {
 			return fmt.Errorf("cmake build: %w", err)
 		}
 

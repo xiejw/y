@@ -59,6 +59,7 @@ func main() {
 				TarURL:       "https://github.com/Kitware/CMake/releases/download/v4.1.1/cmake-4.1.1.tar.gz",
 				ExtractDir:   "cmake-4.1.1",
 				ConfigureCmd: "./bootstrap",
+				SingleJob:    true,
 			}),
 		},
 		{
