@@ -260,4 +260,9 @@ func main() {
 		}
 		fmt.Printf("[done]    %s\n", t.Name)
 	}
+
+	fmt.Printf("\n")
+	fmt.Printf("=== --- Notes --- ===\n")
+	fmt.Printf("export PATH=%s:$PATH\n", env.BinDir)
+	fmt.Printf("export LD_LIBRARY_PATH=%s:$LD_LIBRARY_PATH\n", env.LibDir)
 }
