@@ -253,14 +253,18 @@ type RustConfig struct {
 }
 
 // rustTargetTriple returns the Rust target triple for the current platform.
-func rustTargetTriple() string {
+func rustTargetTriple() (string, error) {
 	switch runtime.GOOS + "/" + runtime.GOARCH {
 	case "darwin/arm64":
-		return "aarch64-apple-darwin"
+		return "aarch64-apple-darwin", nil
 	case "darwin/amd64":
-		return "x86_64-apple-darwin"
+		return "x86_64-apple-darwin", nil
+	case "linux/amd64":
+		return "x86_64-unknown-linux-gnu", nil
+	case "linux/arm64":
+		return "aarch64-unknown-linux-gnu", nil
 	default:
-		return "x86_64-unknown-linux-gnu"
+		return "", fmt.Errorf("no Rust target triple for %s/%s", runtime.GOOS, runtime.GOARCH)
 	}
 }
 
@@ -276,7 +280,10 @@ func rustTargetTriple() string {
 // Rust installs to <UsrDir>/rust/, and cargo/rustc/rustup are symlinked into BinDir.
 func RustInstall(cfg RustConfig) func(*Env) error {
 	return func(env *Env) error {
-		triple := rustTargetTriple()
+		triple, err := rustTargetTriple()
+		if err != nil {
+			return fmt.Errorf("unsupported platform: %w", err)
+		}
 		tarName := fmt.Sprintf("rust-%s-%s.tar.xz", cfg.Version, triple)
 		extractDir := fmt.Sprintf("rust-%s-%s", cfg.Version, triple)
 		url := "https://static.rust-lang.org/dist/" + tarName
