@@ -12,8 +12,9 @@
 //
 //  1. Delete empty directories (and re-check the parent).
 //  2. Delete directories whose base name starts with ".build" (recursively).
-//  3. Delete "a.out" files found inside a directory.
-//  4. Delete ".DS_Store" files found inside a directory.
+//  3. Delete directories whose base name starts with ".venv" (recursively).
+//  4. Delete "a.out" files found inside a directory.
+//  5. Delete ".DS_Store" files found inside a directory.
 
 package main
 
@@ -79,6 +80,13 @@ func (gw *GabageWiper) Init() error {
 			return fs.SkipDir
 		}
 
+		// We don't go into the code as the folder will be entirely
+		// removed.
+		if strings.HasPrefix(filepath.Base(path), ".venv") {
+			gw.candidateDirs[path] = true
+			return fs.SkipDir
+		}
+
 		gw.candidateDirs[path] = true
 		return nil
 	}
@@ -128,7 +136,17 @@ func (gw *GabageWiper) workOnCandidates() bool {
 			continue
 		}
 
-		// Rule 3: If file a.out exists, delete it
+		// Rule 3: If the path starts with ".venv", delete it
+		if strings.HasPrefix(filepath.Base(dirToConsider), ".venv") {
+			actions = append(actions, Action{
+				kind: DelDirAll,
+				path: dirToConsider,
+			})
+			workDone = false
+			continue
+		}
+
+		// Rule 4: If file a.out exists, delete it
 		path_to_a_out := os_path.Join(dirToConsider, "a.out")
 		if _, err := os.Stat(path_to_a_out); err == nil {
 			actions = append(actions, Action{
@@ -139,7 +157,7 @@ func (gw *GabageWiper) workOnCandidates() bool {
 			continue
 		}
 
-		// Rule 4: If file .DS_Store exists, delete it
+		// Rule 5: If file .DS_Store exists, delete it
 		path_to_ds_store := os_path.Join(dirToConsider, ".DS_Store")
 		if _, err := os.Stat(path_to_ds_store); err == nil {
 			actions = append(actions, Action{
