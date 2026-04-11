@@ -1,6 +1,21 @@
-# vim
-*.swp
-*.swo
-
-# rs/cc
+# all
 .build*
+
+# c/cc
+*.o
+a.out
+
+# vim
+*.swo
+*.swp
+
+# config generated files.
+configure.mk
+
+# mac
+.DS_Store
+
+# tex
+*.aux
+*.log
+
