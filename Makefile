@@ -1,4 +1,4 @@
-# === WHAT ===
+#=== WHAT ===
 #
 # Makefile for project y
 #
@@ -56,6 +56,8 @@ install:
 	@echo "==>" Link sym links for tmux
 	rm -f ~/.tmux.conf
 	ln -sf ~/Workspace/y/dotfiles/conf/tmux.conf ~/.tmux.conf
+	@echo "==>" Install mdv
+	make -C tools/mdv/ install
 	@echo "==>" Patch ~/.profile
 	command -v go || (echo "must have go first"; exit 1)
 	go run ~/Workspace/y/tools/scripts/patch_profile.go
