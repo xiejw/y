@@ -82,21 +82,6 @@ func main() {
 			}),
 		},
 		{
-			Name: "glow",
-			Bin:  "glow",
-			Install: GoInstall(GoConfig{
-				RepoURL: "https://github.com/charmbracelet/glow.git",
-				BinName: "glow",
-			}),
-		},
-		{
-			Name: "rust",
-			Bin:  "cargo",
-			Install: RustInstall(RustConfig{
-				Version: "1.91.0",
-			}),
-		},
-		{
 			Name: "fd",
 			Bin:  "fd",
 			Install: RustCargoInstall(RustCargoConfig{

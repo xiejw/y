@@ -10,7 +10,7 @@ set -euo pipefail
 # Defaults to ~/Workspace/build if no build-dir is given.
 #
 
-GO_VERSION="1.26.1"
+GO_VERSION="1.26.2"
 
 BUILD_DIR="${1:-$HOME/Workspace/build}"
 PREFIX="$BUILD_DIR/usr"

@@ -38,6 +38,12 @@ Use `install_go.sh` to install the Go toolchain from a pre-built tarball:
 This installs Go into `~/Workspace/build/usr/go/` and symlinks `go`/`gofmt`
 into `~/Workspace/build/usr/bin/`. Once done, use `go run .` as normal.
 
+Use `install_rs.sh` to install the Rust toolchain via rustup:
+
+    ./install_rs.sh
+
+This runs the official rustup installer (`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`), which is required before cargo-based tools can be built.
+
 ## Usage
 
 ```sh
@@ -78,7 +84,7 @@ chsh
 ## Key source files
 
 - `main.go` — tool list and entry point
-- `installer.go` — `Env`, `Tool`, and all installer constructors (`CAutoconf`, `CMakeBuild`, `GoInstall`, `RustInstall`, `RustCargoInstall`)
+- `installer.go` — `Env`, `Tool`, and all installer constructors (`CAutoconf`, `CMakeBuild`, `GoInstall`, `RustCargoInstall`)
 
 ## Verification
 

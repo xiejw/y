@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 )
 
 // Env holds paths used during installation.
@@ -250,91 +249,6 @@ func CAutoconf(cfg CConfig) func(*Env) error {
 		}
 
 		return run(srcDir, "make", "clean")
-	}
-}
-
-// RustConfig configures a Rust toolchain installation.
-type RustConfig struct {
-	Version string // e.g. "1.91.0"
-}
-
-// rustTargetTriple returns the Rust target triple for the current platform.
-func rustTargetTriple() (string, error) {
-	switch runtime.GOOS + "/" + runtime.GOARCH {
-	case "darwin/arm64":
-		return "aarch64-apple-darwin", nil
-	case "darwin/amd64":
-		return "x86_64-apple-darwin", nil
-	case "linux/amd64":
-		return "x86_64-unknown-linux-gnu", nil
-	case "linux/arm64":
-		return "aarch64-unknown-linux-gnu", nil
-	default:
-		return "", fmt.Errorf("no Rust target triple for %s/%s", runtime.GOOS, runtime.GOARCH)
-	}
-}
-
-// RustInstall creates an installer for Rust using a pre-built tarball from static.rust-lang.org.
-//
-// Layout under BuildDir:
-//
-//	rust/
-//	  rust-<Version>-<triple>.tar.xz
-//	  rust-<Version>-<triple>/
-//	    install.sh
-//
-// Rust installs to <UsrDir>/rust/, and cargo/rustc/rustup are symlinked into BinDir.
-func RustInstall(cfg RustConfig) func(*Env) error {
-	return func(env *Env) error {
-		triple, err := rustTargetTriple()
-		if err != nil {
-			return fmt.Errorf("unsupported platform: %w", err)
-		}
-		tarName := fmt.Sprintf("rust-%s-%s.tar.xz", cfg.Version, triple)
-		extractDir := fmt.Sprintf("rust-%s-%s", cfg.Version, triple)
-		url := "https://static.rust-lang.org/dist/" + tarName
-
-		workDir := filepath.Join(env.BuildDir, "rust")
-		if err := os.MkdirAll(workDir, 0755); err != nil {
-			return fmt.Errorf("mkdir: %w", err)
-		}
-
-		tarPath := filepath.Join(workDir, tarName)
-		if _, err := os.Stat(tarPath); os.IsNotExist(err) {
-			if err := run(workDir, "curl", "-OL", url); err != nil {
-				return fmt.Errorf("curl: %w", err)
-			}
-		}
-
-		srcDir := filepath.Join(workDir, extractDir)
-		if _, err := os.Stat(srcDir); os.IsNotExist(err) {
-			if err := run(workDir, "tar", "xf", tarPath); err != nil {
-				return fmt.Errorf("tar: %w", err)
-			}
-		}
-
-		rustPrefix := filepath.Join(env.UsrDir, "rust")
-		if err := run(srcDir, "./install.sh", "--prefix="+rustPrefix); err != nil {
-			return fmt.Errorf("install.sh: %w", err)
-		}
-		// rustfmt is not included in the default rust distribution; install it separately.
-		if err := run(srcDir, "./install.sh", "--prefix="+rustPrefix, "--components=rustfmt-preview"); err != nil {
-			return fmt.Errorf("install.sh rustfmt-preview: %w", err)
-		}
-
-		for _, bin := range []string{"cargo", "rustc", "rustup"} {
-			src := filepath.Join(rustPrefix, "bin", bin)
-			if _, err := os.Stat(src); os.IsNotExist(err) {
-				continue
-			}
-			dst := filepath.Join(env.BinDir, bin)
-			os.Remove(dst)
-			if err := os.Symlink(src, dst); err != nil {
-				return fmt.Errorf("symlink %s: %w", bin, err)
-			}
-		}
-
-		return nil
 	}
 }
 
