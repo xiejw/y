@@ -12,6 +12,10 @@
 #   file.
 # - All source code trees are renamed in linux-*-src so the deletion could be
 #   easier.
+# - VERSION (e.g. 6.7 or 7.1.0) controls the download. The major version is
+#   extracted for the URL path (v6.x, v7.x, etc.). A trailing .0 suffix is
+#   stripped from the URL and directory name (e.g. 7.1.0 → 7.1) since
+#   kernel.org omits it.
 #
 #
 # TODO:
