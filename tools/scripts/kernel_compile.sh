@@ -26,14 +26,17 @@ if [ -z "${VERSION}" ]; then
   exit 1
 fi
 
+MAJOR_VERSION=$(echo "${VERSION}" | cut -d. -f1)
+URL_VERSION="${VERSION%.0}"
+
 cd ~/Workspace/kernel
 rm -rf linux*.tar.xz
-wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-${VERSION}.tar.xz
-tar xvf linux-${VERSION}.tar.xz
+wget https://cdn.kernel.org/pub/linux/kernel/v${MAJOR_VERSION}.x/linux-${URL_VERSION}.tar.xz
+tar xvf linux-${URL_VERSION}.tar.xz
 rm -rf linux-*-src
 rm -rf linux
-mv linux-${VERSION} linux-${VERSION}-src
-ln -sf linux-${VERSION}-src linux
+mv linux-${URL_VERSION} linux-${URL_VERSION}-src
+ln -sf linux-${URL_VERSION}-src linux
 cp *-config linux/.config
 mkdir -p configs
 mv *-config configs
