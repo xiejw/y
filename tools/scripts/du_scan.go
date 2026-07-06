@@ -4,7 +4,7 @@
 //
 // Usage:
 //
-//	go run du_scan.go [root_dir]
+//	go run du_scan.go <root_dir>
 //
 // Output: /tmp/usage.csv with columns: folder,size,is_dir
 
@@ -29,13 +29,22 @@ const (
 	outputCSVPath = "/tmp/usage.csv"
 )
 
+// sizeUnits maps `du -h` size suffixes to their byte multiplier.
+var sizeUnits = map[byte]float64{
+	'K': 1 << 10,
+	'M': 1 << 20,
+	'G': 1 << 30,
+	'T': 1 << 40,
+	'P': 1 << 50,
+}
+
 func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile)
 
-	root := "."
-	if len(os.Args) > 1 {
-		root = os.Args[1]
+	if len(os.Args) != 2 {
+		log.Fatalf("usage: go run du_scan.go <root_dir>")
 	}
+	root := os.Args[1]
 
 	f, err := os.Create(outputCSVPath)
 	if err != nil {
@@ -114,16 +123,8 @@ func du(dir string) []duEntry {
 // parseSize parses human-readable `du -h` sizes (e.g. "1.2G", "512K", "0")
 // into bytes.
 func parseSize(s string) (int64, error) {
-	units := map[byte]float64{
-		'K': 1 << 10,
-		'M': 1 << 20,
-		'G': 1 << 30,
-		'T': 1 << 40,
-		'P': 1 << 50,
-	}
-
 	last := s[len(s)-1]
-	mult, ok := units[last]
+	mult, ok := sizeUnits[last]
 	if !ok {
 		return strconv.ParseInt(s, 10, 64)
 	}
