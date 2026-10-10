@@ -35,18 +35,17 @@ syntax match notesHeader4 "^####\s.*$" contains=notesHeaderDelim
 syntax match notesHeader5 "^#####\s.*$" contains=notesHeaderDelim
 syntax match notesHeader6 "^######\s.*$" contains=notesHeaderDelim
 
-" NOTE: intentionally NOT linked to "Title" -- several colorschemes (e.g.
-" nord) define Title with the same foreground as Normal text and no
-" bold/color attributes in cterm mode, making it invisible in a terminal.
-" Statement/Function/Type are near-universally given a distinct color, so
-" headers stay visible regardless of colorscheme.
+" NOTE: headers use explicit colors rather than linking to groups
+" like "Title"/"Function"/"Statement" -- colorschemes (e.g. nord) may give
+" those the same foreground as Normal text in cterm mode, making headers
+" invisible in a terminal.
 highlight default link notesHeaderDelim Comment
-highlight default link notesHeader1 Function
-highlight default link notesHeader2 Statement
-highlight default link notesHeader3 Type
-highlight default link notesHeader4 Type
-highlight default link notesHeader5 Type
-highlight default link notesHeader6 Type
+highlight default notesHeader1 ctermfg=cyan guifg=cyan
+highlight default notesHeader2 ctermfg=darkblue guifg=darkblue
+highlight default notesHeader3 ctermfg=magenta guifg=purple
+highlight default notesHeader4 ctermfg=magenta guifg=purple
+highlight default notesHeader5 ctermfg=magenta guifg=purple
+highlight default notesHeader6 ctermfg=magenta guifg=purple
 
 " === --- Setext Header ------------------------------------------------- ===
 "
@@ -57,7 +56,7 @@ highlight default link notesHeader6 Type
 " Only the text line is highlighted (same color as notesHeader1); the
 " dash line itself is left unstyled.
 syntax match notesSetextHeader "^.\+\n\ze-\{3,}\s*$"
-highlight default link notesSetextHeader Function
+highlight default link notesSetextHeader notesHeader1
 
 " === --- List Marker --------------------------------------------------- ===
 "
