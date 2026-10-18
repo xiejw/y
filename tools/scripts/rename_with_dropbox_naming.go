@@ -40,7 +40,7 @@ var (
 
 // trackedExtensions lists the (lower-case, without dot) file extensions this
 // script scans for.
-var trackedExtensions = []string{"mp4"}
+var trackedExtensions = []string{"mp4", "jpg"}
 
 var prefixPattern = regexp.MustCompile(`^\d{4}-\d{2}-\d{2} \d{2}\.\d{2}\.\d{2}`)
 
