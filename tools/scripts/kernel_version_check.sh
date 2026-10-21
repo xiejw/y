@@ -24,7 +24,7 @@ find_latest() {
 
 find_existing_version() {
   LOCAL_VERSION=`uname -r |
-    grep -E -o '[0-9\.]+'`
+    grep -E -o '^[0-9\.]+'`
   echo "Find local  Kernel version ${LOCAL_VERSION}"
 }
 
