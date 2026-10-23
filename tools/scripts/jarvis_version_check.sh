@@ -11,7 +11,7 @@ find_latest() {
 }
 
 find_existing_version() {
-  LOCAL_VERSION=`~/Workspace/.bin/jarvis --version |
+  LOCAL_VERSION=`~/.local/bin/jarvis --version |
     grep -E -o '[0-9\.]+'`
   echo "Find local  Jarvis version ${LOCAL_VERSION}"
 }

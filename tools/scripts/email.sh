@@ -9,7 +9,7 @@ set -e
 set -x
 
 MOCKINGJAY_HOME=${HOME}/Workspace/x/ann/mockingjay
-MOCKINGJAY_CLIENT=${HOME}/Workspace/.bin/email
+MOCKINGJAY_CLIENT=${HOME}/.local/bin/email
 
 if ! test -f ${MOCKINGJAY_CLIENT}; then
   echo "mockingjay client not exist"

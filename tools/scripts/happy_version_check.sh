@@ -14,7 +14,7 @@ find_latest() {
 }
 
 find_existing_version() {
-  LOCAL_VERSION=`~/Workspace/.bin/${CLI_NAME} --version |
+  LOCAL_VERSION=`~/.local/bin/${CLI_NAME} --version |
     grep -E -o '[0-9\.]+'`
   echo "Find local  ${CLI_NAME} version ${LOCAL_VERSION}"
 }

@@ -195,9 +195,9 @@ alias fd='fd -c always'
 #
 function jv {
   if [[ $# -eq 1 ]]; then
-    ~/Workspace/.bin/jarvis $1
+    ~/.local/bin/jarvis $1
   else
-    ~/Workspace/.bin/jarvis
+    ~/.local/bin/jarvis
   fi
 }
 
