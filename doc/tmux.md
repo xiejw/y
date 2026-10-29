@@ -28,7 +28,6 @@ https://gist.github.com/andreyvit/2921703 as reference):
 |                 | `PREFIX 1 ...`    | Switch to window 1. ... 9                                    |
 |                 | `PREFIX p`        | previous window                                              |
 |                 | `PREFIX n`        | next window                                                  |
-|                 | `PREFIX l`        | 'last' (previously used)  window                             |
 |                 | `PREFIX w`        | choose window from list                                      |
 |                 | `PREFIX ,`        | rename the current window                                    |
 |                 | `PREFIX &`        | kill  the current window                                     |
@@ -41,14 +40,18 @@ https://gist.github.com/andreyvit/2921703 as reference):
 |                 | `PREFIX <up>`     |                                                              |
 |                 | `PREFIX <down>`   |                                                              |
 |                 | `PREFIX [hjkl]`   | go to next pane on the left, down, up, right.                |
+|                 | `M-[hjkl]`        | (No prefix) go to next pane on the left, down, up, right.    |
+|                 | `M-f`             | (No prefix) go to the next pane (cycle through all of them)  |
 |                 | `PREFIX o`        | go to the next pane (cycle through all of them)              |
 |                 | `PREFIX ;`        | go to the ‘last’ (previously used) pane                      |
 | Pane Move       | `PREFIX {`        | move the current pane to left                                |
 |                 | `PREFIX }`        | move the current pane to right                               |
 |                 | `PREFIX !`        | move the current pane into a new separate window             |
 | Pane Layout     | `PREFIX <space>`  | switch to the next layout                                    |
-|                 | `PREFIX [JKHL]`   | (Repeated) Resize the pane left, right, down, up by 5 lines. |
+|                 | `PREFIX [JKHL]`   | (Repeated) Resize the pane down, up, left, right by 5 lines. |
+|                 | `PREFIX =`        | Equalize the current pane and its siblings (`select-layout -E`). |
 | Pane Zoom       | `PREFIX z`        | Toggle: zoom (max)/unzoom (restore) the current pane         |
+|                 | `M-g`             | (No prefix) Toggle: zoom/unzoom the current pane             |
 |                 | `PREFIX x`        | kill the current pane                                        |
 |                 | `PREFIX q`        | display pane numbers for a short while (if you type the number, move cursor there). |
 
@@ -74,10 +77,13 @@ https://gist.github.com/andreyvit/2921703 as reference):
 Press `PREFIX [` enters _Copy Mode_. After quitting, press `PREFIX ]` to paste
 the selection.
 
+Mouse is enabled. Scrolling up with the mouse wheel enters _Copy Mode_
+automatically.
+
     Function                vi
     Back to indentation     ^
     Clear selection         Escape
-    Copy selection          Enter
+    Copy selection          Enter or y
     Cursor down             j
     Cursor left             h
     Cursor right            l
@@ -96,6 +102,7 @@ the selection.
     Paste buffer            p
     Previous page           C-b
     Previous word           b
+    Start selection         v
     Quit mode               q
     Scroll down             C-Down or J
     Scroll up               C-Up or K
