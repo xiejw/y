@@ -34,7 +34,7 @@ https://gist.github.com/andreyvit/2921703 as reference):
 | Pane Split      | `PREFIX "`        | split vertically (top/bottom)                                |
 |                 | `PREFIX s`        | split vertically (top/bottom)                                |
 |                 | `PREFIX %`        | split horizontally (left/right)                              |
-|                 | `PREFIX v`        | split horizontally (left 0.66 /right 0.33)                   |
+|                 | `PREFIX v`        | split horizontally (left 0.5 /right 0.5)                     |
 | Pane Navigation | `PREFIX <left>`   | go to the next pane on the left                              |
 |                 | `PREFIX <right>`  |                                                              |
 |                 | `PREFIX <up>`     |                                                              |
