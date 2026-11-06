@@ -5,7 +5,7 @@
 set -e
 
 find_latest() {
-  VERSION=`make --no-print-directory -C ~/Workspace/x/ann/jarvis version`
+  VERSION=`make --no-print-directory -C ~/Workspace/x/assist/jarvis version`
 
   echo "Find latest Jarvis version ${VERSION}"
 }
@@ -26,5 +26,5 @@ if [ "${VERSION}" == "${LOCAL_VERSION}" ]; then
   echo "Version same for Jarvis"
 else
   echo -e "${RED}!!! Upgrade Jarvis !!!${NC}"
-  make -C ~/Workspace/x/ann/jarvis install
+  make -C ~/Workspace/x/assist/jarvis install
 fi

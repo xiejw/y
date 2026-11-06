@@ -5,7 +5,7 @@
 set -e
 
 CLI_NAME=happy
-REPO=x/ann
+REPO=x/assist
 
 find_latest() {
   VERSION=`make --no-print-directory -C ~/Workspace/${REPO}/${CLI_NAME} version`
