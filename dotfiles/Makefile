@@ -13,15 +13,15 @@ default: install
 
 install: $(CMDS)
 
-# Each cmd lives at <name>/cmd/main.go and installs to $(BIN_DIR)/<name>.
+# Each cmd lives at cmds/<name>/cmd/main.go and installs to $(BIN_DIR)/<name>.
 $(CMDS):
-	mkdir -p $(BIN_DIR) && go build -o $(BIN_DIR)/$@ ./$@/cmd/main.go
+	mkdir -p $(BIN_DIR) && go build -o $(BIN_DIR)/$@ ./cmds/$@/cmd/main.go
 
 # -----------
 # maintenance
 #
 fmt:
-	gofmt -w $(CMDS)
+	gofmt -w cmds
 
 test: default
 
