@@ -1,7 +1,5 @@
 ### To Install
 
-_NOTE_: This is a mirror site.
-
 Run
 ```
 make install
