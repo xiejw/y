@@ -1,37 +1,29 @@
 # vim:
 
-FMT_FOLDERS = cmd include src
-
-CFLAGS += -std=c99 -O2
-# CFLAGS += -std=c99 -O2 -Wall -Werror -pedantic -Wno-c11-extensions
-CFLAGS += -I.
-
-SRC = $(wildcard src/*.c)
+CMDS = prompt sync_git_repo
 
 BIN_DIR ?= $(HOME)/.local/bin
 
-.PHONY: default prompt sync_git_repo fmt test clean
+.PHONY: default install $(CMDS) fmt test clean
 
 # -------
 # actions
 #
-default: prompt sync_git_repo
+default: install
 
-prompt:
-	mkdir -p $(BIN_DIR) && ${CC} $(CFLAGS) -o $(BIN_DIR)/$@ $(SRC) cmd/$@/main.c
+install: $(CMDS)
 
-sync_git_repo:
+# Each cmd lives at <name>/cmd/main.go and installs to $(BIN_DIR)/<name>.
+$(CMDS):
 	mkdir -p $(BIN_DIR) && go build -o $(BIN_DIR)/$@ ./$@/cmd/main.go
 
 # -----------
 # maintenance
 #
 fmt:
-	~/Workspace/y/tools/scripts/clang_format_all.sh $(FMT_FOLDERS)
-	gofmt -w sync_git_repo
+	gofmt -w $(CMDS)
 
 test: default
 
 clean:
-	rm -f $(BIN_DIR)/prompt $(BIN_DIR)/sync_git_repo
-
+	rm -f $(addprefix $(BIN_DIR)/,$(CMDS))
