@@ -3,8 +3,6 @@ description: 'Common Action'
 inputs:
   repo_at:
     default: y
-  compile_eva:
-    default: false
   compile_eve:
     default: false
   require_clang:
@@ -74,20 +72,6 @@ runs:
       if: ${{ inputs.require_gcc == 'true' }}
       shell: bash
       run: ${CC} --version
-
-    # --------------------------------------------------------------------------
-    # Eva related
-    #
-    - name: Prepare Eva
-      if: ${{ inputs.compile_eva == 'true' }}
-      shell: bash
-      run: |
-        echo "NO_CLANG_FLAGS=1" >> $GITHUB_ENV
-    - name: Build Eva
-      if: ${{ inputs.compile_eva == 'true' }}
-      shell: bash
-      run: |
-        make -C ${{ github.workspace }}/${{ inputs.repo_at }}/ann/eva release
 
     # --------------------------------------------------------------------------
     # Eve related
