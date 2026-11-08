@@ -2,6 +2,9 @@
 
 This document defines mandatory rules for all C++ code in this project.
 
+Last modified: 2026-11.
+
+
 ## A) Language Standard
 
 - The compiler **must** be invoked with `-std=c++17`.
@@ -32,6 +35,8 @@ This document defines mandatory rules for all C++ code in this project.
   needed.
 - `char` is permitted only for raw byte/string literal handling (e.g.
   `const char*` string literals), not as a numeric type.
+
+NOTE: Existing code might not follow this section. So keep as is.
 
 ## C) No Reference Parameters
 

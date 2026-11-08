@@ -47,8 +47,15 @@ func run(name string, args ...string) []byte {
 // threads", but the default selection is already "same user, same terminal",
 // so it behaves about the same. The match is a plain substring, so any
 // command line containing "vim" counts.
+//
+// exec.Command connects the child's stdin to /dev/null by default, which makes
+// `ps -T` fail with "stdin: not a terminal", so pass our own stdin (the
+// shell's tty) through explicitly.
 func vimRunInBg() bool {
-	return bytes.Contains(run("ps", "-T"), []byte("vim"))
+	cmd := exec.Command("ps", "-T")
+	cmd.Stdin = os.Stdin
+	out, _ := cmd.Output()
+	return bytes.Contains(out, []byte("vim"))
 }
 
 // gitPending reports whether the working tree has uncommitted changes.
