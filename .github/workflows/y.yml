@@ -2,21 +2,33 @@ run-name: ${{ github.actor }} is running tests for ${{ github.workflow }}
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v4
         with:
           path: y
-      - uses: ./y/.github/actions/base
-        with:
-          require_gcc: true
-          require_go: true
-      - name: Install fd
-        shell: bash
+
+      # man-db is too slow and useless
+      - name: Remove man-db
+        run: sudo apt-get remove --purge man-db
+
+      - name: Install GCC, Go and fd
         run: |
+          sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-              fd-find
+              gcc g++ golang-go fd-find
+      - name: Set environmental variables
+        run: |
+          echo "CC=gcc" >> $GITHUB_ENV
+          echo "CXX=g++" >> $GITHUB_ENV
+          echo "GO=go" >> $GITHUB_ENV
+      - name: Display versions
+        run: |
+          ${CC} --version
+          ${GO} version
+
       - name: Create fd alias
         run: sudo ln -s $(which fdfind) /usr/local/bin/fd && fd --version
+
       - name: Run ${{ github.workflow }} Test
         run: make -C ${{ github.workspace }}/y/ clean test
