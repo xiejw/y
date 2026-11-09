@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 )
 
 // Env holds paths used during installation.
@@ -253,57 +254,48 @@ func CAutoconf(cfg CConfig) func(*Env) error {
 	}
 }
 
-// RustCargoConfig configures a Rust cargo-based tool installation.
-type RustCargoConfig struct {
-	RepoURL string // git clone URL
-	BinName string // binary name in target/release/ and BinDir
-	RepoDir string // git clone directory name; defaults to BinName if empty
+// BinaryDownloadConfig configures installing a prebuilt binary.
+type BinaryDownloadConfig struct {
+	BinName string            // installed filename in BinDir
+	URLs    map[string]string // "<GOARCH>-<GOOS>" (e.g. "arm64-darwin") -> download URL
 }
 
-// RustCargoInstall creates an installer for tools built with 'cargo build --release'.
+// BinaryDownload creates an installer that downloads a prebuilt binary for the
+// current platform ("<GOARCH>-<GOOS>"). Platforms without a URL are an error.
 //
 // Layout under BuildDir:
 //
 //	<BinName>/
-//	  <BinName>/   <- git clone
-//	    target/    <- removed by cargo clean
+//	  <downloaded file>  <- moved into BinDir
 //
-// Example (fd):
+// Example (fd on arm64):
 //
 //	~/Workspace/build/fd/
-//	  git clone https://github.com/sharkdp/fd.git
-//	  cd fd && cargo build --release --locked
-//	  mv target/release/fd ~/Workspace/build/usr/bin/fd
-//	  cargo clean
-func RustCargoInstall(cfg RustCargoConfig) func(*Env) error {
+//	  curl -fL -o fd https://…/fd_arm64_darwin
+//	  chmod 755 fd && mv fd ~/Workspace/build/usr/bin/fd
+func BinaryDownload(cfg BinaryDownloadConfig) func(*Env) error {
 	return func(env *Env) error {
+		url, ok := cfg.URLs[runtime.GOARCH+"-"+runtime.GOOS]
+		if !ok {
+			return fmt.Errorf("no prebuilt binary for %s-%s", runtime.GOARCH, runtime.GOOS)
+		}
+
 		workDir := filepath.Join(env.BuildDir, cfg.BinName)
 		if err := os.MkdirAll(workDir, 0755); err != nil {
 			return fmt.Errorf("mkdir: %w", err)
 		}
 
-		repoDir := cfg.RepoDir
-		if repoDir == "" {
-			repoDir = cfg.BinName
+		tmp := filepath.Join(workDir, cfg.BinName)
+		if err := run(workDir, "curl", "-fL", "-o", tmp, url); err != nil {
+			return fmt.Errorf("curl: %w", err)
 		}
-		srcDir := filepath.Join(workDir, repoDir)
-		if _, err := os.Stat(srcDir); os.IsNotExist(err) {
-			if err := run(workDir, "git", "clone", cfg.RepoURL); err != nil {
-				return fmt.Errorf("git clone: %w", err)
-			}
+		if err := os.Chmod(tmp, 0755); err != nil {
+			return fmt.Errorf("chmod: %w", err)
 		}
-
-		if err := run(srcDir, "cargo", "build", "--release", "--locked"); err != nil {
-			return fmt.Errorf("cargo build: %w", err)
-		}
-
-		src := filepath.Join(srcDir, "target", "release", cfg.BinName)
-		dst := filepath.Join(env.BinDir, cfg.BinName)
-		if err := os.Rename(src, dst); err != nil {
+		if err := os.Rename(tmp, filepath.Join(env.BinDir, cfg.BinName)); err != nil {
 			return fmt.Errorf("install: %w", err)
 		}
-
-		return run(srcDir, "cargo", "clean")
+		return nil
 	}
 }
 

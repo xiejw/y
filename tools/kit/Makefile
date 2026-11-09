@@ -1,8 +1,5 @@
 BUILD = /tmp/build
 
-# cargo (rustup) is not on PATH by default; the Rust installers need it.
-export PATH := $(HOME)/.cargo/bin:$(PATH)
-
 test:
 	go build ./...
 
@@ -29,7 +26,7 @@ test_c:
 	go run kit/cmd vim                   ${BUILD}
 	go run kit/cmd tmux                  ${BUILD}
 
-# Tools written in rust
+# Prebuilt binaries (Rust tools, downloaded; arm64-darwin and amd64-linux)
 test_rs:
 	go run kit/cmd fd                    ${BUILD}
 	go run kit/cmd eza                   ${BUILD}

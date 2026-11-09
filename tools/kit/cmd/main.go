@@ -8,7 +8,7 @@
 //	go run ./cmd <name> <build-dir> # install one tool to custom prefix
 //
 // To add a tool, append to the tools slice in main(). Installer constructors
-// (CAutoconf, CMakeBuild, RustCargoInstall, GoInstall) live in kit/src.
+// (CAutoconf, CMakeBuild, BinaryDownload, GoInstall) live in kit/src.
 
 package main
 
@@ -84,36 +84,51 @@ func main() {
 			}),
 		},
 		{
+			// Prebuilt; source: https://github.com/sharkdp/fd
 			Name: "fd",
 			Bin:  "fd",
-			Install: kit.RustCargoInstall(kit.RustCargoConfig{
-				RepoURL: "https://github.com/sharkdp/fd.git",
+			Install: kit.BinaryDownload(kit.BinaryDownloadConfig{
 				BinName: "fd",
+				URLs: map[string]string{
+					"arm64-darwin": "https://github.com/xiejw/y/releases/download/2026-11-01/fd_arm64_darwin",
+					"amd64-linux":  "https://github.com/xiejw/y/releases/download/2026-11-09-linux/fd_amd64_linux",
+				},
 			}),
 		},
 		{
+			// Prebuilt; source: https://github.com/eza-community/eza
 			Name: "eza",
 			Bin:  "eza",
-			Install: kit.RustCargoInstall(kit.RustCargoConfig{
-				RepoURL: "https://github.com/eza-community/eza.git",
+			Install: kit.BinaryDownload(kit.BinaryDownloadConfig{
 				BinName: "eza",
+				URLs: map[string]string{
+					"arm64-darwin": "https://github.com/xiejw/y/releases/download/2026-11-01/eaz_arm64_darwin",
+					"amd64-linux":  "https://github.com/xiejw/y/releases/download/2026-11-09-linux/eza_amd64_linux",
+				},
 			}),
 		},
 		{
+			// Prebuilt; source: https://github.com/ajeetdsouza/zoxide
 			Name: "zoxide",
 			Bin:  "zoxide",
-			Install: kit.RustCargoInstall(kit.RustCargoConfig{
-				RepoURL: "https://github.com/ajeetdsouza/zoxide.git",
+			Install: kit.BinaryDownload(kit.BinaryDownloadConfig{
 				BinName: "zoxide",
+				URLs: map[string]string{
+					"arm64-darwin": "https://github.com/xiejw/y/releases/download/2026-11-01/zoxide_arm64_darwin",
+					"amd64-linux":  "https://github.com/xiejw/y/releases/download/2026-11-09-linux/zoxide_amd64_linux",
+				},
 			}),
 		},
 		{
+			// Prebuilt; source: https://github.com/BurntSushi/ripgrep
 			Name: "ripgrep",
 			Bin:  "rg",
-			Install: kit.RustCargoInstall(kit.RustCargoConfig{
-				RepoURL: "https://github.com/BurntSushi/ripgrep.git",
+			Install: kit.BinaryDownload(kit.BinaryDownloadConfig{
 				BinName: "rg",
-				RepoDir: "ripgrep",
+				URLs: map[string]string{
+					"arm64-darwin": "https://github.com/xiejw/y/releases/download/2026-11-01/rg_arm64_darwin",
+					"amd64-linux":  "https://github.com/xiejw/y/releases/download/2026-11-09-linux/rg_amd64_linux",
+				},
 			}),
 		},
 		{

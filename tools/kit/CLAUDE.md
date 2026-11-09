@@ -28,9 +28,11 @@ Each tool gets its own subdirectory under `~/Workspace/build/` for source and ta
 
 ## Prerequisites
 
-Go and Rust (`cargo`) must already be installed and on `PATH`. kit does not
-install either toolchain: Go is needed to run kit itself, and cargo is needed
-to build the Rust-based tools.
+Go must already be installed and on `PATH` to run kit itself. Rust is not
+needed: the Rust-based tools (fd, eza, ripgrep, zoxide) are downloaded as
+prebuilt binaries from this repo's GitHub releases (`BinaryDownload`), keyed
+by `<GOARCH>-<GOOS>`: `arm64-darwin` and `amd64-linux`. Other platforms error
+out.
 
 ## Usage
 
@@ -72,7 +74,7 @@ chsh
 ## Key source files
 
 - `cmd/main.go` — tool list and entry point (package `main`)
-- `src/installer.go` — package `kit/src`: `Env`, `Tool`, all installer constructors (`CAutoconf`, `CMakeBuild`, `GoInstall`, `RustCargoInstall`) and `InstallToolsWithFilter`
+- `src/installer.go` — package `kit/src`: `Env`, `Tool`, all installer constructors (`CAutoconf`, `CMakeBuild`, `GoInstall`, `BinaryDownload`) and `InstallToolsWithFilter`
 
 ## Verification
 
