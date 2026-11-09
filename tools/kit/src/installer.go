@@ -1,8 +1,9 @@
-package main
+package src
 
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -374,4 +375,57 @@ func CMakeBuild(cfg CMakeBuildConfig) func(*Env) error {
 
 		return os.RemoveAll(filepath.Join(srcDir, "build"))
 	}
+}
+
+// InstallToolsWithFilter installs every tool in tools that is not already
+// installed, along with its Deps. If filter is non-empty, only the tool with
+// that name is considered. Exits the process on the first failure.
+func InstallToolsWithFilter(env *Env, tools []*Tool, filter string) {
+	toolsByName := map[string]*Tool{}
+	for _, t := range tools {
+		toolsByName[t.Name] = t
+	}
+
+	var installTool func(t *Tool) error
+	installTool = func(t *Tool) error {
+		for _, depName := range t.Deps {
+			dep := toolsByName[depName]
+			if dep == nil {
+				log.Fatalf("unknown dep %q for %s", depName, t.Name)
+			}
+			if dep.IsInstalled(env) {
+				continue
+			}
+			fmt.Printf("[install] %s (dep of %s)\n", dep.Name, t.Name)
+			if err := installTool(dep); err != nil {
+				log.Fatalf("[error]   %s: %v", dep.Name, err)
+			}
+			fmt.Printf("[done]    %s\n", dep.Name)
+		}
+		return t.Install(env)
+	}
+
+	for _, t := range tools {
+		if filter != "" && t.Name != filter {
+			continue
+		}
+		if t.IsInstalled(env) {
+			dir := env.BinDir
+			if t.Lib != "" {
+				dir = env.LibDir
+			}
+			fmt.Printf("[skip]    %s (already in %s)\n", t.Name, dir)
+			continue
+		}
+		fmt.Printf("[install] %s\n", t.Name)
+		if err := installTool(t); err != nil {
+			log.Fatalf("[error]   %s: %v", t.Name, err)
+		}
+		fmt.Printf("[done]    %s\n", t.Name)
+	}
+
+	fmt.Printf("\n")
+	fmt.Printf("=== --- Notes --- ===\n")
+	fmt.Printf("export PATH=%s:$PATH\n", env.BinDir)
+	fmt.Printf("export LD_LIBRARY_PATH=%s:$LD_LIBRARY_PATH\n", env.LibDir)
 }

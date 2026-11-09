@@ -1,48 +1,41 @@
 BUILD = /tmp/build
 
+# cargo (rustup) is not on PATH by default; the Rust installers need it.
+export PATH := $(HOME)/.cargo/bin:$(PATH)
+
 test:
-	go build -o /dev/null kit
+	go build ./...
 
 install:
-	go run kit
+	go run kit/cmd
 
 fmt:
-	go fmt kit
+	go fmt ./...
 
 # === --- For manually testing only ---------------------------------------- ===
 
-test_all: test_bootstrap test_toolchain test_c test_rs test_go test_lib
-
-test_bootstrap:
-	./install_go.sh                  ${BUILD}
+test_all: test_toolchain test_c test_rs test_lib
 
 test_toolchain:
-	go run kit rust                  ${BUILD}
-	go run kit git                   ${BUILD}
-	go run kit cmake                 ${BUILD}
-	go run kit ninja                 ${BUILD}
+	go run kit/cmd git                   ${BUILD}
+	go run kit/cmd cmake                 ${BUILD}
+	go run kit/cmd ninja                 ${BUILD}
 
 # Tools written in c/cc
 test_c:
-	go run kit rsync                 ${BUILD}
-	go run kit telnet                ${BUILD}
-	go run kit jq                    ${BUILD}
-	go run kit bash                  ${BUILD}
-	go run kit vim                   ${BUILD}
-	go run kit tmux                  ${BUILD}
+	go run kit/cmd rsync                 ${BUILD}
+	go run kit/cmd telnet                ${BUILD}
+	go run kit/cmd bash                  ${BUILD}
+	go run kit/cmd vim                   ${BUILD}
+	go run kit/cmd tmux                  ${BUILD}
 
 # Tools written in rust
 test_rs:
-	go run kit fd                    ${BUILD}
-	go run kit eza                   ${BUILD}
-	go run kit ripgrep               ${BUILD}
-	go run kit zoxide                ${BUILD}
-	go run kit delta                 ${BUILD}
-
-# Tools written in go
-test_go:
-	go run kit glow                  ${BUILD}
+	go run kit/cmd fd                    ${BUILD}
+	go run kit/cmd eza                   ${BUILD}
+	go run kit/cmd ripgrep               ${BUILD}
+	go run kit/cmd zoxide                ${BUILD}
 
 test_lib:
-	go run kit pcre2                 ${BUILD}
+	go run kit/cmd pcre2                 ${BUILD}
 

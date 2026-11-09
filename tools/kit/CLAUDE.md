@@ -19,8 +19,6 @@ This prefix is not configurable at the tool level — every installer targets it
   usr/
     bin/       ← compiled binaries (git, cmake, vim, …)
     lib/       ← libraries (libpcre2-8.dylib, …)
-    go/        ← Go toolchain (go/gofmt symlinked into bin/)
-    rust/      ← Rust toolchain (cargo/rustc symlinked into bin/)
   <tool>/      ← per-tool build workspace (one directory per tool)
     <tarball>
     <extracted-source>/
@@ -28,40 +26,30 @@ This prefix is not configurable at the tool level — every installer targets it
 
 Each tool gets its own subdirectory under `~/Workspace/build/` for source and tarballs. Build artifacts are cleaned up after installation.
 
-## Bootstrap
+## Prerequisites
 
-`kit` is written in Go, so Go must be available before running it.
-Use `install_go.sh` to install the Go toolchain from a pre-built tarball:
-
-    ./install_go.sh
-
-This installs Go into `~/Workspace/build/usr/go/` and symlinks `go`/`gofmt`
-into `~/Workspace/build/usr/bin/`. Once done, use `go run .` as normal.
-
-Use `install_rs.sh` to install the Rust toolchain via rustup:
-
-    ./install_rs.sh
-
-This runs the official rustup installer (`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`), which is required before cargo-based tools can be built.
+Go and Rust (`cargo`) must already be installed and on `PATH`. kit does not
+install either toolchain: Go is needed to run kit itself, and cargo is needed
+to build the Rust-based tools.
 
 ## Usage
 
 ```sh
 # Install all missing tools (skips already-installed ones)
-go run .
+go run ./cmd
 
 # Install a single tool by name
-go run . <name>
+go run ./cmd <name>
 
 # Install a single tool to a custom prefix (overrides ~/Workspace/build)
-go run . <name> <build-dir>
+go run ./cmd <name> <build-dir>
 ```
 
 Examples:
 
 ```sh
-go run . vim
-go run . git /tmp/build
+go run ./cmd vim
+go run ./cmd git /tmp/build
 ```
 
 The program prints one line per tool:
@@ -76,20 +64,20 @@ The program prints one line per tool:
 ## Special Note for Bash
 
 ```
-go run . bash
+go run ./cmd bash
 sudo vim /etc/shells
 chsh
 ```
 
 ## Key source files
 
-- `main.go` — tool list and entry point
-- `installer.go` — `Env`, `Tool`, and all installer constructors (`CAutoconf`, `CMakeBuild`, `GoInstall`, `RustCargoInstall`)
+- `cmd/main.go` — tool list and entry point (package `main`)
+- `src/installer.go` — package `kit/src`: `Env`, `Tool`, all installer constructors (`CAutoconf`, `CMakeBuild`, `GoInstall`, `RustCargoInstall`) and `InstallToolsWithFilter`
 
 ## Verification
 
 After any edit, confirm the program compiles:
 
 ```sh
-go build -o /dev/null .
+go build ./...
 ```
