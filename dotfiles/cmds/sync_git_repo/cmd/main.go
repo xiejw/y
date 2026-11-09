@@ -1,6 +1,5 @@
 // Command sync_git_repo runs `git pull --rebase` for every repository listed in
 // ~/.git_repo_list (one path per line; empty lines ignored).
-//
 package main
 
 import (
