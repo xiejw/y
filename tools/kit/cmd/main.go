@@ -144,6 +144,9 @@ func main() {
 				WorkDir:    "bash",
 				TarURL:     "https://ftp.gnu.org/gnu/bash/bash-5.2.tar.gz",
 				ExtractDir: "bash-5.2",
+				// No system gettext on macOS; the bundled lib/intl races
+				// under make -j (libintl.h not yet generated).
+				ConfigArgs: []string{"--disable-nls"},
 			}),
 		},
 		{
