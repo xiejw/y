@@ -24,7 +24,7 @@ This prefix is not configurable at the tool level — every installer targets it
     <extracted-source>/
 ```
 
-Each tool gets its own subdirectory under `~/Workspace/build/` for source and tarballs. Build artifacts are cleaned up after installation.
+Each tool gets its own subdirectory under `~/Workspace/build/` for source and tarballs. After a successful install the whole `<tool>/` directory is deleted, unless `--keep_compiled_assets` is passed (then nothing is deleted). On failure it is left in place for debugging.
 
 ## Prerequisites
 
@@ -45,6 +45,9 @@ go run ./cmd <name>
 
 # Install a single tool to a custom prefix (overrides ~/Workspace/build)
 go run ./cmd <name> <build-dir>
+
+# Keep tarballs, sources and build outputs (flags go before positional args)
+go run ./cmd --keep_compiled_assets [<name> [<build-dir>]]
 ```
 
 Examples:

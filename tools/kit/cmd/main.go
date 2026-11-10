@@ -7,12 +7,18 @@
 //	go run ./cmd <name>             # install one tool by name
 //	go run ./cmd <name> <build-dir> # install one tool to custom prefix
 //
+// Flags (must precede positional args):
+//
+//	--keep_compiled_assets  keep tarballs, sources and build outputs under
+//	                        <build-dir>/<tool>/ (default: delete after install)
+//
 // To add a tool, append to the tools slice in main(). Installer constructors
 // (CAutoconf, CMakeBuild, BinaryDownload, GoInstall) live in kit/src.
 
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -22,16 +28,22 @@ import (
 )
 
 func main() {
+	keepAssets := flag.Bool("keep_compiled_assets", false,
+		"keep downloaded tarballs, extracted sources and build outputs after install")
+	flag.Parse()
+	args := flag.Args()
+
 	env, err := kit.NewEnv()
 	if err != nil {
 		log.Fatalf("env: %v", err)
 	}
+	env.KeepCompiledAssets = *keepAssets
 
-	if len(os.Args) > 2 {
-		env.BuildDir = os.Args[2]
-		env.UsrDir = filepath.Join(os.Args[2], "usr")
-		env.BinDir = filepath.Join(os.Args[2], "usr", "bin")
-		env.LibDir = filepath.Join(os.Args[2], "usr", "lib")
+	if len(args) > 1 {
+		env.BuildDir = args[1]
+		env.UsrDir = filepath.Join(args[1], "usr")
+		env.BinDir = filepath.Join(args[1], "usr", "bin")
+		env.LibDir = filepath.Join(args[1], "usr", "lib")
 	}
 
 	fmt.Printf("build: %s\n", env.BuildDir)
@@ -202,8 +214,8 @@ func main() {
 
 	// Optional: install only the named tool.
 	filter := ""
-	if len(os.Args) > 1 {
-		filter = os.Args[1]
+	if len(args) > 0 {
+		filter = args[0]
 	}
 
 	kit.InstallToolsWithFilter(env, tools, filter)

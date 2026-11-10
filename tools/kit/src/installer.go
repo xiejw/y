@@ -16,6 +16,11 @@ type Env struct {
 	UsrDir   string // ~/Workspace/build/usr
 	BinDir   string // ~/Workspace/build/usr/bin
 	LibDir   string // ~/Workspace/build/usr/lib
+
+	// KeepCompiledAssets keeps each tool's work directory (tarball, extracted
+	// source and build outputs) after a successful install. When false (the
+	// default), the work directory is removed.
+	KeepCompiledAssets bool
 }
 
 // NewEnv initializes the build environment from the user's home directory.
@@ -70,6 +75,18 @@ func runEnv(dir string, extraEnv []string, name string, args ...string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+// finish cleans up workDir after a successful install. If KeepCompiledAssets
+// is set, nothing is deleted; otherwise the whole workDir is removed.
+func finish(env *Env, workDir string) error {
+	if env.KeepCompiledAssets {
+		return nil
+	}
+	if err := os.RemoveAll(workDir); err != nil {
+		return fmt.Errorf("cleanup: %w", err)
+	}
+	return nil
 }
 
 // copyFile copies src to dst with the given file mode.
@@ -133,7 +150,10 @@ func GoInstall(cfg GoConfig) func(*Env) error {
 			return fmt.Errorf("install: %w", err)
 		}
 
-		return os.RemoveAll(filepath.Join(srcDir, ".build"))
+		if err := os.RemoveAll(filepath.Join(srcDir, ".build")); err != nil {
+			return fmt.Errorf("cleanup: %w", err)
+		}
+		return finish(env, workDir)
 	}
 }
 
@@ -165,7 +185,7 @@ type CConfig struct {
 //
 //	<WorkDir>/
 //	  <tarball>
-//	  <ExtractDir>/  <- source tree (make clean runs here)
+//	  <ExtractDir>/  <- source tree
 //
 // Example (git, standard autoconf):
 //
@@ -173,7 +193,7 @@ type CConfig struct {
 //	  curl -OL https://…/git-2.51.0.tar.gz
 //	  tar xf git-2.51.0.tar.gz
 //	  cd git-2.51.0 && ./configure --prefix=~/Workspace/build/usr
-//	  make -j && make install && make clean
+//	  make -j && make install
 //
 // Example (cmake, ConfigureCmd="./bootstrap"):
 //
@@ -181,7 +201,7 @@ type CConfig struct {
 //	  curl -OL https://…/cmake-4.1.1.tar.gz
 //	  tar xf cmake-4.1.1.tar.gz
 //	  cd cmake-4.1.1 && ./bootstrap --prefix=~/Workspace/build/usr
-//	  make -j && make install && make clean
+//	  make -j && make install
 func CAutoconf(cfg CConfig) func(*Env) error {
 	tarFile := filepath.Base(cfg.TarURL)
 	return func(env *Env) error {
@@ -250,7 +270,7 @@ func CAutoconf(cfg CConfig) func(*Env) error {
 			}
 		}
 
-		return run(srcDir, "make", "clean")
+		return finish(env, workDir)
 	}
 }
 
@@ -295,7 +315,7 @@ func BinaryDownload(cfg BinaryDownloadConfig) func(*Env) error {
 		if err := os.Rename(tmp, filepath.Join(env.BinDir, cfg.BinName)); err != nil {
 			return fmt.Errorf("install: %w", err)
 		}
-		return nil
+		return finish(env, workDir)
 	}
 }
 
@@ -315,7 +335,7 @@ type CMakeBuildConfig struct {
 //	<WorkDir>/
 //	  <tarball>
 //	  <ExtractDir>/  <- source tree
-//	    build/       <- removed after install
+//	    build/
 //
 // Example (ninja):
 //
@@ -325,7 +345,6 @@ type CMakeBuildConfig struct {
 //	  cd ninja-1.13.1
 //	  cmake -B build -S . -DCMAKE_INSTALL_PREFIX=~/Workspace/build/usr
 //	  cmake --build build && cmake --install build
-//	  rm -rf build/
 func CMakeBuild(cfg CMakeBuildConfig) func(*Env) error {
 	tarFile := filepath.Base(cfg.TarURL)
 	return func(env *Env) error {
@@ -365,7 +384,7 @@ func CMakeBuild(cfg CMakeBuildConfig) func(*Env) error {
 			return fmt.Errorf("cmake install: %w", err)
 		}
 
-		return os.RemoveAll(filepath.Join(srcDir, "build"))
+		return finish(env, workDir)
 	}
 }
 
